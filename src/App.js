@@ -11,6 +11,7 @@ import Alert from './components/Alert';
 import Signup from './components/Signup';
 import Login from './components/Login';
 import Error from './components/Error';
+import KhataBook from './components/KhataBook'
 function App() {
 	const [alert, setAlert] = useState(null);
 	const showAlert = (message, type) => {
@@ -46,6 +47,9 @@ function App() {
 								</Route>
 								<Route exact path="/userdetail">
 									<User />
+								</Route>
+								<Route exact path="/khatabook">
+									<KhataBook/>
 								</Route>
 								<Route>
 
