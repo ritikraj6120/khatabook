@@ -5,6 +5,7 @@ const Note = require('../models/Note');
 // const Reminder = require('../models/Reminder');
 const { body, validationResult } = require('express-validator');
 
+
 // ROUTE 1: Get All the Notes using: GET "/api/notes/getuser". Login required
 router.get('/fetchallnotes', fetchuser, async (req, res) => {
 	try {
@@ -15,6 +16,7 @@ router.get('/fetchallnotes', fetchuser, async (req, res) => {
 		res.status(500).send("Internal Server Error");
 	}
 })
+
 
 // ROUTE 2: Add a new Note using: POST "/api/notes/addnote". Login required
 router.post('/addnote', fetchuser, [

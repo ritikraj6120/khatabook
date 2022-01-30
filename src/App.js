@@ -1,6 +1,5 @@
 import './App.css';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { useState } from "react";
 import NoteState from './context/notes/NoteState';
 import UserState from './context/notes/UserState';
 import Navbar from './components/Navbar';
@@ -13,43 +12,34 @@ import Login from './components/Login';
 import Error from './components/Error';
 import KhataBook from './components/KhataBook'
 function App() {
-	const [alert, setAlert] = useState(null);
-	const showAlert = (message, type) => {
-		setAlert({
-			msg: message,
-			type: type
-		})
-		setTimeout(() => {
-			setAlert(null);
-		}, 1500);
-	}
 
 	return (
 		<>
-			<UserState>
-				<NoteState>
-					<Router>
+			<Router>
+				<UserState>
+					<NoteState>
+
 						<Navbar />
-						<Alert alert={alert} />
+						<Alert  />
 						<div className="container">
 							<Switch>
 								<Route exact path="/">
-									<Home showAlert={showAlert} />
+									<Home  />
 								</Route>
 								<Route exact path="/about">
 									<About />
 								</Route>
 								<Route exact path="/login">
-									<Login showAlert={showAlert} />
+									<Login />
 								</Route>
 								<Route exact path="/signup">
-									<Signup showAlert={showAlert} />
+									<Signup />
 								</Route>
 								<Route exact path="/userdetail">
 									<User />
 								</Route>
 								<Route exact path="/khatabook">
-									<KhataBook/>
+									<KhataBook />
 								</Route>
 								<Route>
 
@@ -57,9 +47,10 @@ function App() {
 								</Route>
 							</Switch>
 						</div>
-					</Router>
-				</NoteState>
-			</UserState>
+
+					</NoteState>
+				</UserState>
+			</Router>
 		</>
 	);
 }

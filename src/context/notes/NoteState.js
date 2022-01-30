@@ -1,16 +1,27 @@
 import NoteContext from "./noteContext";
 import { useState } from "react";
-// import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 const NoteState = (props) => {
-	// let history = useHistory();
+	let history = useHistory();
 	const host = "http://localhost:5000"
 	const notesInitial = []
 	const [notes, setNotes] = useState(notesInitial)
+	const [alert, setAlert] = useState(null);
+
+	// shows alert 
+	const showAlert = (message, type) => {
+		setAlert({
+			msg: message,
+			type: type
+		})
+		setTimeout(() => {
+			setAlert(null);
+		}, 1500);
+	}
 
 	// Get all Notes
 	const getNotes = async () => {
 		// API Call 
-
 		const response = await fetch(`${host}/api/notes/fetchallnotes`, {
 			method: 'GET',
 			headers: {
@@ -35,9 +46,15 @@ const NoteState = (props) => {
 			},
 			body: JSON.stringify({ title, description, tag })
 		});
+		if (response.status !== 200) {
 
-		const note = await response.json();
-		setNotes(notes.concat(note))
+			history.push("/login");
+		}
+		else {
+			showAlert("Added Succcessfully", "success")
+			const note = await response.json();
+			setNotes(notes.concat(note))
+		}
 	}
 
 	// Delete a Note
@@ -84,7 +101,7 @@ const NoteState = (props) => {
 	}
 
 	return (
-		<NoteContext.Provider value={{ notes, addNote, deleteNote, editNote, getNotes }}>
+		<NoteContext.Provider value={{ notes, addNote, deleteNote, editNote, getNotes, showAlert, alert }}>
 			{props.children}
 		</NoteContext.Provider>
 	)

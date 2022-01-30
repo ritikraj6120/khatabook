@@ -4,11 +4,11 @@ import Noteitem from './Noteitem';
 import AddNote from './AddNote';
 import {useHistory} from 'react-router-dom'
 
-const Notes = (props) => {
+const Notes = () => {
 
     const context = useContext(noteContext);
 	let history=useHistory();
-    const { notes, getNotes, editNote } = context;
+    const { notes, getNotes, editNote,showAlert } = context;
     useEffect(() => {
 		if(localStorage.getItem('token'))
         getNotes()
@@ -31,7 +31,7 @@ const Notes = (props) => {
     const handleClick = (e)=>{ 
         editNote(note.id, note.etitle, note.edescription, note.etag)
         refClose.current.click();
-		props.showAlert("Updated Succcessfully","success")
+		showAlert("Updated Succcessfully","success")
     }
 
     const onChange = (e)=>{
@@ -40,7 +40,7 @@ const Notes = (props) => {
 
     return (
         <>
-            <AddNote showAlert={props.showAlert}/>
+            <AddNote />
             <button ref={ref} type="button" className="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Launch demo modal
             </button>
@@ -84,7 +84,7 @@ const Notes = (props) => {
                 {notes.length===0 && 'No notes to display'}
                 </div>
                 {notes.map((note) => {
-                    return <Noteitem key={note._id} updateNote={updateNote} showAlert ={props.showAlert} note={note} />
+                    return <Noteitem key={note._id} updateNote={updateNote}  note={note} />
                 })}
             </div>
         </>

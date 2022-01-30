@@ -18,9 +18,9 @@ const User = () => {
 		
 		<div>
 		
-			<p>{UserDetail.name}</p>
-			<p>{UserDetail.email}</p>
-			<p>{UserDetail.name} create their account on {new Date(UserDetail.date).toLocaleString()} I.S.T</p>
+			<p>😎 {UserDetail.fname} {UserDetail.lname}</p>
+			<p>📧 { UserDetail.email}</p>
+			<p> {UserDetail.name} created account on {new Date(UserDetail.date).toLocaleString()} I.S.T</p>
 		</div>
 	)
 }
