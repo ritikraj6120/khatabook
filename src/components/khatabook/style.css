@@ -1,0 +1,10 @@
+.sticky-btn {
+	background-color: rgb(194, 11, 96);
+    position: fixed;
+    bottom: 30px;
+    right: 15px;
+    width: 5vw;
+    height: 5vw;
+    border-radius: 50%;
+  }
+ 

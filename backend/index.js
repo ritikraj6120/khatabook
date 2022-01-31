@@ -12,7 +12,7 @@ app.use(express.json())
 app.use('/api/auth', require('./routes/auth'))
 app.use('/api/notes', require('./routes/notes'))
 app.use('/api/user',require('./routes/user'));
-// app.use('/api/khatabok',require('./routes/khatabook'));
+app.use('/api/khatabook',require('./routes/khatabook'));
 
 
 app.listen(port, () => {
