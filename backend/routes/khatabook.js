@@ -51,7 +51,7 @@ router.put('/updatecustomer/:id', fetchuser, async (req, res) => {
 		if (title) { newCustomer.title = title };
 		if (name) { newCustomer.name = name };
 		if (amount) { newCustomer.amount = amount };
-
+		console.log(title,name,amount);
 		// Find the note to be updated and update it
 		let customer = await Customers.findById(req.params.id);
 		if (!customer) { return res.status(404).send("Not Found") }
@@ -59,8 +59,9 @@ router.put('/updatecustomer/:id', fetchuser, async (req, res) => {
 		if (customer.user.toString() !== req.user.id) {
 			return res.status(401).send("Not Allowed");
 		}
+		
 		const updateCustomer = await Customers.findByIdAndUpdate(req.params.id, { $set: newCustomer }, { new: true })
-		res.json(updateCustomer);
+		res.status(200).json(updateCustomer);
 	}
 	catch (error) {
 		console.error(error.message);
@@ -102,7 +103,7 @@ router.delete('/deletecustomer/:id', fetchuser, async (req, res) => {
 // ROUTE 1: Get All the Customers using: GET "/api/khatabok/getsupplier". Login required
 router.get('/getsuppliers', fetchuser, async (req, res) => {
 	try {
-		const suppliers = await Customers.find({ user: req.user.id });
+		const suppliers = await Suppliers.find({ user: req.user.id });
 		res.json(suppliers)
 	} catch (error) {
 		console.error(error.message);
@@ -154,7 +155,7 @@ router.put('/updatesupplier/:id', fetchuser, async (req, res) => {
 			return res.status(401).send("Not Allowed");
 		}
 		const updatesupplier = await Suppliers.findByIdAndUpdate(req.params.id, { $set: newsupplier }, { new: true })
-		res.json(updatesupplier);
+		res.status(200).json(updatesupplier);
 	}
 	catch (error) {
 		console.error(error.message);

@@ -16,6 +16,8 @@ import Suppliers from './components/khatabook/Suppliers'
 import Customers from './components/khatabook/Customers'
 import AddCustomer from './components/khatabook/AddCustomer';
 import AddSupplier from './components/khatabook/AddSupplier';
+import EditCustomer from './components/khatabook/EditCustomer';
+import EditSupplier from './components/khatabook/EditSupplier';
 function Routerapp() {
 
 	return (
@@ -50,6 +52,12 @@ function Routerapp() {
 				</Route>
 				<Route exact path="/khatabook/addsupplier">
 					<AddSupplier />
+				</Route>
+				<Route exact path="/khatabook/editcustomer">
+					<EditCustomer />
+				</Route>
+				<Route exact path="/khatabook/editsupplier">
+					<EditSupplier />
 				</Route>
 				<Route>
 					<Error />

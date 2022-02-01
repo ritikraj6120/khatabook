@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-// import { Link, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import khataContext from "../../context/notes/khataContext"
 
 const Navbar = () => {
@@ -21,9 +21,10 @@ const Navbar = () => {
 }
 
 const AddCustomer = () => {
+	let history=useHistory();
 	const context = useContext(khataContext);
 	const { addCustomer } = context;
-	const [customer, setCustomer] = useState({ title: "Mr", name: "", amount: "" });
+	const [customer, setCustomer] = useState({ title: "Mr", name: "", amount: 0 });
 	const onChange = (e) => {
 		setCustomer({ ...customer, [e.target.name]: e.target.value })
 	}
@@ -31,7 +32,8 @@ const AddCustomer = () => {
 	const handleClick = (e) => {
 		e.preventDefault();
 		addCustomer(customer.title, customer.name, customer.amount);
-		setCustomer({ title: "Mr", name: "", amount: "" });
+		setCustomer({ title: "Mr", name: "", amount: 0 });
+		history.push('/khatabook/customers');
 	}
 
 	return (

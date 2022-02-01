@@ -1,19 +1,20 @@
 import khataContext from "./khataContext";
 import noteContext from "./noteContext";
-import { useState,useContext } from "react";
+import { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
+
 const KhataState = (props) => {
-	const context=useContext(noteContext)
-	const {showAlert}=context;
+	const context = useContext(noteContext)
+	const { showAlert } = context;
 	let history = useHistory();
 	const host = "http://localhost:5000"
 	const customerInitial = []
 	const [customers, setCustomers] = useState(customerInitial)
 
-	const supplierInitial=[]
+	const supplierInitial = []
 	const [suppliers, setSuppliers] = useState(supplierInitial)
-
-
+	const [singlecustomer, setSinglecustomer] = useState({});
+	const [singlesupplier, setSinglesupplier] = useState({});
 	// Get all Customers
 	const getCustomers = async () => {
 		// API Call 
@@ -32,6 +33,8 @@ const KhataState = (props) => {
 			const json = await response.json()
 			console.log(json);
 			setCustomers(json);
+
+
 		}
 
 	}
@@ -70,7 +73,7 @@ const KhataState = (props) => {
 				'Content-Type': 'application/json',
 				"auth-token": localStorage.getItem('token')
 			},
-			body: JSON.stringify({ title, name, amount})
+			body: JSON.stringify({ title, name, amount })
 		});
 		console.log(response.status);
 		if (response.status !== 200) {
@@ -95,7 +98,7 @@ const KhataState = (props) => {
 				'Content-Type': 'application/json',
 				"auth-token": localStorage.getItem('token')
 			},
-			body: JSON.stringify({ title, name, amount})
+			body: JSON.stringify({ title, name, amount })
 		});
 		if (response.status !== 200) {
 
@@ -118,24 +121,24 @@ const KhataState = (props) => {
 				"auth-token": localStorage.getItem('token')
 			}
 		});
-		const json = await response.json();
+		// const json = await response.json();
 		const newCustomers = customers.filter((customer) => { return customer._id !== id })
 		setCustomers(newCustomers)
 	}
 
 	// Edit a Customer
-	const editCustomer = async (id,  title, name, amount) => {
+	const editCustomer = async (id, title, name, amount) => {
 		// API Call 
-		console.log("got my boy");
-		const response = await fetch(`${host}/api/notes/updatecustomer/${id}`, {
+		console.log(title, name, amount);
+		const response = await fetch(`${host}/api/khatabook/updatecustomer/${id}`, {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json',
 				"auth-token": localStorage.getItem('token')
 			},
-			body: JSON.stringify({  title, name, amount })
+			body: JSON.stringify({ title, name, amount })
 		});
-		const json = await response.json();
+		// const json = await response.json();
 
 		let newCustomers = JSON.parse(JSON.stringify(customers))
 		// Logic to edit in client
@@ -151,8 +154,35 @@ const KhataState = (props) => {
 		setCustomers(newCustomers);
 	}
 
+	const editSupplier = async (id, title, name, amount) => {
+		// API Call 
+		console.log(title, name, amount);
+		const response = await fetch(`${host}/api/khatabook/updatesupplier/${id}`, {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+				"auth-token": localStorage.getItem('token')
+			},
+			body: JSON.stringify({ title, name, amount })
+		});
+		// const json = await response.json();
+
+		let newSuppliers = JSON.parse(JSON.stringify(suppliers))
+		// Logic to edit in client
+		for (let index = 0; index < newSuppliers.length; index++) {
+			const element = newSuppliers[index];
+			if (element._id === id) {
+				newSuppliers[index].title = title;
+				newSuppliers[index].name = name;
+				newSuppliers[index].amount = amount;
+				break;
+			}
+		}
+		setSuppliers(newSuppliers);
+	}
+
 	return (
-		<khataContext.Provider value={{ customers, addCustomer, deleteCustomer, editCustomer, getCustomers ,getSuppliers,addSupplier,suppliers}}>
+		<khataContext.Provider value={{ customers, getCustomers, addCustomer, deleteCustomer, editCustomer, suppliers, getSuppliers, addSupplier, editSupplier, singlecustomer, setSinglecustomer, singlesupplier, setSinglesupplier }}>
 			{props.children}
 		</khataContext.Provider>
 	)
