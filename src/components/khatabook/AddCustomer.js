@@ -1,8 +1,8 @@
 import React, { useState, useContext } from 'react'
-import { useHistory } from "react-router-dom";
+import { useHistory,Link,useLocation } from "react-router-dom";
 import khataContext from "../../context/notes/khataContext"
-
-const Navbar = () => {
+import Navbar from './Navbar';
+const Navbar2 = () => {
 	return (
 		<nav className="navbar navbar-expand-lg  navbar-dark bg-primary" style={{ color: "#ffffff" }
 		}>
@@ -38,7 +38,9 @@ const AddCustomer = () => {
 
 	return (
 		<>
-			<Navbar />
+			<Navbar a="/khatabook/addcustomer" b="/khatabook/addsupplier"/>
+			<br/>
+			<Navbar2 />
 			<br />
 			<form onSubmit={handleClick}>
 				<div className="row">

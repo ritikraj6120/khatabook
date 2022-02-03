@@ -13,7 +13,7 @@ const EditCustomer = () => {
 		// singlecustomer.amount;
 		// console.log("hello");
 		// console.log(typeof singlecustomer.amount);
-		// console.log(typeof amount);
+		// console.log(typeof amount);                                                                                                         
 		amount=parseInt(amount, 10);
 		// console.log(typeof amount);
 		// console.log(amount);
@@ -29,7 +29,7 @@ const EditCustomer = () => {
 
 	return (
 		<>
-		<Navbar/>
+		<Navbar a="/khatabook/editcustomer" b="/khatabook/editsupplier"/>
 		<h3> Update Customer</h3>
 			<form onSubmit={handleSubmit}>
 				<div className="form-row align-items-center">

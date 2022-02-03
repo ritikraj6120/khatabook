@@ -11,7 +11,7 @@ import Alert from './components/Alert';
 import Signup from './components/Signup';
 import Login from './components/Login';
 import Error from './components/Error';
-import KhataBook from './components/khatabook/KhataBook'
+// import KhataBook from './components/khatabook/KhataBook'
 import Suppliers from './components/khatabook/Suppliers'
 import Customers from './components/khatabook/Customers'
 import AddCustomer from './components/khatabook/AddCustomer';
@@ -38,20 +38,20 @@ function Routerapp() {
 				<Route exact path="/userdetail">
 					<User />
 				</Route>
-				<Route exact path="/khatabook">
+				{/* <Route exact path="/khatabook">
 					<KhataBook />
-				</Route>
+				</Route> */}
 				<Route exact path="/khatabook/customers">
 					<Customers />
-				</Route>
-				<Route exact path="/khatabook/addcustomer">
-					<AddCustomer />
 				</Route>
 				<Route exact path="/khatabook/suppliers">
 					<Suppliers />
 				</Route>
 				<Route exact path="/khatabook/addsupplier">
 					<AddSupplier />
+				</Route>
+				<Route exact path="/khatabook/addcustomer">
+					<AddCustomer />
 				</Route>
 				<Route exact path="/khatabook/editcustomer">
 					<EditCustomer />

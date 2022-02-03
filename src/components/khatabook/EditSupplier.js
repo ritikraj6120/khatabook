@@ -29,7 +29,7 @@ const EditSupplier = () => {
 
 	return (
 		<>
-		<Navbar/>
+		<Navbar a="/khatabook/editcustomer" b="/khatabook/editsupplier"/>
 		<h3> Update Supplier</h3>
 			<form onSubmit={handleSubmit}>
 				<div className="form-row align-items-center">

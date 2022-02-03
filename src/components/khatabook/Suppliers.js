@@ -23,7 +23,7 @@ const Suppliers = () => {
 
 	return (
 		<>
-			<Navbar />
+			<Navbar a="/khatabook/customers" b="/khatabook/suppliers"/>
 			<div className="card mt-5" style={{ width: "18rem" }}>
 				<div className="card-body">
 					<h5 className="card-title">You Will Give </h5>
