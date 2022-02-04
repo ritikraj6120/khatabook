@@ -4,11 +4,13 @@ import Customeritem from './Customeritem';
 import { useHistory, Link } from 'react-router-dom'
 import Navbar from './Navbar'
 import './style.css'
+import { Button } from '@mui/material';
+import generatePDF  from './services/customerReport'
+
 import PersonAddRoundedIcon from '@mui/icons-material/PersonAddRounded';
 const Customers = () => {
-	const context = useContext(khataContext);
 	let history = useHistory();
-	const { customers, getCustomers } = context;
+	const { customers, getCustomers } = useContext(khataContext);;
 	useEffect(() => {
 		if (localStorage.getItem('token'))
 			getCustomers()
@@ -23,11 +25,13 @@ const Customers = () => {
 
 	return (
 		<>
-			<Navbar a="/khatabook/customers" b="/khatabook/suppliers"/>
+			<Navbar a="/khatabook/customers" b="/khatabook/suppliers" />
 			<div className="card mt-5" style={{ width: "18rem" }}>
 				<div className="card-body">
 					<h5 className="card-title">You will get </h5>
-					<p className="card-text">Rs {customerbalance}</p>
+					<p className="card-text">Rs {customerbalance}</p> <Button variant="contained" onClick={() => generatePDF(customers)}>
+						Download Report
+					</Button>
 				</div>
 			</div>
 			<div className=" my-3">

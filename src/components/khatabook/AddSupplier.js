@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { useHistory,Link,useLocation } from "react-router-dom";
+import { useHistory} from "react-router-dom";
 import khataContext from "../../context/notes/khataContext"
 import Navbar from './Navbar';
 
@@ -47,14 +47,14 @@ const AddSupplier = () => {
 			<form onSubmit={handleClick}>
 				<div className="row">
 					<div className="col-sm col-lg-4">
-						<label htmlhtmlFor="exampleFormControlSelect1">Enter Title</label>
+						<label htmlFor="exampleFormControlSelect1">Enter Title</label>
 						<select className="form-control" id="exampleFormControlSelect1" name="title" value={supplier.title} onChange={onChange} >
 							<option value="Mr">Mr</option>
 							<option value="Mrs">Mrs</option>
 						</select>
 					</div>
 					<div className="col-sm col-lg-4">
-						<label htmlhtmlFor="name">Name</label>
+						<label htmlFor="name">Name</label>
 						<input required="required" type="text" className="form-control" id="name" name="name"
 							value={supplier.name} onChange={onChange} />
 					</div>

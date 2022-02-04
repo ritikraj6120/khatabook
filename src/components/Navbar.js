@@ -9,7 +9,7 @@ const Navbar = () => {
 		localStorage.removeItem('token');
 		history.push('/login');
 	}
-	
+
 	let location = useLocation();
 	return (
 		<nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -27,7 +27,7 @@ const Navbar = () => {
 							<Link className={`nav-link ${location.pathname === "/about" ? "active" : ""}`} to="/about">About</Link>
 						</li>
 						<li className="nav-item">
-							<Link className={`nav-link ${location.pathname === "/khatabook/customers" ? "active" : ""}`} to="/khatabook/customers">KhataBook</Link>
+							<Link className={`nav-link ${location.pathname === "/khatabook/customers" || location.pathname === "/khatabook/suppliers" ? "active" : ""}`} to="/khatabook/customers">KhataBook</Link>
 						</li>
 					</ul>
 					{

@@ -126,6 +126,10 @@ const KhataState = (props) => {
 		setCustomers(newCustomers)
 	}
 
+
+
+
+
 	// Edit a Customer
 	const editCustomer = async (id, title, name, amount) => {
 		// API Call 
@@ -152,7 +156,23 @@ const KhataState = (props) => {
 			}
 		}
 		setCustomers(newCustomers);
+		// Dummy promise for blocking  // but no need to do it because async by default returns a promise
+		// return new Promise((resolve,reject)=>{
+		// 	resolve("success");
+		// 	reject("fail")
+		// });
 	}
+
+
+
+
+
+
+
+
+
+
+
 
 	const editSupplier = async (id, title, name, amount) => {
 		// API Call 

@@ -6,7 +6,7 @@ import { Link, useLocation } from "react-router-dom";
 const Navbar = ({a,b}) => {
 	let location = useLocation();
 	return (
-		<nav className="navbar navbar-expand-lg  navbar-dark bg-primary" style={{color : "#ffffff" }}>
+		<nav className="navbar navbar-expand-lg   navbar-dark bg-primary" style={{color : "#ffffff" }}>
 			<div className="container-fluid">
 				<div className="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul className="navbar-nav me-auto mb-2 mb-lg-0">

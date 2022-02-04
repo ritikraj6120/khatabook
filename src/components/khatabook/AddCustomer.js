@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { useHistory,Link,useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import khataContext from "../../context/notes/khataContext"
 import Navbar from './Navbar';
 const Navbar2 = () => {

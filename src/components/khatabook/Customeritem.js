@@ -3,15 +3,11 @@ import { useHistory } from 'react-router-dom';
 import khataContext from '../../context/notes/khataContext';
 const Customeritem = (props) => {
 	let history=useHistory();
-	const context = useContext(khataContext);
-	const {  singlecustomer,setSinglecustomer } =  context ;
+	const {  singlecustomer,setSinglecustomer} = useContext(khataContext);
 	const { customer } = props;
 	const { title, name, amount } = customer;
 	const edit =()=>{
-		// console.log(typeof singlecustomer);
-		// console.log("clicked on button");
 		setSinglecustomer(customer)	;
-		// console.log( singlecustomer);
 		history.push('/khatabook/editcustomer');
 
 	}
