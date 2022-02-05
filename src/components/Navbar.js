@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link, useLocation, useHistory } from "react-router-dom";
-
+import UserNavbar from './UserNavbar';
 
 
 const Navbar = () => {
@@ -27,7 +27,7 @@ const Navbar = () => {
 							<Link className={`nav-link ${location.pathname === "/about" ? "active" : ""}`} to="/about">About</Link>
 						</li>
 						<li className="nav-item">
-							<Link className={`nav-link ${location.pathname === "/khatabook/customers" || location.pathname === "/khatabook/suppliers" ? "active" : ""}`} to="/khatabook/customers">KhataBook</Link>
+							<Link className={`nav-link ${ location.pathname.includes("/khatabook") ? "active" : ""}`} to="/khatabook/customers">KhataBook</Link>
 						</li>
 					</ul>
 					{
@@ -36,11 +36,7 @@ const Navbar = () => {
 							<Link className="btn btn-primary mx-1" to="/signup" role="button">Signup</Link>
 						</form> :
 							<>
-								<Link to="/userdetail">
-									<span style={{ color: "white", fontSize: "1.5rem" }}>
-										<i className="far fa-user mx-4"></i>
-									</span>
-								</Link>
+								<UserNavbar/>
 								<button onClick={handleLogout} className="btn btn-primary">Logout</button>
 							</>
 					}
@@ -51,3 +47,6 @@ const Navbar = () => {
 }
 
 export default Navbar
+
+
+// location.pathname.includes() === "/khatabook/customers" || location.pathname === "/khatabook/suppliers"
