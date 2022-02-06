@@ -5,6 +5,8 @@ import UserState from './context/notes/UserState';
 import KhataState from './context/notes/KhataState';
 import Navbar from './components/Navbar';
 import Home from './components/Home';
+import Important from './components/Important.js';
+import Completed from './components/Completed.js';
 import About from './components/About';
 import User from './components/User'
 import Alert from './components/Alert';
@@ -25,6 +27,12 @@ function Routerapp() {
 			<Switch>
 				<Route exact path="/">
 					<Home />
+				</Route>
+				<Route exact path="/important">
+					<Important />
+				</Route>
+				<Route exact path="/completed">
+					<Completed />
 				</Route>
 				<Route exact path="/about">
 					<About />

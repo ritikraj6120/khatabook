@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
+import {useHistory} from 'react-router-dom'
 import noteContext from "../context/notes/noteContext"
 import Noteitem from './Noteitem';
 import AddNote from './AddNote';
-import {useHistory} from 'react-router-dom'
+import NoteNavbar from './NoteNavbar';
 
 const Notes = () => {
 
@@ -16,7 +17,6 @@ const Notes = () => {
 		{
 			history.push('/login');
 		}
-        // eslint-disable-next-line
     }, [])
     const ref = useRef(null)
     const refClose = useRef(null)
@@ -40,6 +40,7 @@ const Notes = () => {
 
     return (
         <>
+		<NoteNavbar/>
             <AddNote />
             <button ref={ref} type="button" className="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Launch demo modal

@@ -45,14 +45,15 @@ router.post('/addnote', fetchuser, [
 
 // ROUTE 3: Update an existing Note using: PUT "/api/notes/updatenote". Login required
 router.put('/updatenote/:id', fetchuser, async (req, res) => {
-	const { title, description, tag } = req.body;
+	const { title, description, tag,important } = req.body;
 	try {
 		// Create a newNote object
 		const newNote = {};
 		if (title) { newNote.title = title };
 		if (description) { newNote.description = description };
 		if (tag) { newNote.tag = tag };
-
+		if(important){newNote.important = important };
+		
 		// Find the note to be updated and update it
 		let note = await Note.findById(req.params.id);
 		if (!note) { return res.status(404).send("Not Found") }
@@ -61,6 +62,7 @@ router.put('/updatenote/:id', fetchuser, async (req, res) => {
 			return res.status(401).send("Not Allowed");
 		}
 		note = await Note.findByIdAndUpdate(req.params.id, { $set: newNote }, { new: true })
+		console.log(note);
 		res.json({ note });
 	} catch (error) {
 		console.error(error.message);

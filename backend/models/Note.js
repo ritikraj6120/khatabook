@@ -18,10 +18,18 @@ const NotesSchema = new Schema({
         type: String,
         default: "General"
     },
+	important:{
+		type: Boolean,
+        default: false
+	},
+	completed:{
+		type: Boolean,
+        default: false
+	},
     date:{
         type: Date,
         default: Date.now
-    },
+    }
   });
 
   module.exports = mongoose.model('notes', NotesSchema);
