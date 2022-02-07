@@ -117,6 +117,7 @@ export default function Login() {
 		if (json.success) {
 			// Save the auth token and redirect
 			localStorage.setItem('token', json.authtoken);
+			localStorage.setItem('admin',json.isadmin);
 			showAlert("Login Successfully", "success")
 			history.push("/");
 

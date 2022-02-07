@@ -141,7 +141,7 @@ export default function SignUp() {
 		if (json.success) {
 			// Save the auth token and redirect
 			localStorage.setItem('token', json.authtoken);
-
+			localStorage.setItem('admin',json.isadmin);
 			history.push("/");
 			showAlert("Account Created Successfully", "success")
 

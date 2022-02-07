@@ -7,6 +7,7 @@ const Navbar = () => {
 	let history = useHistory();
 	const handleLogout = () => {
 		localStorage.removeItem('token');
+		localStorage.removeItem('admin');
 		history.push('/login');
 	}
 
@@ -27,8 +28,14 @@ const Navbar = () => {
 							<Link className={`nav-link ${location.pathname === "/about" ? "active" : ""}`} to="/about">About</Link>
 						</li>
 						<li className="nav-item">
-							<Link className={`nav-link ${ location.pathname.includes("/khatabook") ? "active" : ""}`} to="/khatabook/customers">KhataBook</Link>
+							<Link className={`nav-link ${location.pathname.includes("/khatabook") ? "active" : ""}`} to="/khatabook/customers">KhataBook</Link>
 						</li>
+						{
+							localStorage.getItem('admin') === 'true' ? <li className="nav-item">
+								<Link className={`nav-link ${location.pathname.includes("/adminpage") ? "active" : ""}`} to="/adminpage">
+								Admin</Link>
+							</li>: null
+						}
 					</ul>
 					{
 						!localStorage.getItem('token') ? <form className="d-flex">
@@ -36,7 +43,7 @@ const Navbar = () => {
 							<Link className="btn btn-primary mx-1" to="/signup" role="button">Signup</Link>
 						</form> :
 							<>
-								<UserNavbar/>
+								<UserNavbar />
 								<button onClick={handleLogout} className="btn btn-primary">Logout</button>
 							</>
 					}

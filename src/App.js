@@ -3,16 +3,18 @@ import { Switch, Route } from "react-router-dom";
 import NoteState from './context/notes/NoteState';
 import UserState from './context/notes/UserState';
 import KhataState from './context/notes/KhataState';
+import AdminState from './context/notes/AdminState';
 import Navbar from './components/Navbar';
 import Home from './components/Home';
 import Important from './components/Important.js';
 import Completed from './components/Completed.js';
 import About from './components/About';
-import User from './components/User'
+import User from './components/User';
 import Alert from './components/Alert';
 import Signup from './components/Signup';
 import Login from './components/Login';
 import Error from './components/Error';
+import Adminpage from './components/Admin/AdminPage';
 // import KhataBook from './components/khatabook/KhataBook'
 import Suppliers from './components/khatabook/Suppliers'
 import Customers from './components/khatabook/Customers'
@@ -39,6 +41,9 @@ function Routerapp() {
 				</Route>
 				<Route exact path="/login">
 					<Login />
+				</Route>
+				<Route exact path="/adminpage">
+					<Adminpage />
 				</Route>
 				<Route exact path="/signup">
 					<Signup />
@@ -77,17 +82,19 @@ function Routerapp() {
 
 const App = () => {
 	return (
-		<UserState>
-			<NoteState>
-				<KhataState>
-					<Navbar />
-					<Alert />
-					<div className="container">
-						<Routerapp />
-					</div>
-				</KhataState>
-			</NoteState>
-		</UserState >
+		<AdminState>
+			<UserState>
+				<NoteState>
+					<KhataState>
+						<Navbar />
+						<Alert />
+						<div className="container">
+							<Routerapp />
+						</div>
+					</KhataState>
+				</NoteState>
+			</UserState >
+		</AdminState>
 	);
 };
 

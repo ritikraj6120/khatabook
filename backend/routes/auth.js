@@ -49,7 +49,8 @@ router.post('/createuser', [
 
     // res.json(user)
 	success=true;
-    res.json({success, authtoken })
+	 
+    res.json({success, authtoken ,isadmin:user.isadmin})
 
   } catch (error) {
     console.error(error.message);
@@ -92,7 +93,8 @@ router.post('/login', [
     }
     const authtoken = jwt.sign(data, JWT_SECRET);
     success = true;
-    res.json({ success, authtoken })
+	console.log(user.isadmin);
+    res.json({ success, authtoken,isadmin:user.isadmin });
 
   } catch (error) {
     console.error(error.message);

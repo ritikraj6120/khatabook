@@ -2,9 +2,8 @@ import React, { useContext, useEffect } from 'react'
 import UserContext from '../context/notes/userContext';
 import { useHistory } from 'react-router-dom'
 const User = () => {
-	const context = useContext(UserContext);
 	let history = useHistory();
-	const { UserDetail , getUser } = context;
+	const { UserDetail , getUser } = useContext(UserContext);
 	useEffect(() => {
 		if (localStorage.getItem('token'))
 			getUser()
