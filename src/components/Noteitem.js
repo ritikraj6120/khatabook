@@ -7,6 +7,7 @@ import Tooltip from '@mui/material/Tooltip';
 import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { IconButton } from '@mui/material';
+import soundfile from '../music/completed.wav';
 const Noteitem = (props) => {
 
 	const { note, updateNote } = props;
@@ -19,6 +20,11 @@ const Noteitem = (props) => {
 	}
 	const handleCompleted = () => {
 		console.log(!note.completed);
+		if(!note.completed)
+		{
+			const audio = new Audio(soundfile);
+			audio.play();
+		}
 		editNote(note._id, null, null, null, null, !note.completed);
 	}
 	console.log("inside noteitem");
