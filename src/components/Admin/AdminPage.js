@@ -66,14 +66,15 @@ const AdminDashboard = () => {
 		fetchUserList();
 	}, []);
 
+	const simpleUsers = Users.filter(user => !user.isadmin);
 
 	return (
 		<div>
 			<h1>Admin Dashboard</h1>
 			<p>You are logged in as admin</p>
-			<p>Users Count:- {Users.length}</p>
+			<p>Users Count:- {simpleUsers.length}</p>
 			<ul>
-				{Users.map((user) => {
+				{simpleUsers.map((user) => {
 					// return <li key={user.id}>{user.firstName + " " + user.lastName}</li>;
 					return <OutlinedCard key={user.id} {...user} />;
 				})}

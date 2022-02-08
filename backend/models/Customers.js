@@ -14,7 +14,11 @@ const CustomerSchema = new Schema({
 		type: String,
 		required: true,
 	},
-	amount: {
+	lendamount: {
+		type: Number,
+		default: 0,
+	},
+	takeamount:{
 		type: Number,
 		default: 0,
 	},

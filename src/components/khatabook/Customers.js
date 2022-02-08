@@ -19,21 +19,33 @@ const Customers = () => {
 		}
 		// eslint-disable-next-line
 	}, [])
-	let customerbalance = 0;
-	customers.map((customer) => { customerbalance += customer.amount })
-
-
+	let customerlendamount = 0;
+	let customertakeamount = 0;
+	for (let i = 0; i < customers.length; i++) 
+	{
+		if(customers[i].lendamount-customers[i].takeamount>=0)
+		{
+			customerlendamount+=(customers[i].lendamount-customers[i].takeamount);
+		}
+		else{
+			customertakeamount+=(customers[i].takeamount-customers[i].lendamount);
+		}
+	}
 	return (
 		<>
 			<Navbar a="/khatabook/customers" b="/khatabook/suppliers" />
 			<div className="card mt-5" style={{ width: "18rem" }}>
 				<div className="card-body">
 					<h5 className="card-title">You will get </h5>
-					<p className="card-text">Rs {customerbalance}</p> <Button variant="contained" onClick={() => generatePDF(customers)}>
+					<p className="card-text">Rs {customerlendamount}</p> 
+					<h5 className="card-title">You will give </h5>
+					<p className="card-text">Rs {customertakeamount}</p>
+					<Button variant="contained" onClick={() => generatePDF(customers)}>
 						Download Report
 					</Button>
 				</div>
 			</div>
+
 			<div className=" my-3">
 				<br />
 				<div className="container mx-2 h3">

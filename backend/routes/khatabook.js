@@ -20,7 +20,7 @@ router.get('/getcustomers', fetchuser, async (req, res) => {
 
 router.post('/addcustomer', fetchuser, async (req, res) => {
 	try {
-		const { title, name, amount } = req.body;
+		const { title, name, lendamount,takeamount } = req.body;
 		console.log(title);
 		// If there are errors, return Bad request and the errors
 		// const errors = validationResult(req);
@@ -28,7 +28,7 @@ router.post('/addcustomer', fetchuser, async (req, res) => {
 		// 	return res.status(400).json({ errors: errors.array() });
 		// }
 		const customer = new Customers({
-			title, name, amount, user: req.user.id
+			title, name, lendamount,takeamount, user: req.user.id
 		})
 		const savedCustomer = await customer.save()
 
@@ -44,14 +44,15 @@ router.post('/addcustomer', fetchuser, async (req, res) => {
 // ROUTE 3: Update an existing customer using: PUT "/api/khatabok/updatecustomers". Login required
 
 router.put('/updatecustomer/:id', fetchuser, async (req, res) => {
-	const { title, name, amount } = req.body;
+	const { title, name,lendamount, takeamount } = req.body;
 	try {
 		// Create a newNote object
 		const newCustomer = {};
 		if (title) { newCustomer.title = title };
 		if (name) { newCustomer.name = name };
-		if (amount) { newCustomer.amount = amount };
-		console.log(title,name,amount);
+		if (lendamount) { newCustomer.lendamount = lendamount };
+		if(takeamount)	{ newCustomer.takeamount = takeamount };
+		console.log(title,name,lendamount,takeamount);
 		// Find the note to be updated and update it
 		let customer = await Customers.findById(req.params.id);
 		if (!customer) { return res.status(404).send("Not Found") }

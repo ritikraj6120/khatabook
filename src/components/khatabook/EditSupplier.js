@@ -4,7 +4,8 @@ import { useHistory } from 'react-router-dom';
 import Navbar from './Navbar';
 const EditSupplier = () => {
 	let history = useHistory();
-	const { singlesupplier, editSupplier } = useContext(khataContext);
+	const { editSupplier } = useContext(khataContext);
+		const singlesupplier = JSON.parse(localStorage.getItem('singlesupplier'));
 	const [credentials, setCredentials] = useState({ title: singlesupplier.title, name: singlesupplier.name, amount: 0 })
 
 	const handleSubmit = async (e) => {

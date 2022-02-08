@@ -4,17 +4,15 @@ import khataContext from '../../context/notes/khataContext';
 
 const Supplieritem = (props) => {
 	let history=useHistory();
-	const {  singlesupplier,setSinglesupplier } =   useContext(khataContext);
+	// const {  singlesupplier,setSinglesupplier } =   useContext(khataContext);
 	
 	const { supplier } = props;
 	// console.log(supplier);
 	const { title, name, amount } = supplier;
 
 	const edit =()=>{
-		// console.log(typeof singlecustomer);
-		// console.log("clicked on button");
-		setSinglesupplier(supplier)	;
-		// console.log( singlecustomer);
+		// setSinglesupplier(supplier)	;
+		localStorage.setItem("singlesupplier",JSON.stringify(supplier))
 		history.push('/khatabook/editsupplier');
 
 	}

@@ -63,7 +63,7 @@ const KhataState = (props) => {
 	}
 
 	// Add a Customer
-	const addCustomer = async (title, name, amount) => {
+	const addCustomer = async (title, name, lendamount,takeamount) => {
 		// TODO: API Call
 		// API Call 
 		console.log(title);
@@ -73,7 +73,7 @@ const KhataState = (props) => {
 				'Content-Type': 'application/json',
 				"auth-token": localStorage.getItem('token')
 			},
-			body: JSON.stringify({ title, name, amount })
+			body: JSON.stringify({ title, name, lendamount,takeamount})
 		});
 		console.log(response.status);
 		if (response.status !== 200) {
@@ -131,16 +131,16 @@ const KhataState = (props) => {
 
 
 	// Edit a Customer
-	const editCustomer = async (id, title, name, amount) => {
+	const editCustomer = async (id, title, name,lendamount, takeamount) => {
 		// API Call 
-		console.log(title, name, amount);
+		console.log(title, name, lendamount,takeamount);
 		const response = await fetch(`${host}/api/khatabook/updatecustomer/${id}`, {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json',
 				"auth-token": localStorage.getItem('token')
 			},
-			body: JSON.stringify({ title, name, amount })
+			body: JSON.stringify({ title, name, lendamount,takeamount })
 		});
 		// const json = await response.json();
 
@@ -151,7 +151,8 @@ const KhataState = (props) => {
 			if (element._id === id) {
 				newCustomers[index].title = title;
 				newCustomers[index].name = name;
-				newCustomers[index].amount = amount;
+				newCustomers[index].lendamount += lendamount;
+				newCustomers[index].takeamount += takeamount;
 				break;
 			}
 		}

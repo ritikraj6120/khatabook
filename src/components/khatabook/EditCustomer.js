@@ -4,19 +4,17 @@ import { useHistory } from 'react-router-dom';
 import Navbar from './Navbar';
 const EditCustomer = () => {
 	let history = useHistory();
-	const { singlecustomer, editCustomer } = useContext(khataContext);
-	const [credentials, setCredentials] = useState({ title: singlecustomer.title, name: singlecustomer.name, amount: 0 })
-
-
-
-
-
+	const { editCustomer } = useContext(khataContext);
+	const singlecustomer = JSON.parse(localStorage.getItem('singlecustomer'));
+	const [credentials, setCredentials] = useState({ title: singlecustomer.title, name: singlecustomer.name, lendamount: 0, takeamount: 0 })
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		let { title, name, amount } = credentials;
-		amount = parseInt(amount, 10);
-		amount += singlecustomer.amount
-		await editCustomer(singlecustomer._id, title, name, amount);
+		let { title, name, lendamount, takeamount } = credentials;
+		lendamount = parseInt(lendamount, 10);
+		takeamount = parseInt(takeamount, 10);
+		lendamount += singlecustomer.lendamount;
+		takeamount += singlecustomer.takeamount;
+		await editCustomer(singlecustomer._id, title, name, lendamount, takeamount);
 		history.push("/khatabook/customers");
 	}
 
@@ -37,9 +35,9 @@ const EditCustomer = () => {
 			<form onSubmit={handleSubmit}>
 				<div className="form-row align-items-center">
 					<div className="col-sm-3 my-1">
-					<label  className="sr-only" htmlFor="inlineFormInputName">Title</label>
+						<label className="sr-only" htmlFor="inlineFormInputName">Title</label>
 						<select className="form-control" id="inlineFormInputName"
-							name="title"  placeholder="Title" value={credentials.title} onChange={onChange} >
+							name="title" placeholder="Title" value={credentials.title} onChange={onChange} >
 							<option value="Mr">Mr</option>
 							<option value="Mrs">Mrs</option>
 						</select>
@@ -51,11 +49,15 @@ const EditCustomer = () => {
 
 					<div className="col-sm-3 my-1">
 						<label className="sr-only" htmlFor="inlineFormInputName">Name</label>
-						<input type="text" className="form-control" id="inlineFormInputName" name="name" placeholder="Name" value={credentials.name} onChange={onChange} />
+						<input type="text" className="form-control" id="inlineFormInputName" name="name" placeholder="Name" value={credentials.name} onChange={onChange} required />
 					</div>
 					<div className="col-sm-3 my-1">
-						<label className="sr-only" htmlFor="inlineFormInputGroupUsername">Amount</label>
-						<input type="number" className="form-control" id="inlineFormInputGroupUsername" name="amount" placeholder="Add extra amount"  onChange={onChange} />
+						<label className="sr-only" htmlFor="inlineFormInputGroupUsername">You give</label>
+						<input type="number" className="form-control" id="inlineFormInputGroupUsername" name="lendamount" placeholder="You give" min="0" onChange={onChange} />
+					</div>
+					<div className="col-sm-3 my-1">
+						<label className="sr-only" htmlFor="inlineFormInputGroupUsername">You Got</label>
+						<input type="number" className="form-control" id="inlineFormInputGroupUsername" name="takeamount" placeholder="You Got" min="0" onChange={onChange} />
 					</div>
 					<div className="col-auto my-1">
 						<button type="submit" className="btn btn-primary">Update</button>

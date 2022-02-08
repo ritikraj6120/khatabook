@@ -24,15 +24,15 @@ const AddCustomer = () => {
 	let history=useHistory();
 	const context = useContext(khataContext);
 	const { addCustomer } = context;
-	const [customer, setCustomer] = useState({ title: "Mr", name: "", amount: 0 });
+	const [customer, setCustomer] = useState({ title: "Mr", name: "", lendamount: 0,takeamount:0 });
 	const onChange = (e) => {
 		setCustomer({ ...customer, [e.target.name]: e.target.value })
 	}
 
 	const handleClick = (e) => {
 		e.preventDefault();
-		addCustomer(customer.title, customer.name, customer.amount);
-		setCustomer({ title: "Mr", name: "", amount: 0 });
+		addCustomer(customer.title, customer.name, customer.lendamount,customer.takeamount);
+		setCustomer({ title: "Mr", name: "", lendamount: 0 ,takeamount:0});
 		history.push('/khatabook/customers');
 	}
 
@@ -58,15 +58,27 @@ const AddCustomer = () => {
 							value={customer.name} onChange={onChange} />
 					</div>
 					<div className="col-sm col-lg-4">
-						<label htmlFor="amount">Amount</label>
+						<label htmlFor="amount">You Gave</label>
 						<input
 							required="required"
 							type="number"
 							className="form-control"
 							id="amount"
-							value={customer.amount}
+							value={customer.lendamount}
 							onChange={onChange}
-							name="amount"
+							name="lendamount"
+						/>
+					</div>
+					<div className="col-sm col-lg-4">
+						<label htmlFor="amount">You Got</label>
+						<input
+							required="required"
+							type="number"
+							className="form-control"
+							id="amount"
+							value={customer.takeamount}
+							onChange={onChange}
+							name="takeamount"
 						/>
 					</div>
 				</div>
