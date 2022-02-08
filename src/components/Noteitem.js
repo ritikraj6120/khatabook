@@ -8,6 +8,7 @@ import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { IconButton } from '@mui/material';
 import soundfile from '../music/completed.wav';
+import './style.css'
 const Noteitem = (props) => {
 
 	const { note, updateNote } = props;
@@ -20,8 +21,7 @@ const Noteitem = (props) => {
 	}
 	const handleCompleted = () => {
 		console.log(!note.completed);
-		if(!note.completed)
-		{
+		if (!note.completed) {
 			const audio = new Audio(soundfile);
 			audio.play();
 		}
@@ -30,10 +30,10 @@ const Noteitem = (props) => {
 	console.log("inside noteitem");
 	return (
 		<div className="col-md-3">
-			<div className="card my-3">
-				<div className="card-body">
+			<div className="card my-3 cardbody">
+				<div className="card-body ">
 					<div className="d-flex align-items-center">
-						<h5 className="card-title">{note.title}</h5>
+
 						{/* <i className="far fa-trash-alt mx-2" onClick={() => { deleteNote(note._id); showAlert("Deleted successfully", "success"); }} ></i> */}
 						<Tooltip className='mx-2' title="Delete note" placement="top" arrow style={{ cursor: " pointer" }}>
 							<DeleteIcon onClick={() => { deleteNote(note._id); showAlert("Deleted successfully", "success"); }} />
@@ -59,7 +59,12 @@ const Noteitem = (props) => {
 								</Tooltip>
 						}
 					</div>
+					<hr />
+					<h5 className="card-title">{note.title}</h5>
+					<hr />
 					<p className="card-text">{note.description}</p>
+					<hr />
+					<i><small>{note.tag}</small></i>
 
 				</div>
 			</div>

@@ -17,7 +17,9 @@ const Customeritem = (props) => {
 				<div className="d-flex bd-highlight">
 					<div className="p-2  bd-highlight">{title}</div>
 					<div className="p-2 bd-highlight">{name}</div>
-					<div className="p-2 flex-grow-1 bd-highlight">Rs {amount}</div>
+					<div className="p-2 flex-grow-1 bd-highlight">Rs {amount}
+					
+					</div>
 				</div>
 			</button>
 		</>

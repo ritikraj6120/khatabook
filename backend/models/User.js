@@ -23,6 +23,9 @@ const UserSchema = new Schema({
 		type:Boolean,
 		default:false
 	},
+	phone:{
+		type:Number
+	},
     date:{
         type: Date,
         default: Date.now
