@@ -7,7 +7,8 @@ const KhataState = (props) => {
 	const context = useContext(noteContext)
 	const { showAlert } = context;
 	let history = useHistory();
-	const host = "http://localhost:5000"
+	const host = "http://localhost:5000";
+	
 	const customerInitial = []
 	const [customers, setCustomers] = useState(customerInitial)
 
@@ -89,7 +90,7 @@ const KhataState = (props) => {
 	}
 
 	// Add a Supplier
-	const addSupplier = async (title, name, amount) => {
+	const addSupplier = async (title, name,payment, purchase) => {
 		// TODO: API Call
 		// API Call 
 		const response = await fetch(`${host}/api/khatabook/addsupplier`, {
@@ -98,7 +99,7 @@ const KhataState = (props) => {
 				'Content-Type': 'application/json',
 				"auth-token": localStorage.getItem('token')
 			},
-			body: JSON.stringify({ title, name, amount })
+			body: JSON.stringify({title, name,payment, purchase})
 		});
 		if (response.status !== 200) {
 
@@ -175,16 +176,16 @@ const KhataState = (props) => {
 
 
 
-	const editSupplier = async (id, title, name, amount) => {
+	const editSupplier = async (id, title, name,payment, purchase) => {
 		// API Call 
-		console.log(title, name, amount);
+		console.log(title, name,payment, purchase);
 		const response = await fetch(`${host}/api/khatabook/updatesupplier/${id}`, {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json',
 				"auth-token": localStorage.getItem('token')
 			},
-			body: JSON.stringify({ title, name, amount })
+			body: JSON.stringify({ title, name,payment, purchase })
 		});
 		// const json = await response.json();
 
@@ -195,7 +196,8 @@ const KhataState = (props) => {
 			if (element._id === id) {
 				newSuppliers[index].title = title;
 				newSuppliers[index].name = name;
-				newSuppliers[index].amount = amount;
+				newSuppliers[index].payment += payment;
+				newSuppliers[index].purchase += purchase;
 				break;
 			}
 		}

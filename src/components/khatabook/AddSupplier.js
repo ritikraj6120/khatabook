@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { useHistory} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import khataContext from "../../context/notes/khataContext"
 import Navbar from './Navbar';
 
@@ -22,10 +22,10 @@ const Navbar2 = () => {
 }
 
 const AddSupplier = () => {
-	let history=useHistory();
+	let history = useHistory();
 	const context = useContext(khataContext);
 	const { addSupplier } = context;
-	const [supplier, setSupplier] = useState({ title: "Mr", name: "", amount: "" });
+	const [supplier, setSupplier] = useState({ title: "Mr", name: "", payment: 0,purchase:0 });
 
 	const onChange = (e) => {
 		setSupplier({ ...supplier, [e.target.name]: e.target.value })
@@ -33,15 +33,15 @@ const AddSupplier = () => {
 
 	const handleClick = (e) => {
 		e.preventDefault();
-		addSupplier(supplier.title, supplier.name, supplier.amount);
-		setSupplier({ title: "Mr", name: "", amount: "" });
+		addSupplier(supplier.title, supplier.name, supplier.payment,supplier.purchase);
+		setSupplier({ title: "Mr", name: "", payment: 0 ,purchase:0});
 		history.push('/khatabook/suppliers');
 	}
 
 	return (
 		<>
-			<Navbar a="/khatabook/addcustomer" b="/khatabook/addsupplier"/>
-			<br/>
+			<Navbar a="/khatabook/addcustomer" b="/khatabook/addsupplier" />
+			<br />
 			<Navbar2 />
 			<br />
 			<form onSubmit={handleClick}>
@@ -59,15 +59,27 @@ const AddSupplier = () => {
 							value={supplier.name} onChange={onChange} />
 					</div>
 					<div className="col-sm col-lg-4">
-						<label htmlFor="amount">Amount</label>
+						<label htmlFor="amount">Your Payment</label>
 						<input
 							required="required"
 							type="number"
 							className="form-control"
 							id="amount"
-							value={supplier.amount}
+							value={supplier.payment}
 							onChange={onChange}
-							name="amount"
+							name="payment"
+						/>
+					</div>
+					<div className="col-sm col-lg-4">
+						<label htmlFor="amount">Your Purchase</label>
+						<input
+							required="required"
+							type="number"
+							className="form-control"
+							id="amount"
+							value={supplier.purchase}
+							onChange={onChange}
+							name="purchase"
 						/>
 					</div>
 				</div>

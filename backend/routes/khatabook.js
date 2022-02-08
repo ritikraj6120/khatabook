@@ -116,15 +116,14 @@ router.get('/getsuppliers', fetchuser, async (req, res) => {
 
 router.post('/addsupplier', fetchuser, async (req, res) => {
 	try {
-		const { title, name, amount } = req.body;
-
+		const { title, name, payment,purchase } = req.body;
 		// If there are errors, return Bad request and the errors
 		// const errors = validationResult(req);
 		// if (!errors.isEmpty()) {
 		// 	return res.status(400).json({ errors: errors.array() });
 		// }
 		const supplier = new Suppliers({
-			title, name, amount, user: req.user.id
+			title, name, payment,purchase , user: req.user.id
 		})
 		const savedsupplier = await supplier.save()
 
@@ -140,13 +139,14 @@ router.post('/addsupplier', fetchuser, async (req, res) => {
 // ROUTE 3: Update an existing customer using: PUT "/api/khatabok/updatesupplier". Login required
 
 router.put('/updatesupplier/:id', fetchuser, async (req, res) => {
-	const { title, name, amount } = req.body;
+	const { title, name, payment,purchase  } = req.body;
 	try {
 		// Create a newNote object
 		const newsupplier = {};
 		if (title) { newsupplier.title = title };
 		if (name) { newsupplier.name = name };
-		if (amount) { newsupplier.amount = amount };
+		if (payment) { newCustomer.payment = payment };
+		if(purchase) { newCustomer.purchase = purchase };
 
 		// Find the note to be updated and update it
 		let supplier = await Suppliers.findById(req.params.id);

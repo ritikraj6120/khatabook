@@ -21,13 +21,11 @@ const Customeritem = (props) => {
 					<div className="p-2 bd-highlight">{name}</div>
 					<div className="p-2 flex-grow-1 bd-highlight">Rs {Math.abs(currentTotal)}
 					<br/>
-					{ currentTotal>=0?<small>You will get </small>: <small>You will give</small>}
+					{ currentTotal >= 0? currentTotal>0?<small>You will get </small>:null : <small>You will give</small>}
 					</div>
 				</div>
 			</button>
 		</>
-
-
 
 	)
 }

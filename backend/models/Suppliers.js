@@ -14,14 +14,18 @@ const SupplierSchema = new Schema({
 		type: String,
 		required: true,
 	},
-	amount: {
+	purchase: {
+		type: Number,
+		default: 0,
+	},
+	payment:{
 		type: Number,
 		default: 0,
 	},
 	date: {
 		type: Date,
 		default: Date.now
-	},
+	}
 });
 
 module.exports = mongoose.model('suppliers', SupplierSchema);

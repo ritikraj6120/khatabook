@@ -7,6 +7,7 @@ const EditCustomer = () => {
 	const { editCustomer } = useContext(khataContext);
 	const singlecustomer = JSON.parse(localStorage.getItem('singlecustomer'));
 	const [credentials, setCredentials] = useState({ title: singlecustomer.title, name: singlecustomer.name, lendamount: 0, takeamount: 0 })
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		let { title, name, lendamount, takeamount } = credentials;
@@ -53,7 +54,7 @@ const EditCustomer = () => {
 					</div>
 					<div className="col-sm-3 my-1">
 						<label className="sr-only" htmlFor="inlineFormInputGroupUsername">You give</label>
-						<input type="number" className="form-control" id="inlineFormInputGroupUsername" name="lendamount" placeholder="You give" min="0" onChange={onChange} />
+						<input type="number" className="form-control" id="inlineFormInputGroupUsername" name="lendamount" placeholder="You Give" min="0" onChange={onChange} />
 					</div>
 					<div className="col-sm-3 my-1">
 						<label className="sr-only" htmlFor="inlineFormInputGroupUsername">You Got</label>

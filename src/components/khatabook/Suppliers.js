@@ -20,16 +20,30 @@ const Suppliers = () => {
 		}
 		// eslint-disable-next-line
 	}, [])
-	let supplierbalance = 0;
-	suppliers.map((supplier) => { supplierbalance += supplier.amount })
+	// let supplierbalance = 0;
+	// suppliers.map((supplier) => { supplierbalance += supplier.amount })
+	let supplierpayment = 0;
+	let supplierpurchase = 0;
+	for (let i = 0; i < suppliers.length; i++) 
+	{
+		if(suppliers[i].payment-suppliers[i].purchase>=0)
+		{
+			supplierpayment+=(suppliers[i].payment-suppliers[i].purchase);
+		}
+		else{
+			supplierpurchase+=(suppliers[i].purchase-suppliers[i].payment);
+		}
+	}
 
 	return (
 		<>
 			<Navbar a="/khatabook/customers" b="/khatabook/suppliers" />
 			<div className="card mt-5" style={{ width: "18rem" }}>
 				<div className="card-body">
-					<h5 className="card-title">You Will Give </h5>
-					<p className="card-text">Rs {supplierbalance}</p>
+					<h5 className="card-title">Total Purchase </h5>
+					<p className="card-text">Rs {supplierpurchase}</p>
+					<h5 className="card-title">Your Advance</h5>
+					<p className="card-text">Rs {supplierpayment}</p>
 					<Button variant="contained" onClick={() => generatePDF(suppliers)}>
 						Download Report
 					</Button>

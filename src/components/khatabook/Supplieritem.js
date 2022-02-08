@@ -8,8 +8,8 @@ const Supplieritem = (props) => {
 	
 	const { supplier } = props;
 	// console.log(supplier);
-	const { title, name, amount } = supplier;
-
+	const { title, name, payment, purchase } = supplier;
+	let currentTotal=payment-purchase;
 	const edit =()=>{
 		// setSinglesupplier(supplier)	;
 		localStorage.setItem("singlesupplier",JSON.stringify(supplier))
@@ -22,7 +22,10 @@ const Supplieritem = (props) => {
 			<div className="d-flex bd-highlight">
 				<div className="p-2  bd-highlight">{title}</div>
 				<div className="p-2 bd-highlight">{name}</div>
-				<div className="p-2 flex-grow-1 bd-highlight">Rs {amount}</div>
+				<div className="p-2 flex-grow-1 bd-highlight">Rs {Math.abs(currentTotal)}
+				<br/>
+					{ currentTotal>=0 ? currentTotal>0? <small>Advance </small>:null : <small>You'll Give</small>}
+				</div>
 			</div>
 		</button>
 
