@@ -76,7 +76,7 @@ const AdminDashboard = () => {
 			<ul>
 				{simpleUsers.map((user) => {
 					// return <li key={user.id}>{user.firstName + " " + user.lastName}</li>;
-					return <OutlinedCard key={user.id} {...user} />;
+					return <OutlinedCard key={user._id} {...user} />;
 				})}
 			</ul>
 		</div>

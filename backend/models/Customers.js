@@ -13,6 +13,7 @@ const CustomerSchema = new Schema({
 	name: {
 		type: String,
 		required: true,
+		unique:true
 	},
 	lendamount: {
 		type: Number,

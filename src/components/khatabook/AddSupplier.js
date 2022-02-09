@@ -48,7 +48,7 @@ const AddSupplier = () => {
 				<div className="row">
 					<div className="col-sm col-lg-4">
 						<label htmlFor="exampleFormControlSelect1">Enter Title</label>
-						<select className="form-control" id="exampleFormControlSelect1" name="title" value={supplier.title} onChange={onChange} >
+						<select className="form-select" id="exampleFormControlSelect1" name="title" value={supplier.title} onChange={onChange} >
 							<option value="Mr">Mr</option>
 							<option value="Mrs">Mrs</option>
 						</select>

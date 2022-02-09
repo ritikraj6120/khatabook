@@ -4,8 +4,8 @@ import { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 
 const KhataState = (props) => {
-	const context = useContext(noteContext)
-	const { showAlert } = context;
+	const { showAlert } = useContext(noteContext)
+	
 	let history = useHistory();
 	const host = "http://localhost:5000";
 	
@@ -77,9 +77,12 @@ const KhataState = (props) => {
 			body: JSON.stringify({ title, name, lendamount,takeamount})
 		});
 		console.log(response.status);
-		if (response.status !== 200) {
-
-			history.push("/login");
+		if (response.status === 409) {
+			showAlert("User already exists", "danger")
+		}
+		else if(response.status !== 200)
+		{
+			history.push('/login');
 		}
 		else {
 			showAlert("Customer Added Succcessfully", "success")
@@ -101,9 +104,12 @@ const KhataState = (props) => {
 			},
 			body: JSON.stringify({title, name,payment, purchase})
 		});
-		if (response.status !== 200) {
-
-			history.push("/login");
+		if (response.status === 409) {
+			showAlert("User already exists", "danger")
+		}
+		else if(response.status !== 200)
+		{
+			history.push('/login');
 		}
 		else {
 			showAlert("Supplier Added Succcessfully", "success")

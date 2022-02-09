@@ -13,6 +13,7 @@ const SupplierSchema = new Schema({
 	name: {
 		type: String,
 		required: true,
+		unique:true
 	},
 	purchase: {
 		type: Number,

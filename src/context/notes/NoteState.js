@@ -48,7 +48,7 @@ const NoteState = (props) => {
 		});
 		if (response.status !== 200) {
 
-			history.push("/login");
+			showAlert("Invalid Details for Notes", "danger")
 		}
 		else {
 			showAlert("Added Succcessfully", "success")

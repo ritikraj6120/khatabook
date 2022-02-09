@@ -30,9 +30,16 @@ router.post('/addcustomer', fetchuser, async (req, res) => {
 		const customer = new Customers({
 			title, name, lendamount,takeamount, user: req.user.id
 		})
-		const savedCustomer = await customer.save()
-
-		res.status(200).json(savedCustomer)
+		const rep=await Customers.findOne({name});
+		if(!rep)
+		{
+			const savedCustomer = await customer.save()
+			res.status(200).json(savedCustomer)
+		}
+		else{
+			 res.status(409).json({ "danger": "Customer already exist"})
+		}
+		
 
 	} catch (error) {
 		console.error(error.message);
@@ -125,9 +132,15 @@ router.post('/addsupplier', fetchuser, async (req, res) => {
 		const supplier = new Suppliers({
 			title, name, payment,purchase , user: req.user.id
 		})
-		const savedsupplier = await supplier.save()
-
-		res.json(savedsupplier)
+		const rep=await Suppliers.findOne({name});
+		if(!rep)
+		{
+			const savedsupplier = await supplier.save()
+			res.status(200).json(savedsupplier)
+		}
+		else{
+			 res.status(409).json({ "danger": "Customer already exist"})
+		}
 
 	} catch (error) {
 		console.error(error.message);
