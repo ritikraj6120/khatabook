@@ -5,7 +5,7 @@ const AddNote = () => {
 	const context = useContext(noteContext);
 	const { addNote } = context;
 
-	const [note, setNote] = useState({ title: "", description: "", tag: "" })
+	const [note, setNote] = useState({ title: "", description: "", tag: "Personal" })
 
 	const handleClick = (e) => {
 		e.preventDefault();
@@ -33,7 +33,8 @@ const AddNote = () => {
 				<div className="mb-3">
 					<label htmlFor="tag" className="form-label">Tag</label>
 					{/* <input type="text" className="form-control" id="tag" name="tag" value={note.tag} onChange={onChange} required /> */}
-					<select className="form-select" id="tag" name="tag" value={note.tag} onChange={onChange} required>
+
+					<select className="form-select" id="tag" name="tag" value={note.tag} onChange={onChange} >
 						<option value="Personal">Personal</option>
 						<option value="Work">Work</option>
 						<option value="Customer">Customer</option>
@@ -41,6 +42,7 @@ const AddNote = () => {
 						<option value="Staff">Staff</option>
 						<option value="Others">Others</option>
 					</select>
+
 				</div>
 
 				<button type="submit" className="btn btn-primary" >Add Note</button>

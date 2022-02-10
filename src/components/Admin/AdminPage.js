@@ -26,8 +26,7 @@ const OutlinedCard = (props) => {
 	// };
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		deleteuser(e.target.value);
-		window.location.reload();
+		deleteuser(e.target.value);	
 	};
 	return (
 		<Box sx={{ minWidth: 275 }}>
@@ -59,22 +58,22 @@ const OutlinedCard = (props) => {
 };
 
 const AdminDashboard = () => {
-	const { Users, fetchUserList } = useContext(AdminContext);
+	const { users, fetchUserList } = useContext(AdminContext);
 	const [userList, setUserList] = useState([]);
 
 	useEffect(() => {
 		fetchUserList();
 	}, []);
 
-	const simpleUsers = Users.filter(user => !user.isadmin);
+	
 
 	return (
 		<div>
 			<h1>Admin Dashboard</h1>
 			<p>You are logged in as admin</p>
-			<p>Users Count:- {simpleUsers.length}</p>
+			<p>Users Count:- {users.length}</p>
 			<ul>
-				{simpleUsers.map((user) => {
+				{users.map((user) => {
 					// return <li key={user.id}>{user.firstName + " " + user.lastName}</li>;
 					return <OutlinedCard key={user._id} {...user} />;
 				})}

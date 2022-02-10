@@ -6,7 +6,8 @@ const EditSupplier = () => {
 	let history = useHistory();
 	const { editSupplier } = useContext(khataContext);
 	const singlesupplier = JSON.parse(localStorage.getItem('singlesupplier'));
-	const [credentials, setCredentials] = useState({ title: singlesupplier.title, name: singlesupplier.name, amount: 0 })
+	console.log(singlesupplier);
+	const [credentials, setCredentials] = useState({ title: singlesupplier.title, name: singlesupplier.name, payment:0,purchase:0 })
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -15,6 +16,8 @@ const EditSupplier = () => {
 		// amount+=singlesupplier.amount;
 		payment = parseInt(payment, 10);
 		purchase = parseInt(purchase, 10);
+		console.log(payment);
+		console.log(purchase);
 		payment += singlesupplier.payment;
 		purchase += singlesupplier.purchase;
 		await editSupplier(singlesupplier._id, title, name, payment, purchase);

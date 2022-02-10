@@ -28,9 +28,22 @@ const Notes = () => {
 	}
 
 	const handleClick = (e) => {
+		if(note.etitle.length<1)
+		{
+			refClose.current.click();
+			showAlert("Title length less than 1", "danger");
+		}
+		else if(note.edescription.length<5)
+		{
+			refClose.current.click();
+			showAlert("Description length less than 5", "danger");
+		}
+		else
+		{
 		editNote(note.id, note.etitle, note.edescription, note.etag)
 		refClose.current.click();
 		showAlert("Updated Succcessfully", "success")
+		}
 	}
 
 	const onChange = (e) => {
@@ -65,14 +78,21 @@ const Notes = () => {
 								</div>
 								<div className="mb-3">
 									<label htmlFor="tag" className="form-label">Tag</label>
-									<input type="text" className="form-control" id="etag" name="etag" value={note.etag} onChange={onChange} />
+									<select className="form-select" id="etag" name="etag" value={note.etag} onChange={onChange} >
+										<option value="Personal">Personal</option>
+										<option value="Work">Work</option>
+										<option value="Customer">Customer</option>
+										<option value="Supplier">Supplier</option>
+										<option value="Staff">Staff</option>
+										<option value="Others">Others</option>
+									</select>
 								</div>
 
 							</form>
 						</div>
 						<div className="modal-footer">
 							<button ref={refClose} type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-							<button disabled={note.etitle.length < 5 || note.edescription.length < 5} type="button" className="btn btn-primary" onClick={handleClick}>Update Note</button>
+							<button  type="button" className="btn btn-primary" onClick={handleClick}>Update Note</button>
 						</div>
 					</div>
 				</div>

@@ -67,7 +67,7 @@ const KhataState = (props) => {
 	const addCustomer = async (title, name, lendamount,takeamount) => {
 		// TODO: API Call
 		// API Call 
-		console.log(title);
+		// console.log(title);
 		const response = await fetch(`${host}/api/khatabook/addcustomer`, {
 			method: 'POST',
 			headers: {
@@ -79,6 +79,7 @@ const KhataState = (props) => {
 		console.log(response.status);
 		if (response.status === 409) {
 			showAlert("User already exists", "danger")
+			
 		}
 		else if(response.status !== 200)
 		{

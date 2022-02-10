@@ -28,7 +28,7 @@ router.get('/fetchUserList', fetchuser,fetchadmin, async (req, res) => {
 	try {
 		// console.log("hello")
 		// console.log(req.user.id)
-		const user = await User.find();
+		const user = await User.find().select("-password");
 		// console.log(user);
 		res.status(200).json(user);
 	} catch (error) {
@@ -43,7 +43,7 @@ router.post('/deleteuser/:id', fetchuser, fetchadmin, async (req, res) => {
 		if (!user) { return res.status(404).send("Not Found") }
 	
 		user = await User.findByIdAndDelete(req.params.id)
-		res.json({ user: user });
+		res.status(200).json({ user: user });
 	} catch (error) {
 		console.error(error.message);
 		res.status(500).send("Internal Server Error");

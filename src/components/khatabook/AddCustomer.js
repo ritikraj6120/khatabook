@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react'
 import { useHistory } from "react-router-dom";
 import khataContext from "../../context/notes/khataContext"
+import noteContext from '../../context/notes/noteContext';
 import Navbar from './Navbar';
 const Navbar2 = () => {
 	return (
@@ -21,25 +22,30 @@ const Navbar2 = () => {
 }
 
 const AddCustomer = () => {
-	let history=useHistory();
-	const context = useContext(khataContext);
-	const { addCustomer } = context;
-	const [customer, setCustomer] = useState({ title: "Mr", name: "", lendamount: 0,takeamount:0 });
+	let history = useHistory();
+	const {showAlert}=useContext(noteContext)
+	const { addCustomer } = useContext(khataContext)
+	const [customer, setCustomer] = useState({ title: "Mr", name: "", lendamount: 0, takeamount: 0 });
 	const onChange = (e) => {
 		setCustomer({ ...customer, [e.target.name]: e.target.value })
 	}
 
 	const handleClick = (e) => {
 		e.preventDefault();
-		addCustomer(customer.title, customer.name, customer.lendamount,customer.takeamount);
-		setCustomer({ title: "Mr", name: "", lendamount: 0 ,takeamount:0});
-		history.push('/khatabook/customers');
+		if (customer.name.length < 1) {
+			showAlert("Customer length less than 1", "danger");
+		}
+		else {
+			addCustomer(customer.title, customer.name, customer.lendamount, customer.takeamount);
+			setCustomer({ title: "Mr", name: "", lendamount: 0, takeamount: 0 });
+			history.push('/khatabook/customers');
+		}
 	}
 
 	return (
 		<>
-			<Navbar a="/khatabook/addcustomer" b="/khatabook/addsupplier"/>
-			<br/>
+			<Navbar a="/khatabook/addcustomer" b="/khatabook/addsupplier" />
+			<br />
 			<Navbar2 />
 			<br />
 			<form onSubmit={handleClick}>
@@ -54,13 +60,13 @@ const AddCustomer = () => {
 					</div>
 					<div className="col-sm col-lg-4">
 						<label htmlFor="name">Name</label>
-						<input required="required" type="text" className="form-control" id="name" name="name"
+						<input required type="text" className="form-control" id="name" name="name"
 							value={customer.name} onChange={onChange} />
 					</div>
 					<div className="col-sm col-lg-4">
 						<label htmlFor="amount">You Gave</label>
 						<input
-							required="required"
+							required="required" min="0"
 							type="number"
 							className="form-control"
 							id="amount"
@@ -72,13 +78,13 @@ const AddCustomer = () => {
 					<div className="col-sm col-lg-4">
 						<label htmlFor="amount">You Got</label>
 						<input
-							required="required"
+							required="required" min="0"
 							type="number"
 							className="form-control"
 							id="amount"
 							value={customer.takeamount}
 							onChange={onChange}
-							name="takeamount"
+							name="takeamount" 
 						/>
 					</div>
 				</div>

@@ -158,8 +158,8 @@ router.put('/updatesupplier/:id', fetchuser, async (req, res) => {
 		const newsupplier = {};
 		if (title) { newsupplier.title = title };
 		if (name) { newsupplier.name = name };
-		if (payment) { newCustomer.payment = payment };
-		if(purchase) { newCustomer.purchase = purchase };
+		if (payment) { newsupplier.payment = payment };
+		if(purchase) { newsupplier.purchase = purchase };
 
 		// Find the note to be updated and update it
 		let supplier = await Suppliers.findById(req.params.id);

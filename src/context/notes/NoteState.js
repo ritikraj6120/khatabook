@@ -16,7 +16,7 @@ const NoteState = (props) => {
 		})
 		setTimeout(() => {
 			setAlert(null);
-		}, 1500);
+		}, 2000);
 	}
 
 	// Get all Notes
@@ -51,9 +51,9 @@ const NoteState = (props) => {
 			showAlert("Invalid Details for Notes", "danger")
 		}
 		else {
-			showAlert("Added Succcessfully", "success")
+			showAlert("Note Added Succcessfully", "success")
 			const note = await response.json();
-			setNotes(notes.concat(note))
+			setNotes(notes.concat(note));
 		}
 	}
 
