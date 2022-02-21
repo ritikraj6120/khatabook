@@ -1,11 +1,17 @@
-import React, { useContext, useState } from 'react';
-import khataContext from '../../context/notes/khataContext';
+import React, { useContext, useState,useEffect } from 'react';
+import khataContext from '../../context/khataContext';
 import { useHistory } from 'react-router-dom';
 import Navbar from './Navbar';
 const EditCustomer = () => {
 	let history = useHistory();
-	const { editCustomer } = useContext(khataContext);
+	const { editCustomer, getSingleCustomer, singleCustomer } = useContext(khataContext);
 	const singlecustomer = JSON.parse(localStorage.getItem('singlecustomer'));
+
+	useEffect(() => {
+		getSingleCustomer(singlecustomer._id);
+	}, [])
+
+
 	const [credentials, setCredentials] = useState({ title: singlecustomer.title, name: singlecustomer.name, lendamount: 0, takeamount: 0 })
 
 	const handleSubmit = async (e) => {
@@ -65,7 +71,12 @@ const EditCustomer = () => {
 					</div>
 				</div>
 			</form>
+			{singleCustomer.map((item) => {
+				return <div key={item._id}>
+					<button >{item.lendamount_singleCustomer} {item.takeamount_singleCustomer}</button>
 
+				</div>
+			})}
 		</>
 	);
 };

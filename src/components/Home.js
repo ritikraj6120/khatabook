@@ -1,4 +1,4 @@
-import Notes from './Notes';
+import Notes from './Notes/Notes.js';
 
 const Home = () => {
     return (

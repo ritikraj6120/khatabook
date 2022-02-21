@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import noteContext from "../context/notes/noteContext"
+import noteContext from "../../context/noteContext"
 import Noteitem from './Noteitem';
 import AddNote from './AddNote';
 import NoteNavbar from './NoteNavbar';
@@ -20,7 +20,8 @@ const Notes = () => {
 	const ref = useRef(null)
 	const refClose = useRef(null)
 	const [note, setNote] = useState({ id: "", etitle: "", edescription: "", etag: "" })
-	const completedNotes =notes.filter((note)=>note.completed===true);
+	const importantNotes =notes.filter((note)=>note.important===true);
+
 	const updateNote = (currentNote) => {
 		ref.current.click();
 		setNote({ id: currentNote._id, etitle: currentNote.title, edescription: currentNote.description, etag: currentNote.tag })
@@ -101,10 +102,10 @@ const Notes = () => {
 			<div className="row my-3">
 				<h2>You Notes</h2>
 				<div className="container mx-2">
-					{notes.length === 0 && 'No notes to display'}
+					{importantNotes.length === 0 && 'No notes to display'}
 				</div>
 				{
-					completedNotes.map((note) => {
+					importantNotes.map((note) => {
 						return <Noteitem key={note._id} updateNote={updateNote} note={note} />
 					})}
 			</div>

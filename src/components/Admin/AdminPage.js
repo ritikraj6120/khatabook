@@ -1,20 +1,20 @@
-import React, { useContext, useEffect, useState } from "react";
-import AdminContext from "../../context/notes/AdminContext";
-import Paper from "@mui/material/Paper";
+import React, { useContext, useEffect } from "react";
+import AdminContext from "../../context/AdminContext";
+// import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-const bull = (
-	<Box
-		component="span"
-		sx={{ display: "inline-block", mx: "2px", transform: "scale(0.8)" }}
-	>
-		•
-	</Box>
-);
+// const bull = (
+// 	<Box
+// 		component="span"
+// 		sx={{ display: "inline-block", mx: "2px", transform: "scale(0.8)" }}
+// 	>
+// 		•
+// 	</Box>
+// );
 
 const OutlinedCard = (props) => {
 	const { deleteuser } = useContext(AdminContext);
@@ -59,7 +59,6 @@ const OutlinedCard = (props) => {
 
 const AdminDashboard = () => {
 	const { users, fetchUserList } = useContext(AdminContext);
-	const [userList, setUserList] = useState([]);
 
 	useEffect(() => {
 		fetchUserList();

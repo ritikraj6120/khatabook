@@ -1,11 +1,11 @@
 import React, { useContext, useEffect } from 'react'
-import khataContext from "../../context/notes/khataContext"
+import khataContext from "../../context/khataContext"
 import Supplieritem from './Supplieritem';
 import { useHistory, Link } from 'react-router-dom'
 import Navbar from './Navbar'
 import './style.css'
 import { Button } from '@mui/material';
-import generatePDF  from './services/supplierReport'
+import generatePDF from './services/supplierReport'
 import PersonAddRoundedIcon from '@mui/icons-material/PersonAddRounded';
 const Suppliers = () => {
 
@@ -24,14 +24,12 @@ const Suppliers = () => {
 	// suppliers.map((supplier) => { supplierbalance += supplier.amount })
 	let supplierpayment = 0;
 	let supplierpurchase = 0;
-	for (let i = 0; i < suppliers.length; i++) 
-	{
-		if(suppliers[i].payment-suppliers[i].purchase>=0)
-		{
-			supplierpayment+=(suppliers[i].payment-suppliers[i].purchase);
+	for (let i = 0; i < suppliers.length; i++) {
+		if (suppliers[i].payment - suppliers[i].purchase >= 0) {
+			supplierpayment += (suppliers[i].payment - suppliers[i].purchase);
 		}
-		else{
-			supplierpurchase+=(suppliers[i].purchase-suppliers[i].payment);
+		else {
+			supplierpurchase += (suppliers[i].purchase - suppliers[i].payment);
 		}
 	}
 
@@ -57,9 +55,11 @@ const Suppliers = () => {
 				</div>
 				<div className="d-flex justify-content-center">
 					<div className='d-grid gap-2 col-6 '>
-						{suppliers.map((supplier) => {
-							return <Supplieritem key={supplier._id} supplier={supplier} />
-						})}
+						{
+							suppliers.map((supplier) => {
+								return <Supplieritem key={supplier._id} supplier={supplier} />
+							})
+						}
 					</div>
 				</div>
 			</div>

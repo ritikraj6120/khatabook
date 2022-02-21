@@ -1,19 +1,25 @@
-import React, { useContext, useState } from 'react';
-import khataContext from '../../context/notes/khataContext';
+import React, { useContext, useState, useEffect } from 'react';
+import khataContext from '../../context/khataContext';
 import { useHistory } from 'react-router-dom';
+import './style.css';
 import Navbar from './Navbar';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 const EditSupplier = () => {
 	let history = useHistory();
-	const { editSupplier } = useContext(khataContext);
+	const { editSupplier, getSingleSupplier, singleSupplier } = useContext(khataContext);
 	const singlesupplier = JSON.parse(localStorage.getItem('singlesupplier'));
-	console.log(singlesupplier);
-	const [credentials, setCredentials] = useState({ title: singlesupplier.title, name: singlesupplier.name, payment:0,purchase:0 })
+
+	useEffect(() => {
+		console.log("inside useefffect");
+		getSingleSupplier(singlesupplier._id);
+	}, [])
+
+	const [credentials, setCredentials] = useState({ title: singlesupplier.title, name: singlesupplier.name, payment: 0, purchase: 0 })
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		let { title, name, payment, purchase } = credentials;
-		// amount=parseInt(amount, 10);
-		// amount+=singlesupplier.amount;
 		payment = parseInt(payment, 10);
 		purchase = parseInt(purchase, 10);
 		console.log(payment);
@@ -59,6 +65,20 @@ const EditSupplier = () => {
 					</div>
 				</div>
 			</form>
+			{singleSupplier.map((item) => {
+				return <div key={item._id}> 
+					<button >{item.purchase_singleSupplier} {item.payment_singleSupplier}</button>
+					
+				</div>
+			})}
+
+
+			<div className='fixed'>
+				<Stack spacing={2} direction="row">
+					<Button style={{ backgroundColor: "red" }} variant="contained">Purchase</Button>
+					<Button style={{ backgroundColor: "#2da62d" }} variant="contained">payment</Button>
+				</Stack>
+			</div>
 
 		</>
 	);

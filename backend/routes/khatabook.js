@@ -3,7 +3,33 @@ const router = express.Router();
 const fetchuser = require('../middleware/fetchuser');
 const Customers = require('../models/Customers');
 const Suppliers = require('../models/Suppliers');
+const singleSupplierTransaction = require('../models/singleSupplierTransaction')
+const singleCustomerTransaction = require('../models/singleCustomerTransaction')
 const { body, validationResult } = require('express-validator');
+
+
+// Route 0" Get single suppliers using : get "/api/khatabook/getSingleSupplier". login required
+router.get('/getSingleCustomer/:id', fetchuser, async (req, res) => {
+	try {
+
+		let customer = await Customers.findById(req.params.id);
+		if (!customer) { return res.status(404).send("Not Found") }
+
+		if (customer.user.toString() !== req.user.id) {
+			return res.status(401).send("Not Allowed");
+		}
+
+		const getSingleCustomer = await singleCustomerTransaction.find({ customer: req.params.id });
+		res.status(200).json(getSingleCustomer);
+
+	}
+	catch (error) {
+		console.error(error.message);
+		res.status(500).send("Internal Server Error");
+	}
+})
+
+
 
 // ROUTE 1: Get All the Customers using: GET "/api/khatabok/getcustomers". Login required
 router.get('/getcustomers', fetchuser, async (req, res) => {
@@ -20,7 +46,7 @@ router.get('/getcustomers', fetchuser, async (req, res) => {
 
 router.post('/addcustomer', fetchuser, async (req, res) => {
 	try {
-		const { title, name, lendamount,takeamount } = req.body;
+		const { title, name, lendamount, takeamount } = req.body;
 		console.log(title);
 		// If there are errors, return Bad request and the errors
 		// const errors = validationResult(req);
@@ -28,18 +54,18 @@ router.post('/addcustomer', fetchuser, async (req, res) => {
 		// 	return res.status(400).json({ errors: errors.array() });
 		// }
 		const customer = new Customers({
-			title, name, lendamount,takeamount, user: req.user.id
+			title, name, lendamount, takeamount, user: req.user.id
 		})
-		const rep=await Customers.findOne({name});
-		if(!rep)
-		{
+		const rep = await Customers.findOne({ name });
+		console.log(rep);
+		if (!rep) {
 			const savedCustomer = await customer.save()
 			res.status(200).json(savedCustomer)
 		}
-		else{
-			 res.status(409).json({ "danger": "Customer already exist"})
+		else {
+			res.status(409).json({ "danger": "Customer already exist" })
 		}
-		
+
 
 	} catch (error) {
 		console.error(error.message);
@@ -51,15 +77,15 @@ router.post('/addcustomer', fetchuser, async (req, res) => {
 // ROUTE 3: Update an existing customer using: PUT "/api/khatabok/updatecustomers". Login required
 
 router.put('/updatecustomer/:id', fetchuser, async (req, res) => {
-	const { title, name,lendamount, takeamount } = req.body;
+	const { title, name, lendamount, takeamount } = req.body;
 	try {
 		// Create a newNote object
 		const newCustomer = {};
 		if (title) { newCustomer.title = title };
 		if (name) { newCustomer.name = name };
 		if (lendamount) { newCustomer.lendamount = lendamount };
-		if(takeamount)	{ newCustomer.takeamount = takeamount };
-		console.log(title,name,lendamount,takeamount);
+		if (takeamount) { newCustomer.takeamount = takeamount };
+		console.log(title, name, lendamount, takeamount);
 		// Find the note to be updated and update it
 		let customer = await Customers.findById(req.params.id);
 		if (!customer) { return res.status(404).send("Not Found") }
@@ -67,7 +93,7 @@ router.put('/updatecustomer/:id', fetchuser, async (req, res) => {
 		if (customer.user.toString() !== req.user.id) {
 			return res.status(401).send("Not Allowed");
 		}
-		
+
 		const updateCustomer = await Customers.findByIdAndUpdate(req.params.id, { $set: newCustomer }, { new: true })
 		res.status(200).json(updateCustomer);
 	}
@@ -77,13 +103,12 @@ router.put('/updatecustomer/:id', fetchuser, async (req, res) => {
 	}
 })
 
-
-
 // ROUTE 4: Delete an existing Note using: DELETE "/api/khatabok/deletecustomers". Login required
 router.delete('/deletecustomer/:id', fetchuser, async (req, res) => {
 	try {
 		// Find the customer to be delete and delete it
 		let customer = await Customers.findById(req.params.id);
+
 		if (!customer) { return res.status(404).send("Not Found") }
 
 		// Allow deletion only if user owns this Note
@@ -99,6 +124,33 @@ router.delete('/deletecustomer/:id', fetchuser, async (req, res) => {
 	}
 })
 
+// Route 5:add a transaction  using: post "/api/khatabok/addCustomerTransaction/". Login required
+router.post('/addCustomerTransaction/:id', fetchuser, async (req, res) => {
+	try {
+		console.log(req.params.id);
+		console.log(typeof req.params.id)
+		let customer = await Customers.findById(req.params.id);
+
+		if (!customer) { return res.status(404).send("Not Found") }
+
+		if (customer.user.toString() !== req.user.id) {
+			return res.status(401).send("Not Allowed");
+		}
+		const { lendamount_singleCustomer, takeamount_singleCustomer } = req.body;
+
+		const customertransaction = new singleCustomerTransaction({
+			lendamount_singleCustomer, takeamount_singleCustomer, customer: req.params.id
+		})
+
+		const newCustomertransaction = await customertransaction.save()
+		res.status(200).json(newCustomertransaction);
+
+	}
+	catch (error) {
+		console.error(error.message);
+		res.status(500).send("Internal Server Error");
+	}
+})
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -107,8 +159,29 @@ router.delete('/deletecustomer/:id', fetchuser, async (req, res) => {
 
 
 
+// Route 0" Get single suppliers using : get "/api/khatabook/getSingleSupplier". login required
+router.get('/getSingleSupplier/:id', fetchuser, async (req, res) => {
+	try {
 
-// ROUTE 1: Get All the Customers using: GET "/api/khatabok/getsupplier". Login required
+		let supplier = await Suppliers.findById(req.params.id);
+		if (!supplier) { return res.status(404).send("Not Found") }
+
+		if (supplier.user.toString() !== req.user.id) {
+			return res.status(401).send("Not Allowed");
+		}
+		const getSingleSupplier = await singleSupplierTransaction.find({ supplier: req.params.id });
+		res.status(200).json(getSingleSupplier);
+
+	}
+	catch (error) {
+		console.error(error.message);
+		res.status(500).send("Internal Server Error");
+	}
+})
+
+
+
+// ROUTE 1: Get All the Suppliers using: GET "/api/khatabok/getsupplier". Login required
 router.get('/getsuppliers', fetchuser, async (req, res) => {
 	try {
 		const suppliers = await Suppliers.find({ user: req.user.id });
@@ -119,27 +192,27 @@ router.get('/getsuppliers', fetchuser, async (req, res) => {
 	}
 })
 
+
 // ROUTE 2: Add a new Customer using: GET "/api/khatabok/addcustomers". Login required
 
 router.post('/addsupplier', fetchuser, async (req, res) => {
 	try {
-		const { title, name, payment,purchase } = req.body;
+		const { title, name, payment, purchase } = req.body;
 		// If there are errors, return Bad request and the errors
 		// const errors = validationResult(req);
 		// if (!errors.isEmpty()) {
 		// 	return res.status(400).json({ errors: errors.array() });
 		// }
 		const supplier = new Suppliers({
-			title, name, payment,purchase , user: req.user.id
+			title, name, payment, purchase, user: req.user.id
 		})
-		const rep=await Suppliers.findOne({name});
-		if(!rep)
-		{
+		const rep = await Suppliers.findOne({ name });
+		if (!rep) {
 			const savedsupplier = await supplier.save()
 			res.status(200).json(savedsupplier)
 		}
-		else{
-			 res.status(409).json({ "danger": "Customer already exist"})
+		else {
+			res.status(409).json({ "danger": "Customer already exist" })
 		}
 
 	} catch (error) {
@@ -152,14 +225,14 @@ router.post('/addsupplier', fetchuser, async (req, res) => {
 // ROUTE 3: Update an existing customer using: PUT "/api/khatabok/updatesupplier". Login required
 
 router.put('/updatesupplier/:id', fetchuser, async (req, res) => {
-	const { title, name, payment,purchase  } = req.body;
+	const { title, name, payment, purchase } = req.body;
 	try {
 		// Create a newNote object
 		const newsupplier = {};
 		if (title) { newsupplier.title = title };
 		if (name) { newsupplier.name = name };
 		if (payment) { newsupplier.payment = payment };
-		if(purchase) { newsupplier.purchase = purchase };
+		if (purchase) { newsupplier.purchase = purchase };
 
 		// Find the note to be updated and update it
 		let supplier = await Suppliers.findById(req.params.id);
@@ -198,5 +271,35 @@ router.delete('/deletesupplier/:id', fetchuser, async (req, res) => {
 		res.status(500).send("Internal Server Error");
 	}
 })
+
+// Route 5:add a transaction  using: post "/api/khatabok/addCustomerTransaction/". Login required
+router.post('/addSupplierTransaction/:id', fetchuser, async (req, res) => {
+	try {
+		console.log(req.params.id);
+		console.log(typeof req.params.id)
+		let supplier = await Suppliers.findById(req.params.id);
+
+		if (!supplier) { return res.status(404).send("Not Found") }
+
+		if (supplier.user.toString() !== req.user.id) {
+			return res.status(401).send("Not Allowed");
+		}
+		const { purchase_singleSupplier, payment_singleSupplier } = req.body;
+
+		const suppliertransaction = new singleSupplierTransaction({
+			purchase_singleSupplier, payment_singleSupplier, supplier: req.params.id
+		})
+
+		const newsuppliertransaction = await suppliertransaction.save()
+		res.status(200).json(newsuppliertransaction);
+
+	}
+	catch (error) {
+		console.error(error.message);
+		res.status(500).send("Internal Server Error");
+	}
+})
+
+
 
 module.exports = router

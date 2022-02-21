@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { useHistory } from 'react-router-dom'; 
-import khataContext from '../../context/notes/khataContext';
+// import khataContext from '../../context/khataContext';
 const Customeritem = (props) => {
 	let history=useHistory();
 	// const {  singlecustomer,setSinglecustomer} = useContext(khataContext);

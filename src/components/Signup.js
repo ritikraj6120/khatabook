@@ -85,7 +85,7 @@
 
 import React, {  useContext } from "react";
 import { useHistory } from "react-router-dom";
-import noteContext from "../context/notes/noteContext";
+import noteContext from "../context/noteContext";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -140,10 +140,10 @@ export default function SignUp() {
 		const json = await response.json()
 		if (json.success) {
 			// Save the auth token and redirect
-			localStorage.setItem('token', json.authtoken);
-			localStorage.setItem('admin',json.isadmin);
-			history.push("/");
 			showAlert("Account Created Successfully", "success")
+			history.push("/login");
+			
+			
 
 		}
 		else {

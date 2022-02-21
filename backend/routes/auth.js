@@ -15,6 +15,8 @@ router.post('/createuser', [
 	body('email', 'Enter a valid email').isEmail(),
 	body('password', 'Password must be atleast 8 characters').isLength({ min: 8 }),
 ], async (req, res) => {
+	
+	// console.log(req);
 	let success = false;
 	// If there are errors, return Bad request and the errors
 	const errors = validationResult(req);
@@ -64,7 +66,8 @@ router.post('/createuser', [
 router.post('/login', [
 	body('email', 'Enter a valid email').isEmail(),
 	body('password', 'Password cannot be blank').exists(),
-], async (req, res) => {
+], 
+async (req, res) => {
 	let success = false;
 	// If there are errors, return Bad request and the errors
 	const errors = validationResult(req);

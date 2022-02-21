@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { useHistory } from "react-router-dom";
-import khataContext from "../../context/notes/khataContext"
+import khataContext from "../../context/khataContext"
 import Navbar from './Navbar';
 
 const Navbar2 = () => {

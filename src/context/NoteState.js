@@ -30,7 +30,6 @@ const NoteState = (props) => {
 			}
 		});
 		const json = await response.json()
-		console.log(json);
 		setNotes(json)
 	}
 
@@ -67,45 +66,63 @@ const NoteState = (props) => {
 				"auth-token": localStorage.getItem('token')
 			}
 		});
-		// const json = await response.json();
-		const newNotes = notes.filter((note) => { return note._id !== id })
-		setNotes(newNotes)
+		if(response.status===400 || response.status===401)
+		{
+			showAlert("Invalid User","danger");
+			history.push('/login');
+		}
+		else{
+			const newNotes = notes.filter((note) => { return note._id !== id })
+			setNotes(newNotes)
+			showAlert("Deleted successfully", "success");
+		}
+		
 	}
 
 	// Edit a Note
-	const editNote = async (id, title, description, tag,important,completed) => {
+	const editNote = async (id, title, description, tag, important, completed) => {
 		// API Call 
 		console.log("got my boy");
-		console.log(id, title, description, tag,important,completed);
+		console.log(id, title, description, tag, important, completed);
 		const response = await fetch(`${host}/api/notes/updatenote/${id}`, {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json',
 				"auth-token": localStorage.getItem('token')
 			},
-			body: JSON.stringify({ title, description, tag,important ,completed})
+			body: JSON.stringify({ title, description, tag, important, completed })
 		});
 		// const json = await response.json();
-
-		let newNotes = JSON.parse(JSON.stringify(notes))
-		// Logic to edit in client
-		for (let index = 0; index < newNotes.length; index++) {
-			const element = newNotes[index];
-			if (element._id === id) {
-				if(title)
-				newNotes[index].title = title;
-				if(description)
-				newNotes[index].description = description;
-				if(tag)
-				newNotes[index].tag = tag;
-				if(important===true || important ===false)
-				newNotes[index].important=important;
-				if(completed===true || completed ===false)
-				newNotes[index].completed=completed;
-				break;
-			}
+		if (response.status === 404) {
+			showAlert(" Note Not Found", "danger");
 		}
-		setNotes(newNotes);
+		else if (response.status === (401)) {
+			showAlert(" Note Allowed", "danger");
+			history.push('/login');
+
+		}
+		else {
+			let newNotes = JSON.parse(JSON.stringify(notes))
+			// Logic to edit in client
+			for (let index = 0; index < newNotes.length; index++) {
+				const element = newNotes[index];
+				if (element._id === id) {
+					if (title)
+						newNotes[index].title = title;
+					if (description)
+						newNotes[index].description = description;
+					if (tag)
+						newNotes[index].tag = tag;
+					if (important === true || important === false)
+						newNotes[index].important = important;
+					if (completed === true || completed === false)
+						newNotes[index].completed = completed;
+					break;
+				}
+			}
+			setNotes(newNotes);
+			showAlert("Updated Succcessfully", "success")
+		}
 	}
 
 	return (

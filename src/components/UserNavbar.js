@@ -1,6 +1,6 @@
-import React, { useState,useContext} from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom';
-import UserContext from '../context/notes/userContext';
+// import UserContext from '../context/userContext';
 // const HoverText = () => {
 // 	// const { UserDetail , getUser } =useContext(UserContext);
 // 	return (
@@ -14,18 +14,18 @@ import UserContext from '../context/notes/userContext';
 // };
 
 const UserNavbar = () => {
-	const [isHovering, setIsHovering] = useState(false);
-	const handleMouseOver = () => {
-		setIsHovering(true);
-	};
+	// const [isHovering, setIsHovering] = useState(false);
+	// const handleMouseOver = () => {
+	// 	setIsHovering(true);
+	// };
 
-	const handleMouseOut = () => {
-		setIsHovering(false);
-	};
-
+	// const handleMouseOut = () => {
+	// 	setIsHovering(false);
+	// };
+	// onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}
 	return (
 		<Link to="/userdetail">
-			<span style={{ color: "white", fontSize: "1.5rem" }} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
+			<span style={{ color: "white", fontSize: "1.5rem" }} >
 				
 				<i className="far fa-user mx-4"></i>
 				{/* {isHovering && <HoverText />} */}

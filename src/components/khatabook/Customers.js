@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react'
-import khataContext from "../../context/notes/khataContext"
+import khataContext from "../../context/khataContext"
 import Customeritem from './Customeritem';
 import { useHistory, Link } from 'react-router-dom'
 import Navbar from './Navbar'

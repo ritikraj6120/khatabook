@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react'
 import { useHistory } from "react-router-dom";
-import khataContext from "../../context/notes/khataContext"
-import noteContext from '../../context/notes/noteContext';
+import khataContext from "../../context/khataContext"
+import noteContext from '../../context/noteContext';
 import Navbar from './Navbar';
 const Navbar2 = () => {
 	return (
@@ -27,12 +27,15 @@ const AddCustomer = () => {
 	const { addCustomer } = useContext(khataContext)
 	const [customer, setCustomer] = useState({ title: "Mr", name: "", lendamount: 0, takeamount: 0 });
 	const onChange = (e) => {
+		console.log(customer)
 		setCustomer({ ...customer, [e.target.name]: e.target.value })
+		console.log(customer)
 	}
 
 	const handleClick = (e) => {
 		e.preventDefault();
 		if (customer.name.length < 1) {
+			console.log(customer.name.length);
 			showAlert("Customer length less than 1", "danger");
 		}
 		else {

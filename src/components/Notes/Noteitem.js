@@ -1,19 +1,19 @@
-import React, { useContext, useState } from 'react'
-import noteContext from "../context/notes/noteContext"
+import React, { useContext } from 'react'
+import noteContext from "../../context/noteContext"
 import StarPurple500OutlinedIcon from '@mui/icons-material/StarPurple500Outlined';
 import StarOutlineOutlinedIcon from '@mui/icons-material/StarOutlineOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Tooltip from '@mui/material/Tooltip';
 import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import { IconButton } from '@mui/material';
-import soundfile from '../music/completed.wav';
+// import { IconButton } from '@mui/material';
+import soundfile from '../../music/completed.wav';
 import './style.css'
 const Noteitem = (props) => {
 
 	const { note, updateNote } = props;
 	const context = useContext(noteContext);
-	const { deleteNote, showAlert, editNote } = context;
+	const { deleteNote, editNote } = context;
 
 	const handleimportant = () => {
 		console.log(!note.important);
@@ -27,7 +27,6 @@ const Noteitem = (props) => {
 		}
 		editNote(note._id, null, null, null, null, !note.completed);
 	}
-	console.log("inside noteitem");
 	return (
 		<div className="col-md-3">
 			<div className="card my-3 cardbody">
@@ -36,7 +35,7 @@ const Noteitem = (props) => {
 
 						{/* <i className="far fa-trash-alt mx-2" onClick={() => { deleteNote(note._id); showAlert("Deleted successfully", "success"); }} ></i> */}
 						<Tooltip className='mx-2' title="Delete note" placement="top" arrow style={{ cursor: " pointer" }}>
-							<DeleteIcon onClick={() => { deleteNote(note._id); showAlert("Deleted successfully", "success"); }} />
+							<DeleteIcon onClick={() => { deleteNote(note._id); }} />
 						</Tooltip>
 						<i className="far fa-edit mx-1" onClick={() => { updateNote(note); }} ></i>
 
