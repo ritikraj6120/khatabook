@@ -1,45 +1,43 @@
-import React, { useContext, useState,useEffect } from 'react';
-import khataContext from '../../context/khataContext';
+import React, { useContext, useState, useEffect } from 'react';
+import CustomerContext from '../../../context/CustomerContext';
+import CustomerDetail from './CustomerDetail';
 import { useHistory } from 'react-router-dom';
-import Navbar from './Navbar';
-const EditCustomer = () => {
+import Navbar from '../Navbar';
+import CircularProgress from '@mui/material/CircularProgress';
+const SingleCustomer = () => {
 	let history = useHistory();
-	const { editCustomer, getSingleCustomer, singleCustomer } = useContext(khataContext);
-	const singlecustomer = JSON.parse(localStorage.getItem('singlecustomer'));
+	const { SingleCustomerTransaction, getSingleCustomerTransactions, getSingleCustomerDetail, singleCustomerDetail } = useContext(CustomerContext);
+	const { singleCustomer, loading } = singleCustomerDetail;
+	const singlecustomerid = JSON.parse(localStorage.getItem('SingleCustomerId'));
 
 	useEffect(() => {
-		getSingleCustomer(singlecustomer._id);
+		getSingleCustomerTransactions(singlecustomerid);
+		getSingleCustomerDetail(singlecustomerid);
+		// eslint-disable-next-line
 	}, [])
 
 
-	const [credentials, setCredentials] = useState({ title: singlecustomer.title, name: singlecustomer.name, lendamount: 0, takeamount: 0 })
+	// const [credentials, setCredentials] = useState({ title: singlecustomer.title, name: singlecustomer.name, phone: singlecustomer.phone })
 
-	const handleSubmit = async (e) => {
-		e.preventDefault();
-		let { title, name, lendamount, takeamount } = credentials;
-		lendamount = parseInt(lendamount, 10);
-		takeamount = parseInt(takeamount, 10);
-		lendamount += singlecustomer.lendamount;
-		takeamount += singlecustomer.takeamount;
-		await editCustomer(singlecustomer._id, title, name, lendamount, takeamount);
-		history.push("/khatabook/customers");
-	}
+	// const handleSubmit = async (e) => {
+	// 	let { title, name, phone } = credentials;
+	// 	e.preventDefault();
+	// 	await editCustomer(singlecustomer._id, title, name, phone);
+	// }
 
-
-
-
-
-
-
-	const onChange = (e) => {
-		setCredentials({ ...credentials, [e.target.name]: e.target.value })
-	}
+	// const onChange = (e) => {
+	// 	setCredentials({ ...credentials, [e.target.name]: e.target.value })
+	// }
 
 	return (
 		<>
-			<Navbar a="/khatabook/editcustomer" b="/khatabook/editsupplier" />
-			<h3> Update Customer</h3>
-			<form onSubmit={handleSubmit}>
+			<Navbar a="/editcustomer" b="/editsupplier" />
+			{
+
+				loading === true ? <CircularProgress color="secondary" /> :
+					<div>
+						<CustomerDetail singleCustomer={singleCustomer} />
+						{/* <form onSubmit={handleSubmit}>
 				<div className="form-row align-items-center">
 					<div className="col-sm-3 my-1">
 						<label className="sr-only" htmlFor="inlineFormInputName">Title</label>
@@ -48,40 +46,38 @@ const EditCustomer = () => {
 							<option value="Mr">Mr</option>
 							<option value="Mrs">Mrs</option>
 						</select>
-						{/* <label className="sr-only" htmlFor="inlineFormInputName">Title</label>
-						<input type="text" className="form-control" id="inlineFormInputName" name="title" placeholder="Title" value={credentials.title} onChange={onChange} /> */}
 					</div>
-
-
 
 					<div className="col-sm-3 my-1">
 						<label className="sr-only" htmlFor="inlineFormInputName">Name</label>
 						<input type="text" className="form-control" id="inlineFormInputName" name="name" placeholder="Name" value={credentials.name} onChange={onChange} required />
 					</div>
-					<div className="col-sm-3 my-1">
+					{/* <div className="col-sm-3 my-1">
 						<label className="sr-only" htmlFor="inlineFormInputGroupUsername">You give</label>
 						<input type="number" className="form-control" id="inlineFormInputGroupUsername" name="lendamount" placeholder="You Give" min="0" onChange={onChange} />
 					</div>
 					<div className="col-sm-3 my-1">
 						<label className="sr-only" htmlFor="inlineFormInputGroupUsername">You Got</label>
 						<input type="number" className="form-control" id="inlineFormInputGroupUsername" name="takeamount" placeholder="You Got" min="0" onChange={onChange} />
-					</div>
-					<div className="col-auto my-1">
+					</div> */
+					/* <div className="col-auto my-1">
 						<button type="submit" className="btn btn-primary">Update</button>
-					</div>
-				</div>
-			</form>
-			{singleCustomer.map((item) => {
-				return <div key={item._id}>
-					<button >{item.lendamount_singleCustomer} {item.takeamount_singleCustomer}</button>
+					</div> 
+				 </div> 
+			 </form> } */}
+						{SingleCustomerTransaction.map((item) => {
+							return <div key={item._id}>
+								<button >{item.lendamount_singleCustomer} {item.takeamount_singleCustomer}</button>
 
-				</div>
-			})}
+							</div>
+						})}
+					</div>
+			}
 		</>
 	);
 };
 
-export default EditCustomer;
+export default SingleCustomer;
 
 // <form>
 //   <div className="form-row align-items-center">

@@ -1,19 +1,16 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'; 
-// import khataContext from '../../context/khataContext';
 
-const Supplieritem = (props) => {
+const SupplierItem = (props) => {
 	let history=useHistory();
-	// const {  singlesupplier,setSinglesupplier } =   useContext(khataContext);
 	
 	const { supplier } = props;
-	// console.log(supplier);
 	const { title, name, payment, purchase } = supplier;
 	let currentTotal=payment-purchase;
 
 	const edit =()=>{
-		localStorage.setItem("singlesupplier",JSON.stringify(supplier))
-		history.push('/khatabook/editsupplier');
+		localStorage.setItem("SingleSupplierId",supplier._id)
+		history.push('/editsupplier');
 
 	}
 
@@ -32,4 +29,4 @@ const Supplieritem = (props) => {
 	)
 }
 
-export default Supplieritem;
+export default SupplierItem;

@@ -1,12 +1,11 @@
 import React, { useState, useContext } from 'react'
 import { useHistory } from "react-router-dom";
-import khataContext from "../../context/khataContext"
-import noteContext from '../../context/noteContext';
-import Navbar from './Navbar';
+import CustomerContext from "../../../context/CustomerContext"
+import noteContext from '../../../context/noteContext';
+import Navbar from '../Navbar';
 const Navbar2 = () => {
 	return (
-		<nav className="navbar navbar-expand-lg  navbar-dark bg-primary" style={{ color: "#ffffff" }
-		}>
+		<nav className="navbar navbar-expand-lg  navbar-dark bg-primary" style={{ color: "#ffffff" }}>
 			<div className="container-fluid" >
 				<div className="collapse navbar-collapse" id="navbarSupportedContent" >
 					<ul className="navbar-nav me-auto mb-2 mb-lg-0" >
@@ -24,12 +23,11 @@ const Navbar2 = () => {
 const AddCustomer = () => {
 	let history = useHistory();
 	const {showAlert}=useContext(noteContext)
-	const { addCustomer } = useContext(khataContext)
-	const [customer, setCustomer] = useState({ title: "Mr", name: "", lendamount: 0, takeamount: 0 });
+	const { addCustomer } = useContext(CustomerContext)
+	const [customer, setCustomer] = useState({ title: "Mr", name: "", phone:0});
 	const onChange = (e) => {
-		console.log(customer)
 		setCustomer({ ...customer, [e.target.name]: e.target.value })
-		console.log(customer)
+
 	}
 
 	const handleClick = (e) => {
@@ -39,15 +37,15 @@ const AddCustomer = () => {
 			showAlert("Customer length less than 1", "danger");
 		}
 		else {
-			addCustomer(customer.title, customer.name, customer.lendamount, customer.takeamount);
-			setCustomer({ title: "Mr", name: "", lendamount: 0, takeamount: 0 });
-			history.push('/khatabook/customers');
+			addCustomer(customer.title, customer.name, customer.phone);
+			setCustomer({ title: "Mr", name: "", phone:0 });
+			history.push('/editcustomer');
 		}
 	}
 
 	return (
 		<>
-			<Navbar a="/khatabook/addcustomer" b="/khatabook/addsupplier" />
+			<Navbar a="/addcustomer" b="/addsupplier" />
 			<br />
 			<Navbar2 />
 			<br />
@@ -64,9 +62,14 @@ const AddCustomer = () => {
 					<div className="col-sm col-lg-4">
 						<label htmlFor="name">Name</label>
 						<input required type="text" className="form-control" id="name" name="name"
-							value={customer.name} onChange={onChange} />
+							value={customer.name} onChange={onChange} placeholder="Enter customer Name to add Entries"/>
 					</div>
 					<div className="col-sm col-lg-4">
+						<label htmlFor="phone">Phone</label>
+						<input required type="tel" className="form-control" id="phone" name="phone"  onChange={onChange} placeholder="Enter Phone Number (Optional)"/>
+					</div>
+
+					{/* <div className="col-sm col-lg-4">
 						<label htmlFor="amount">You Gave</label>
 						<input
 							required="required" min="0"
@@ -89,7 +92,7 @@ const AddCustomer = () => {
 							onChange={onChange}
 							name="takeamount" 
 						/>
-					</div>
+					</div> */}
 				</div>
 				<div className="row mt-3">
 					<div className="col-sm">

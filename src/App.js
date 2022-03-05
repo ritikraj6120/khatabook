@@ -2,7 +2,8 @@ import './App.css';
 import { Switch, Route } from "react-router-dom";
 import NoteState from './context/NoteState';
 import UserState from './context/UserState';
-import KhataState from './context/KhataState';
+import CustomerState from './context/CustomerState';
+import SupplierState from './context/SupplierState';
 import AdminState from './context/AdminState';
 import Navbar from './components/Navbar';
 import Home from './components/Home';
@@ -15,13 +16,12 @@ import Signup from './components/Signup';
 import Login from './components/Login';
 import Error from './components/Error';
 import Adminpage from './components/Admin/AdminPage';
-// import KhataBook from './components/khatabook/KhataBook'
-import Suppliers from './components/khatabook/Suppliers'
-import Customers from './components/khatabook/Customers'
-import AddCustomer from './components/khatabook/AddCustomer';
-import AddSupplier from './components/khatabook/AddSupplier';
-import EditCustomer from './components/khatabook/EditCustomer';
-import EditSupplier from './components/khatabook/EditSupplier';
+import Suppliers from './components/khatabook/Supplier/Suppliers'
+import Customers from './components/khatabook/Customer/Customers'
+import AddCustomer from './components/khatabook/Customer/AddCustomer';
+import AddSupplier from './components/khatabook/Supplier/AddSupplier';
+import SingleCustomer from './components/khatabook/Customer/SingleCustomer';
+import SingleSupplier from './components/khatabook/Supplier/SingleSupplier';
 function Routerapp() {
 
 	return (
@@ -51,26 +51,24 @@ function Routerapp() {
 				<Route exact path="/userdetail">
 					<User />
 				</Route>
-				{/* <Route exact path="/khatabook">
-					<KhataBook />
-				</Route> */}
-				<Route exact path="/khatabook/customers">
+				
+				<Route exact path="/customers">
 					<Customers />
 				</Route>
-				<Route exact path="/khatabook/suppliers">
+				<Route exact path="/suppliers">
 					<Suppliers />
 				</Route>
-				<Route exact path="/khatabook/addsupplier">
+				<Route exact path="/addsupplier">
 					<AddSupplier />
 				</Route>
-				<Route exact path="/khatabook/addcustomer">
+				<Route exact path="/addcustomer">
 					<AddCustomer />
 				</Route>
-				<Route exact path="/khatabook/editcustomer">
-					<EditCustomer />
+				<Route exact path="/editcustomer">
+					<SingleCustomer />
 				</Route>
-				<Route exact path="/khatabook/editsupplier">
-					<EditSupplier />
+				<Route exact path="/editsupplier">
+					<SingleSupplier />
 				</Route>
 				<Route>
 					<Error />
@@ -85,16 +83,18 @@ const App = () => {
 		<AdminState>
 			<UserState>
 				<NoteState>
-					<KhataState>
-						<Navbar />
-						<Alert />
-						<div className="container">
-							<Routerapp />
-						</div>
-					</KhataState>
+					<CustomerState>
+						<SupplierState>
+							<Navbar />
+							<Alert />
+							<div className="container">
+								<Routerapp />
+							</div>
+						</SupplierState>
+					</CustomerState>
 				</NoteState>
 			</UserState >
-		</AdminState>
+		</AdminState >
 	);
 };
 

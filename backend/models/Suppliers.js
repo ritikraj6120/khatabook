@@ -15,13 +15,10 @@ const SupplierSchema = new Schema({
 		required: true,
 		unique:true
 	},
-	purchase: {
-		type: Number,
-		default: 0,
-	},
-	payment:{
-		type: Number,
-		default: 0,
+	phone:{
+		type:Number,
+		required:true,
+		min: 9, max: 111111111111
 	},
 	date: {
 		type: Date,

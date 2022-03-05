@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react'
 import { useHistory } from "react-router-dom";
-import khataContext from "../../context/khataContext"
-import Navbar from './Navbar';
+import SupplierContext from "../../../context/SupplierContext"
+import Navbar from '../Navbar';
 
 const Navbar2 = () => {
 	return (
@@ -23,9 +23,8 @@ const Navbar2 = () => {
 
 const AddSupplier = () => {
 	let history = useHistory();
-	const context = useContext(khataContext);
-	const { addSupplier } = context;
-	const [supplier, setSupplier] = useState({ title: "Mr", name: "", payment: 0,purchase:0 });
+	const { addSupplier } =  useContext(SupplierContext);
+	const [supplier, setSupplier] = useState({ title: "Mr", name: "",phone:0 });
 
 	const onChange = (e) => {
 		setSupplier({ ...supplier, [e.target.name]: e.target.value })
@@ -33,14 +32,14 @@ const AddSupplier = () => {
 
 	const handleClick = (e) => {
 		e.preventDefault();
-		addSupplier(supplier.title, supplier.name, supplier.payment,supplier.purchase);
-		setSupplier({ title: "Mr", name: "", payment: 0 ,purchase:0});
-		history.push('/khatabook/suppliers');
+		addSupplier(supplier.title, supplier.name, supplier.phone);
+		setSupplier({ title: "Mr", name: "", phone:0});
+		history.push('/editsupplier');
 	}
 
 	return (
 		<>
-			<Navbar a="/khatabook/addcustomer" b="/khatabook/addsupplier" />
+			<Navbar a="/addcustomer" b="/addsupplier" />
 			<br />
 			<Navbar2 />
 			<br />
@@ -56,9 +55,13 @@ const AddSupplier = () => {
 					<div className="col-sm col-lg-4">
 						<label htmlFor="name">Name</label>
 						<input required="required" type="text" className="form-control" id="name" name="name"
-							value={supplier.name} onChange={onChange} />
+							value={supplier.name} onChange={onChange} placeholder="Enter Supplier Name to add Entries"/>
 					</div>
 					<div className="col-sm col-lg-4">
+						<label htmlFor="phone">Phone</label>
+						<input required type="tel" className="form-control" id="phone" name="phone"  onChange={onChange} placeholder="Enter Phone Number (Optional)"/>
+					</div>
+					{/* <div className="col-sm col-lg-4">
 						<label htmlFor="amount">Your Payment</label>
 						<input
 							required="required"
@@ -81,7 +84,7 @@ const AddSupplier = () => {
 							onChange={onChange}
 							name="purchase"
 						/>
-					</div>
+					</div> */}
 				</div>
 				<div className="row mt-3">
 					<div className="col-sm">

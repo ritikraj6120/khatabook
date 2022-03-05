@@ -15,13 +15,10 @@ const CustomerSchema = new Schema({
 		required: true,
 		unique:true
 	},
-	lendamount: {
-		type: Number,
-		default: 0,
-	},
-	takeamount:{
-		type: Number,
-		default: 0,
+	phone:{
+		type:Number,
+		required:true,
+		min: 9, max: 111111111111
 	},
 	date: {
 		type: Date,

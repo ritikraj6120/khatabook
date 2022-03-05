@@ -28,7 +28,7 @@ const Navbar = () => {
 							<Link className={`nav-link ${location.pathname === "/about" ? "active" : ""}`} to="/about">Help</Link>
 						</li>
 						<li className="nav-item">
-							<Link className={`nav-link ${location.pathname.includes("/khatabook") ? "active" : ""}`} to="/khatabook/customers">KhataBook</Link>
+							<Link className={`nav-link ${location.pathname.includes("/khatabook") ? "active" : ""}`} to="/customers">KhataBook</Link>
 						</li>
 						{
 							localStorage.getItem('admin') === 'true' ? <li className="nav-item">

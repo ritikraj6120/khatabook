@@ -50,9 +50,4 @@ const AddNote = () => {
 		</div>
 	)
 }
-
-<div className="col-sm col-lg-4 ">
-	<label htmlFor="exampleFormControlSelect1">Enter Title</label>
-
-</div>
 export default AddNote
