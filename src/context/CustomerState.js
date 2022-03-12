@@ -63,46 +63,6 @@ const CustomerState = (props) => {
 	const [state, dispatch] = useReducer(reducer,initialState);
 	const[singleCustomerDetail,dispatchsingleCustomerDetail]=useReducer(reducersingleCustomerDetail,initialStatesingleCustomerDetail);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	///////////////////////////////////////////////////////////////////////
 	// Get all Customers function no 1
 	const getCustomers = async () => {

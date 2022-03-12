@@ -3,7 +3,7 @@ import "jspdf-autotable";
 
 
 // define a generatePDF function that accepts a customers argument
-const generatePDF = customers => {
+const generatePDF = (customers,customerBalance) => {
   // initialize jsPDF
   const doc = new jsPDF();
 
@@ -17,20 +17,29 @@ const generatePDF = customers => {
 	const customerData = [];
 	customerData.push(customers[i].title);
 	customerData.push(customers[i].name);
-	if(customers[i].lendamount-customers[i].takeamount>=0)
+	// let ans=[];
+	const result = customerBalance.filter(item => item.customer === customers[i]._id);
+	if(result.length===0)
 	{
-		customerData.push(customers[i].lendamount-customers[i].takeamount);
-	}
-	else{
+		customerData.push(0);
 		customerData.push(0);
 	}
-	if(customers[i].takeamount-customers[i].lendamount>0)
+	else
 	{
-		customerData.push(customers[i].takeamount-customers[i].lendamount);
+		let x=0;
+		x= result[0].amounttoget-result[0].amounttogive;
+		if(x>=0)
+		{
+			customerData.push(x);
+			customerData.push(0);
+		}
+		else{
+			customerData.push(0);
+			customerData.push(-x);
+			
+		}
 	}
-	else{
-		customerData.push(0);
-	}
+	
 
 
 //   customers.forEach(customer => { 

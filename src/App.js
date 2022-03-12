@@ -6,7 +6,7 @@ import CustomerState from './context/CustomerState';
 import SupplierState from './context/SupplierState';
 import AdminState from './context/AdminState';
 import Navbar from './components/Navbar';
-import Home from './components/Home';
+import Notes from './components/Notes/Notes';
 import Important from './components/Notes/Important.js';
 import Completed from './components/Notes/Completed.js';
 import About from './components/About';
@@ -19,6 +19,8 @@ import Adminpage from './components/Admin/AdminPage';
 import Suppliers from './components/khatabook/Supplier/Suppliers'
 import Customers from './components/khatabook/Customer/Customers'
 import AddCustomer from './components/khatabook/Customer/AddCustomer';
+import AddNewTransactionForCustomerGave from './components/khatabook/Customer/AddNewTransactionForCustomerGave';
+import AddNewTransactionForCustomerGet from './components/khatabook/Customer/AddNewTransactionForCustomerGet'; 
 import AddSupplier from './components/khatabook/Supplier/AddSupplier';
 import SingleCustomer from './components/khatabook/Customer/SingleCustomer';
 import SingleSupplier from './components/khatabook/Supplier/SingleSupplier';
@@ -28,7 +30,10 @@ function Routerapp() {
 		<>
 			<Switch>
 				<Route exact path="/">
-					<Home />
+					<Customers/>
+				</Route>
+				<Route exact path="/notes">
+					<Notes/>
 				</Route>
 				<Route exact path="/important">
 					<Important />
@@ -50,6 +55,12 @@ function Routerapp() {
 				</Route>
 				<Route exact path="/userdetail">
 					<User />
+				</Route>
+				<Route exact path="/addNewTransactionForCustomerGave">
+					<AddNewTransactionForCustomerGave/>
+				</Route>
+				<Route exact path="/addNewTransactionForCustomerGet">
+					<AddNewTransactionForCustomerGet/>
 				</Route>
 				
 				<Route exact path="/customers">

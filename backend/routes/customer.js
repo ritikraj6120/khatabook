@@ -87,7 +87,7 @@ router.delete('/deletecustomer/:id', fetchuser, async (req, res) => {
 
 		if (!customer) { return res.status(404).send("Not Found") }
 
-		// Allow deletion only if user owns this Note
+		// Allow deletion only if user owns this customer
 		if (customer.user.toString() !== req.user.id) {
 			return res.status(401).send("Not Allowed");
 		}

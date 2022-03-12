@@ -1,11 +1,16 @@
-import React, {  useContext, useState} from 'react'
+import React, {  useContext, useEffect, useState} from 'react'
 import CustomerContext from '../../../context/CustomerContext'
 
 const CustomerDetail = (props) => {
-	const {singleCustomer} = props;  
-	// console.log(singleCustomer)
+	const {singleCustomer} = props; // db 
+	console.log(singleCustomer)
 	const {editCustomer} = useContext(CustomerContext);
 	const [credentials, setCredentials] = useState({ title: singleCustomer.title, name: singleCustomer.name, phone:singleCustomer.phone })
+	// console.log(singleCustomer.title, singleCustomer.name, singleCustomer.phone)//databse
+	console.log(credentials.title,credentials.name,credentials.phone)//usestate
+	useEffect(()=>{
+		setCredentials({ title: singleCustomer.title, name: singleCustomer.name, phone:singleCustomer.phone })
+	},[singleCustomer]);
 	const onChange = (e) => {
 		setCredentials({ ...credentials, [e.target.name]: e.target.value })
 	}

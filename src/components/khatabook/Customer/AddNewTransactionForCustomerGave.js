@@ -4,10 +4,11 @@ import { useHistory } from 'react-router-dom';
 import '../style.css';
 import CustomerDetail from './CustomerDetail';
 import Navbar from '../Navbar';
-import {Stack,CircularProgress,Button,Typography} from '@mui/material';
-const SingleCustomer = () => {
-	let history=useHistory();
-	const { SingleCustomerTransaction, getSingleCustomerTransactions, getSingleCustomerDetail, singleCustomerDetail } = useContext(CustomerContext);
+import { CircularProgress } from '@mui/material';
+import { CommentsDisabledOutlined, ConstructionOutlined } from '@mui/icons-material';
+const AddNewTransactionForCustomerGave = () => {
+	let history = useHistory();
+	const { getSingleCustomerDetail, singleCustomerDetail, getSingleCustomerTransactions,addSingleCustomerTransaction } = useContext(CustomerContext);
 	const { singleCustomer, loading } = singleCustomerDetail;
 	const singlecustomerid = JSON.parse(localStorage.getItem('SingleCustomerId'));
 
@@ -16,57 +17,37 @@ const SingleCustomer = () => {
 		getSingleCustomerDetail(singlecustomerid);
 		// eslint-disable-next-line
 	}, [])
+	const [newTransaction, setNewTransaction] = useState(0);
 
-
-	// const [credentials, setCredentials] = useState({ title: singlecustomer.title, name: singlecustomer.name, phone: singlecustomer.phone })
-
-	// const handleSubmit = async (e) => {
-	// 	let { title, name, phone } = credentials;
-	// 	e.preventDefault();
-	// 	await editCustomer(singlecustomer._id, title, name, phone);
-	// }
-
-	// const onChange = (e) => {
-	// 	setCredentials({ ...credentials, [e.target.name]: e.target.value })
-	// }
-	const youGaveAddPage = (e) => {
-		history.push('/addNewTransactionForCustomerGave');
+	const onChange = (e) => {
+		setNewTransaction(e.target.value)
+		console.log(newTransaction)
 	}
-	const youGetAddPage = (e) => {
-		history.push('/addNewTransactionForCustomerGet');
+	const handlesubmit = (e) => {
+		e.preventDefault();
+		console.log(typeof parseInt(newTransaction));
+		addSingleCustomerTransaction(singleCustomer._id, parseInt(newTransaction), 0);
+		history.push('/editcustomers')
 	}
 	return (
 		<>
 			<Navbar a="/editcustomer" b="/editsupplier" />
-			{
-
-				loading === true ? <CircularProgress color="secondary" /> :
-					<>
-						<CustomerDetail singleCustomer={singleCustomer} />
-						
-						{SingleCustomerTransaction.map((item) => {
-							return <div key={item._id}>
-								<button >{item.lendamount_singleCustomer} {item.takeamount_singleCustomer}</button>
-
-							</div>
-						})}
-						
-						<div className='fixed'>
-						{/* {SingleCustomerTransaction.length===0?<div className='fixed'>ADD first transaction</div>:null} */}
-							<Stack spacing={2} direction="row">
-								<Button style={{ backgroundColor: "red" }} variant="contained" onClick={youGaveAddPage}>You Gave Rs</Button>
-								<Button style={{ backgroundColor: "#2da62d" }} variant="contained" onClick={youGetAddPage}>You Got Rs</Button>
-							</Stack>
-						</div>
-						
-					</>
+			{ loading === true ? <CircularProgress /> :
+				<>
+					<div>
+						<h1>You gave Rs {newTransaction} to {singleCustomer.name}</h1>
+					</div>
+					<form onSubmit={handlesubmit}>
+						<input type="number" className="form-control " placeholder="Enter Amount"  onChange={onChange} />
+						<button type="submit" className="btn btn-primary">Save</button>
+					</form>
+				</>
 			}
-
 		</>
 	);
 };
 
-export default SingleCustomer;
+export default AddNewTransactionForCustomerGave;
 
 
 // <form>
