@@ -4,12 +4,22 @@ import { useHistory } from 'react-router-dom';
 const SupplierItem = (props) => {
 	let history=useHistory();
 	
-	const { supplier } = props;
-	const { title, name, payment, purchase } = supplier;
-	let currentTotal=payment-purchase;
-
+	const { supplier,supplierBalance } = props;
+	const { title, name} = supplier;
+	const result = supplierBalance.filter(item => item.supplier === supplier._id);
+	let currentTotal=0;
+	let x=0
+	if(result[0])
+	x= result[0].payment -result[0].purchase;
+	if(x>=0)
+	{
+		currentTotal=x;
+	}
+	else{
+		currentTotal=-x;
+	}
 	const edit =()=>{
-		localStorage.setItem("SingleSupplierId",supplier._id)
+		localStorage.setItem("SingleSupplierId",JSON.stringify(supplier._id));
 		history.push('/editsupplier');
 
 	}

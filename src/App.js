@@ -21,6 +21,8 @@ import Customers from './components/khatabook/Customer/Customers'
 import AddCustomer from './components/khatabook/Customer/AddCustomer';
 import AddNewTransactionForCustomerGave from './components/khatabook/Customer/AddNewTransactionForCustomerGave';
 import AddNewTransactionForCustomerGet from './components/khatabook/Customer/AddNewTransactionForCustomerGet'; 
+import AddNewTransactionForSupplierPayment from './components/khatabook/Supplier/AddNewTransactionForSupplierPayment'
+import AddNewTransactionForSupplierPurchase from './components/khatabook/Supplier/AddNewTransactionForSupplierPurchase'
 import AddSupplier from './components/khatabook/Supplier/AddSupplier';
 import SingleCustomer from './components/khatabook/Customer/SingleCustomer';
 import SingleSupplier from './components/khatabook/Supplier/SingleSupplier';
@@ -62,7 +64,12 @@ function Routerapp() {
 				<Route exact path="/addNewTransactionForCustomerGet">
 					<AddNewTransactionForCustomerGet/>
 				</Route>
-				
+				<Route exact path="/addNewTransactionForSupplierPayment">
+					<AddNewTransactionForSupplierPayment/>
+				</Route>
+				<Route exact path="/addNewTransactionForSupplierPurchase">
+					<AddNewTransactionForSupplierPurchase/>
+				</Route>
 				<Route exact path="/customers">
 					<Customers />
 				</Route>

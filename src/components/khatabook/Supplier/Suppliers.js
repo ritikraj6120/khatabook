@@ -21,6 +21,7 @@ const Suppliers = () => {
 	let supplierpayment = 0;
 	let supplierpurchase = 0;
 	if (loading === false) {
+		console.log(suppliers.length)
 		for (let i = 0; i < supplierBalance.length; i++) {
 			let x = supplierBalance[i].payment - supplierBalance[i].purchase >= 0;
 			if (x >= 0) {

@@ -1,5 +1,4 @@
 import React from 'react';
-// import CustomerContext from "../../../context/CustomerContext"
 import { useHistory } from 'react-router-dom'; 
 const CustomerItem = (props) => {
 	let history=useHistory();
@@ -19,7 +18,7 @@ const CustomerItem = (props) => {
 		currentTotal=-x;
 	}
 	const edit =()=>{
-		localStorage.setItem("SingleCustomerId",JSON.stringify(customer._id))
+		localStorage.setItem("SingleCustomerId",JSON.stringify(customer._id));
 		history.push('/editcustomer');
 	}
 	return (

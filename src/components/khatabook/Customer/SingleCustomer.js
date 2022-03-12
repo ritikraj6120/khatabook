@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import '../style.css';
 import CustomerDetail from './CustomerDetail';
 import Navbar from '../Navbar';
-import {Stack,CircularProgress,Button,Typography} from '@mui/material';
+import {Stack,CircularProgress,Button} from '@mui/material';
 const SingleCustomer = () => {
 	let history=useHistory();
 	const { SingleCustomerTransaction, getSingleCustomerTransactions, getSingleCustomerDetail, singleCustomerDetail } = useContext(CustomerContext);

@@ -44,7 +44,7 @@ router.get('/getsuppliers', fetchuser, async (req, res) => {
 
 router.post('/addsupplier', fetchuser, async (req, res) => {
 	try {
-		const { title, name, phonee } = req.body;
+		const { title, name, phone } = req.body;
 		// If there are errors, return Bad request and the errors
 		// const errors = validationResult(req);
 		// if (!errors.isEmpty()) {
@@ -208,7 +208,7 @@ router.post('/addSupplierTransaction/:id', fetchuser, async (req, res) => {
 	}
 	///////////////////////////////////////////////////////////////////////////
 	let newSuppliertransaction = new singleSupplierTransaction({
-		payment_singleSupplier, purchase_singleSupplier, customer: req.params.id
+		payment_singleSupplier, purchase_singleSupplier, supplier: req.params.id
 	})
 
 	try {

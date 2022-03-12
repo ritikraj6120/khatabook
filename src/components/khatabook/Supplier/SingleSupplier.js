@@ -2,18 +2,19 @@ import React, { useContext, useState, useEffect } from 'react';
 import SupplierContext from '../../../context/SupplierContext';
 import { useHistory } from 'react-router-dom';
 import '../style.css';
-import Navbar from '../Navbar';
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
 import SupplierDetail from './SupplierDetail';
+import Navbar from '../Navbar';
+import { Stack, CircularProgress, Button } from '@mui/material';
+
 const SingleSupplier = () => {
 	let history = useHistory();
-	const { SingleSupplierTransaction, getSingleSupplierTransactions,getSingleSupplier} = useContext(SupplierContext);
-	const singlecustomerid = JSON.parse(localStorage.getItem('SingleSupplierId'));
+	const { SingleSupplierTransaction, getSingleSupplierTransactions, getSingleSupplierDetail, singleSupplierDetail } = useContext(SupplierContext);
+	const { singleSupplier, loading } = singleSupplierDetail;
+	const singlesupplierid = JSON.parse(localStorage.getItem('SingleSupplierId'));
 
 	useEffect(() => {
-		console.log("inside useefffect");
-		getSingleSupplier(singlecustomerid);
+		getSingleSupplierTransactions(singlesupplierid);
+		getSingleSupplierDetail(singlesupplierid);
 		// eslint-disable-next-line
 	}, [])
 
@@ -33,13 +34,20 @@ const SingleSupplier = () => {
 	// const onChange = (e) => {
 	// 	setCredentials({ ...credentials, [e.target.name]: e.target.value })
 	// }
-
+	const youGaveAddPage = (e) => {
+		history.push('/addNewTransactionForSupplierPayment');
+	}
+	const youGetAddPage = (e) => {
+		history.push('/addNewTransactionForSupplierPurchase');
+	}
 	return (
 		<>
 			<Navbar a="/editcustomer" b="/editsupplier" />
-			<h3> Update Supplier</h3>
-			<SupplierDetail />
-			{/* <form onSubmit={handleSubmit}>
+			{
+				loading === true ? <CircularProgress color="secondary" /> :
+					<>
+						<SupplierDetail singleSupplier={singleSupplier} />
+						{/* <form onSubmit={handleSubmit}>
 				<div className="form-row align-items-center">
 					<div className="col-sm-3 my-1">
 						<label className="sr-only" htmlFor="inlineFormInputName">Title</label>
@@ -66,37 +74,32 @@ const SingleSupplier = () => {
 					</div>
 				</div>
 			</form> */}
+						<div className="d-flex justify-content-center">
+							<div className='d-grid gap-2 col-6 '>
+								{SingleSupplierTransaction.map((item) => {
+									return (
+										<div key={item._id}>
+											<button className="btn btn-outline-dark" >
+												<div className="d-flex bd-highlight">
+													<div className="p-2  bd-highlight">{item.purchase_singleSupplier}</div>
+													<div className="p-2 bd-highlight">{item.payment_singleSupplier}</div>
+												</div>
+											</button>
 
-			<div className="d-flex justify-content-center">
-				<div className='d-grid gap-2 col-6 '>
-
-					{SingleSupplierTransaction.map((item) => {
-						return(
-						<div key={item._id}>
-							<button className="btn btn-outline-dark" >
-								<div className="d-flex bd-highlight">
-									<div className="p-2  bd-highlight">{item.purchase_singleSupplier}</div>
-									<div className="p-2 bd-highlight">{item.payment_singleSupplier}</div>
-								</div>
-							</button>
-
-						</div>)
-					})}
-
-
-				</div>
-			</div>
-			<div className='fixed'>
-				<Stack spacing={2} direction="row">
-					<Button style={{ backgroundColor: "red" }} variant="contained">Purchase</Button>
-					<Button style={{ backgroundColor: "#2da62d" }} variant="contained">payment</Button>
-				</Stack>
-			</div>
-
-
-
+										</div>)
+								})}
+							</div>
+						</div>
+						<div className='fixed'>
+							<Stack spacing={2} direction="row">
+								<Button style={{ backgroundColor: "red" }} variant="contained" onClick={youGaveAddPage}>PURCHASE</Button>
+								<Button style={{ backgroundColor: "#2da62d" }} variant="contained" onClick={youGetAddPage}>PAYMENT</Button>
+							</Stack>
+						</div>
+					</>
+			}
 		</>
 	);
 };
 
-export default SingleSupplier;
+			export default SingleSupplier;

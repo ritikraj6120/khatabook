@@ -2,10 +2,10 @@ import React, { useContext, useState, useEffect } from 'react';
 import CustomerContext from '../../../context/CustomerContext';
 import { useHistory } from 'react-router-dom';
 import '../style.css';
-import CustomerDetail from './CustomerDetail';
+// import CustomerDetail from './CustomerDetail';
 import Navbar from '../Navbar';
 import { CircularProgress } from '@mui/material';
-import { CommentsDisabledOutlined, ConstructionOutlined } from '@mui/icons-material';
+// import { CommentsDisabledOutlined, ConstructionOutlined } from '@mui/icons-material';
 const AddNewTransactionForCustomerGave = () => {
 	let history = useHistory();
 	const { getSingleCustomerDetail, singleCustomerDetail, getSingleCustomerTransactions,addSingleCustomerTransaction } = useContext(CustomerContext);

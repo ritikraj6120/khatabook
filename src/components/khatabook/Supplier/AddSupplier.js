@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react'
 import { useHistory } from "react-router-dom";
 import SupplierContext from "../../../context/SupplierContext"
+import noteContext from '../../../context/noteContext';
 import Navbar from '../Navbar';
 
 const Navbar2 = () => {
@@ -23,8 +24,9 @@ const Navbar2 = () => {
 
 const AddSupplier = () => {
 	let history = useHistory();
-	const { addSupplier } =  useContext(SupplierContext);
-	const [supplier, setSupplier] = useState({ title: "Mr", name: "",phone:0 });
+	const { addSupplier } = useContext(SupplierContext);
+	const {showAlert}=useContext(noteContext)
+	const [supplier, setSupplier] = useState({ title: "Mr", name: "", phone: 0 });
 
 	const onChange = (e) => {
 		setSupplier({ ...supplier, [e.target.name]: e.target.value })
@@ -32,9 +34,16 @@ const AddSupplier = () => {
 
 	const handleClick = (e) => {
 		e.preventDefault();
-		addSupplier(supplier.title, supplier.name, supplier.phone);
-		setSupplier({ title: "Mr", name: "", phone:0});
-		history.push('/editsupplier');
+		if (supplier.name.length < 1) {
+			console.log(supplier.name.length);
+			showAlert("Supplier length less than 1", "danger");
+		}
+		else {
+			e.preventDefault();
+			addSupplier(supplier.title, supplier.name, supplier.phone);
+			setSupplier({ title: "Mr", name: "", phone: 0 });
+			history.push('/editsupplier');
+		}
 	}
 
 	return (
@@ -55,11 +64,11 @@ const AddSupplier = () => {
 					<div className="col-sm col-lg-4">
 						<label htmlFor="name">Name</label>
 						<input required="required" type="text" className="form-control" id="name" name="name"
-							value={supplier.name} onChange={onChange} placeholder="Enter Supplier Name to add Entries"/>
+							value={supplier.name} onChange={onChange} placeholder="Enter Supplier Name to add Entries" />
 					</div>
 					<div className="col-sm col-lg-4">
 						<label htmlFor="phone">Phone</label>
-						<input required type="tel" className="form-control" id="phone" name="phone"  onChange={onChange} placeholder="Enter Phone Number (Optional)"/>
+						<input required type="tel" className="form-control" id="phone" name="phone" onChange={onChange} placeholder="Enter Phone Number (Optional)" />
 					</div>
 					{/* <div className="col-sm col-lg-4">
 						<label htmlFor="amount">Your Payment</label>
