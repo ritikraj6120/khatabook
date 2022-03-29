@@ -11,10 +11,10 @@ const Navbar = ({a,b}) => {
 				<div className="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul className="navbar-nav me-auto mb-2 mb-lg-0">
 						<li className="nav-item">
-							<Link className={`nav-link pb-0 ${location.pathname === a ? "active border-bottom border-white border-5" : ""}`} to="/customers">Customers</Link>
+							<Link className={`nav-link pb-0 ${location.pathname.toLowerCase().includes('customer') === true ? "active border-bottom border-white border-5" : ""}`} to="/customers">Customers</Link>
 						</li>
 						<li className="nav-item">
-							<Link className={`nav-link pb-0 ${location.pathname === b? "active border-bottom border-white border-5" : ""}`} to="/suppliers">Suppliers</Link>
+							<Link className={`nav-link pb-0 ${location.pathname.toLowerCase().includes('supplier') === true ? "active border-bottom border-white border-5" : ""}`} to="/suppliers">Suppliers</Link>
 						</li>
 					</ul>
 				</div>

@@ -177,19 +177,19 @@ router.post('/addSupplierTransaction/:id', fetchuser, async (req, res) => {
 	//////////////////////////////////////////hello
 	try {
 
-		let amounttoget = 0, amounttogive = 0;
+		let purchase = 0, payment = 0;
 		if (payment_singleSupplier > 0) {
-			amounttoget = amounttoget + payment_singleSupplier;
+			purchase += payment_singleSupplier;
 		}
 		else {
-			amounttogive = amounttogive + purchase_singleSupplier;
+			payment += purchase_singleSupplier;
 		}
 
 
 		
 		
 		const newSupplierNetBalance = new supplierNetBalance({
-			amounttoget, amounttogive, supplier: req.params.id
+			purchase, payment, supplier: req.params.id
 		})
 		const rep = await supplierNetBalance.findOne({ supplier: req.params.id });
 		if (!rep) {
@@ -197,9 +197,9 @@ router.post('/addSupplierTransaction/:id', fetchuser, async (req, res) => {
 		}
 		else {
 			let ans=await supplierNetBalance.findOne({supplier: req.params.id});
-			amounttoget += ans.amounttoget;
-			amounttogive += ans.amounttogive;
-			let doc = await supplierNetBalance.findOneAndUpdate({ supplier: req.params.id }, {$set: {amounttoget:amounttoget,amounttogive:amounttogive}}, { new: true });
+			purchase += ans.purchase;
+			payment += ans.payment;
+			let doc = await supplierNetBalance.findOneAndUpdate({ supplier: req.params.id }, {$set: {payment:payment,payment:payment}}, { new: true });
 		}
 	}
 	catch (error) {

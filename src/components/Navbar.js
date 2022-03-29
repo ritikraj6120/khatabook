@@ -22,15 +22,15 @@ const Navbar = () => {
 				<div className="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul className="navbar-nav me-auto mb-2 mb-lg-0">
 						<li className="nav-item">
-							<Link className={`nav-link ${location.pathname === "/customers" ? "active" : ""}`} aria-current="page" to="/customers">Customers</Link>
+							<Link className={`nav-link ${location.pathname.toLowerCase().includes('customer') === true ? "active" : ""}`} aria-current="page" to="/customers">Customers</Link>
 						</li>
 
 						<li className="nav-item">
-							<Link className={`nav-link ${location.pathname === "/suppliers" ? "active" : ""}`} to="/suppliers">	Suppliers</Link>
+							<Link className={`nav-link ${location.pathname.toLowerCase().includes('supplier') === true ? "active" : ""}`} to="/suppliers">	Suppliers</Link>
 						</li>
 
 						<li className="nav-item">
-							<Link className={`nav-link ${location.pathname === "/notes" ? "active" : ""}`} to="/notes">Notes</Link>
+							<Link className={`nav-link ${location.pathname.toLowerCase().includes('note') === true ? "active" : ""}`} to="/notes">Notes</Link>
 						</li>
 
 						<li className="nav-item">

@@ -27,7 +27,7 @@ const AddNewTransactionForCustomerGave = () => {
 		e.preventDefault();
 		console.log(typeof parseInt(newTransaction));
 		addSingleCustomerTransaction(singleCustomer._id, parseInt(newTransaction), 0);
-		history.push('/editcustomers')
+		history.push('/editcustomer')
 	}
 	return (
 		<>

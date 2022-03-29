@@ -5,7 +5,7 @@ import { useHistory, Link } from 'react-router-dom'
 import Navbar from '../Navbar'
 import '../style.css'
 import { Button } from '@mui/material';
-import generatePDF from './supplierReport'
+import generatePDF from './supplierReport';
 import PersonAddRoundedIcon from '@mui/icons-material/PersonAddRounded';
 import CircularProgress from '@mui/material/CircularProgress';
 const Suppliers = () => {
@@ -23,7 +23,7 @@ const Suppliers = () => {
 	if (loading === false) {
 		console.log(suppliers.length)
 		for (let i = 0; i < supplierBalance.length; i++) {
-			let x = supplierBalance[i].payment - supplierBalance[i].purchase >= 0;
+			let x = supplierBalance[i].payment - supplierBalance[i].purchase;
 			if (x >= 0) {
 				supplierpayment += x;
 			}

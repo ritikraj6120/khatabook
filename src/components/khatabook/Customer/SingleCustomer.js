@@ -4,9 +4,9 @@ import { useHistory } from 'react-router-dom';
 import '../style.css';
 import CustomerDetail from './CustomerDetail';
 import Navbar from '../Navbar';
-import {Stack,CircularProgress,Button} from '@mui/material';
+import { Stack, CircularProgress, Button } from '@mui/material';
 const SingleCustomer = () => {
-	let history=useHistory();
+	let history = useHistory();
 	const { SingleCustomerTransaction, getSingleCustomerTransactions, getSingleCustomerDetail, singleCustomerDetail } = useContext(CustomerContext);
 	const { singleCustomer, loading } = singleCustomerDetail;
 	const singlecustomerid = JSON.parse(localStorage.getItem('SingleCustomerId'));
@@ -43,22 +43,27 @@ const SingleCustomer = () => {
 				loading === true ? <CircularProgress color="secondary" /> :
 					<>
 						<CustomerDetail singleCustomer={singleCustomer} />
-						
-						{SingleCustomerTransaction.map((item) => {
-							return <div key={item._id}>
-								<button >{item.lendamount_singleCustomer} {item.takeamount_singleCustomer}</button>
 
+						<div className="d-flex justify-content-center">
+							<div className='d-grid gap-2 col-6 '>
+								{SingleCustomerTransaction.map((item) => {
+
+									return (<div key={item._id}>
+										<button >{item.lendamount_singleCustomer} {item.takeamount_singleCustomer}</button>
+
+									</div>)
+								})}
 							</div>
-						})}
-						
+						</div>
+
 						<div className='fixed'>
-						{/* {SingleCustomerTransaction.length===0?<div className='fixed'>ADD first transaction</div>:null} */}
+							{/* {SingleCustomerTransaction.length===0?<div className='fixed'>ADD first transaction</div>:null} */}
 							<Stack spacing={2} direction="row">
 								<Button style={{ backgroundColor: "red" }} variant="contained" onClick={youGaveAddPage}>You Gave Rs</Button>
 								<Button style={{ backgroundColor: "#2da62d" }} variant="contained" onClick={youGetAddPage}>You Got Rs</Button>
 							</Stack>
 						</div>
-						
+
 					</>
 			}
 
