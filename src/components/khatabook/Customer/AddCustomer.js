@@ -30,14 +30,14 @@ const AddCustomer = () => {
 
 	}
 
-	const handleClick = (e) => {
+	const handleClick = async (e) => {
 		e.preventDefault();
 		if (customer.name.length < 1) {
 			console.log(customer.name.length);
 			showAlert("Customer length less than 1", "danger");
 		}
 		else {
-			addCustomer(customer.title, customer.name, customer.phone);
+			await addCustomer(customer.title, customer.name, customer.phone);
 			setCustomer({ title: "Mr", name: "", phone:0 });
 			history.push('/editcustomer');
 		}
@@ -66,7 +66,7 @@ const AddCustomer = () => {
 					</div>
 					<div className="col-sm col-lg-4">
 						<label htmlFor="phone">Phone</label>
-						<input required type="tel" className="form-control" id="phone" name="phone"  onChange={onChange} placeholder="Enter Phone Number (Optional)"/>
+						<input required type="number" className="form-control" id="phone" name="phone"  onChange={onChange} placeholder="Enter Phone Number (Optional)"/>
 					</div>
 
 					{/* <div className="col-sm col-lg-4">

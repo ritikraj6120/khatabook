@@ -5,6 +5,7 @@ import '../style.css';
 import CustomerDetail from './CustomerDetail';
 import Navbar from '../Navbar';
 import { Stack, CircularProgress, Button } from '@mui/material';
+import { VolunteerActivismOutlined } from '@mui/icons-material';
 const SingleCustomer = () => {
 	let history = useHistory();
 	const { SingleCustomerTransaction, getSingleCustomerTransactions, getSingleCustomerDetail, singleCustomerDetail } = useContext(CustomerContext);
@@ -13,22 +14,12 @@ const SingleCustomer = () => {
 
 	useEffect(() => {
 		getSingleCustomerTransactions(singlecustomerid);
+		console.log("hey bhagwan");
+		console.log(singlecustomerid);
 		getSingleCustomerDetail(singlecustomerid);
 		// eslint-disable-next-line
 	}, [])
 
-
-	// const [credentials, setCredentials] = useState({ title: singlecustomer.title, name: singlecustomer.name, phone: singlecustomer.phone })
-
-	// const handleSubmit = async (e) => {
-	// 	let { title, name, phone } = credentials;
-	// 	e.preventDefault();
-	// 	await editCustomer(singlecustomer._id, title, name, phone);
-	// }
-
-	// const onChange = (e) => {
-	// 	setCredentials({ ...credentials, [e.target.name]: e.target.value })
-	// }
 	const youGaveAddPage = (e) => {
 		history.push('/addNewTransactionForCustomerGave');
 	}
@@ -41,7 +32,7 @@ const SingleCustomer = () => {
 			{
 
 				loading === true ? <CircularProgress color="secondary" /> :
-					<>
+					<div>
 						<CustomerDetail singleCustomer={singleCustomer} />
 
 						<div className="d-flex justify-content-center">
@@ -64,7 +55,7 @@ const SingleCustomer = () => {
 							</Stack>
 						</div>
 
-					</>
+					</div>
 			}
 
 		</>

@@ -26,7 +26,7 @@ const AddNewTransactionForSupplierPayment = () => {
 	const handlesubmit = (e) => {
 		e.preventDefault();
 		console.log(typeof parseInt(newTransaction));
-		addSingleSupplierTransaction(singleSupplier._id, parseInt(newTransaction), 0);
+		addSingleSupplierTransaction(singleSupplier._id, 0 ,parseInt(newTransaction));
 		history.push('/editsupplier')
 	}
 	return (

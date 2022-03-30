@@ -19,14 +19,17 @@ const AddNewTransactionForSupplierPurchase = () => {
 	const [newTransaction, setNewTransaction] = useState(0);
 
 	const onChange = (e) => {
-		setNewTransaction(e.target.value)
-		console.log(newTransaction)
+		if(e.target.value.length==0)
+		setNewTransaction(0);
+		else
+		setNewTransaction(parseInt(e.target.value))
+		// console.log(newTransaction)
 	}
 
 	const handlesubmit = (e) => {
 		e.preventDefault();
-		console.log(typeof parseInt(newTransaction));
-		addSingleSupplierTransaction(singleSupplier._id,0 , parseInt(newTransaction) );
+		// console.log(typeof parseInt(newTransaction));
+		addSingleSupplierTransaction(singleSupplier._id,  parseInt(newTransaction),0 );
 		history.push('/editsupplier')
 	}
 	return (
@@ -35,10 +38,11 @@ const AddNewTransactionForSupplierPurchase = () => {
 			{ loading === true ? <CircularProgress /> :
 				<>
 					<div>
-						<h1>You got Rs {newTransaction} from {singleSupplier.name}</h1>
+						<h1>Purchase of Rs {newTransaction} from {singleSupplier.name}</h1>
+						
 					</div>
 					<form onSubmit={handlesubmit}>
-						<input type="number" className="form-control " placeholder="Enter Amount"  onChange={onChange} />
+						<input type="number" className="form-control " placeholder="Enter purchase amount"  onChange={onChange} />
 						<button type="submit" className="btn btn-primary">Save</button>
 					</form>
 				</>

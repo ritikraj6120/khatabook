@@ -3,6 +3,7 @@ import CustomerContext from '../../../context/CustomerContext'
 
 const CustomerDetail = (props) => {
 	const {singleCustomer} = props; // db 
+	console.log("hello");
 	console.log(singleCustomer)
 	const {editCustomer} = useContext(CustomerContext);
 	const [credentials, setCredentials] = useState({ title: singleCustomer.title, name: singleCustomer.name, phone:singleCustomer.phone })

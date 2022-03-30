@@ -172,59 +172,60 @@ router.post('/addSupplierTransaction/:id', fetchuser, async (req, res) => {
 
 
 
-	/////gddigskgdkadgkjakakfkfgk
-	const { purchase_singleSupplier, payment_singleSupplier } = req.body;
-	//////////////////////////////////////////hello
-	try {
+		/////gddigskgdkadgkjakakfkfgk
+		const { purchase_singleSupplier, payment_singleSupplier } = req.body;
+		//////////////////////////////////////////hello
+		try {
 
-		let purchase = 0, payment = 0;
-		if (payment_singleSupplier > 0) {
-			purchase += payment_singleSupplier;
+			let purchase = 0, payment = 0;
+			payment += payment_singleSupplier;
+			purchase += purchase_singleSupplier;
+
+			const newSupplierNetBalance = new supplierNetBalance({
+				purchase, payment, supplier: req.params.id
+			})
+			console.log(req.params.id);
+			const rep = await supplierNetBalance.findOne({ supplier: req.params.id });
+			console.log(rep);
+			console.log("bye bye");
+			if (!rep) {
+				console.log("hhhhhh")
+				let doc = await newSupplierNetBalance.save();
+			}
+			else {
+				console.log("mmmmmaaaaaaaaaaaai")
+				let ans = await supplierNetBalance.findOne({ supplier: req.params.id });
+				console.log(typeof ans)
+				purchase += ans.purchase;
+				payment += ans.payment;
+				console.log(purchase);
+				console.log(payment);
+				let doc = await supplierNetBalance.findOneAndUpdate({ supplier: req.params.id }, { $set: { purchase: purchase, payment: payment } }, { new: true });
+			}
 		}
-		else {
-			payment += purchase_singleSupplier;
+		catch (error) {
+			console.error(error.message);
+			res.status(500).send("Internal Server Error");
 		}
-
-
-		
-		
-		const newSupplierNetBalance = new supplierNetBalance({
-			purchase, payment, supplier: req.params.id
+		///////////////////////////////////////////////////////////////////////////
+		let newSuppliertransaction = new singleSupplierTransaction({
+			payment_singleSupplier, purchase_singleSupplier, supplier: req.params.id
 		})
-		const rep = await supplierNetBalance.findOne({ supplier: req.params.id });
-		if (!rep) {
-			let doc = await newSupplierNetBalance.save();
+
+		try {
+			let doc = await newSuppliertransaction.save();
+			res.status(200).json(doc);
+
 		}
-		else {
-			let ans=await supplierNetBalance.findOne({supplier: req.params.id});
-			purchase += ans.purchase;
-			payment += ans.payment;
-			let doc = await supplierNetBalance.findOneAndUpdate({ supplier: req.params.id }, {$set: {payment:payment,payment:payment}}, { new: true });
+		catch (error) {
+			console.error(error.message);
+			res.status(500).send("Internal Server Error");
 		}
 	}
 	catch (error) {
 		console.error(error.message);
 		res.status(500).send("Internal Server Error");
 	}
-	///////////////////////////////////////////////////////////////////////////
-	let newSuppliertransaction = new singleSupplierTransaction({
-		payment_singleSupplier, purchase_singleSupplier, supplier: req.params.id
-	})
-
-	try {
-		let doc = await newSuppliertransaction.save();
-		res.status(200).json(doc);
-
-	}
-	catch (error) {
-		console.error(error.message);
-		res.status(500).send("Internal Server Error");
-	}
-}
-catch (error) {
-	console.error(error.message);
-	res.status(500).send("Internal Server Error");
-}
 })
 
 // // ROUTE 8: Update an existing supplierTransaction  using: PUT "/api/supplier/updatetransactions". Login required
@@ -259,7 +260,7 @@ router.put('/updatetransactions/:id', fetchuser, async (req, res) => {
 
 router.get('/getSupplierBalance', fetchuser, async (req, res) => {
 	try {
-		let doc = await supplierNetBalance.find();
+		let doc = await supplierNetBalance.find({});
 		return res.status(200).json(doc);
 	}
 	catch (error) {

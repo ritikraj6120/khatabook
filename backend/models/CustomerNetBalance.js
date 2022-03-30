@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 const customerNetBalanceSchema = new Schema({
 customer: {
 	type: Schema.Types.ObjectId,
-	ref: 'customer'
+	ref: 'customers'
 },
 amounttoget:{
 	type:Number,

@@ -32,15 +32,15 @@ const AddSupplier = () => {
 		setSupplier({ ...supplier, [e.target.name]: e.target.value })
 	}
 
-	const handleClick = (e) => {
+	const handleClick = async (e) => {
 		e.preventDefault();
 		if (supplier.name.length < 1) {
 			console.log(supplier.name.length);
 			showAlert("Supplier length less than 1", "danger");
 		}
 		else {
-			e.preventDefault();
-			addSupplier(supplier.title, supplier.name, supplier.phone);
+			await addSupplier(supplier.title, supplier.name, supplier.phone);
+			console.log("shyam")
 			setSupplier({ title: "Mr", name: "", phone: 0 });
 			history.push('/editsupplier');
 		}
@@ -68,32 +68,8 @@ const AddSupplier = () => {
 					</div>
 					<div className="col-sm col-lg-4">
 						<label htmlFor="phone">Phone</label>
-						<input required type="tel" className="form-control" id="phone" name="phone" onChange={onChange} placeholder="Enter Phone Number (Optional)" />
+						<input required type="number" className="form-control" id="phone" name="phone" onChange={onChange} placeholder="Enter Phone Number (Optional)" />
 					</div>
-					{/* <div className="col-sm col-lg-4">
-						<label htmlFor="amount">Your Payment</label>
-						<input
-							required="required"
-							type="number"
-							className="form-control"
-							id="amount"
-							value={supplier.payment}
-							onChange={onChange}
-							name="payment"
-						/>
-					</div>
-					<div className="col-sm col-lg-4">
-						<label htmlFor="amount">Your Purchase</label>
-						<input
-							required="required"
-							type="number"
-							className="form-control"
-							id="amount"
-							value={supplier.purchase}
-							onChange={onChange}
-							name="purchase"
-						/>
-					</div> */}
 				</div>
 				<div className="row mt-3">
 					<div className="col-sm">
