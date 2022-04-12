@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const fetchuser = require('../middleware/fetchuser');
 const Customers = require('../models/Customers');
-const singleCustomerTransaction = require('../models/singleCustomerTransaction')
+const CustomerTransactions = require('../models/CustomerTransactions')
 const customerNetBalance = require('../models/CustomerNetBalance');
 const { body, validationResult } = require('express-validator');
 
@@ -19,7 +19,6 @@ router.get('/getcustomers', fetchuser, async (req, res) => {
 })
 
 // ROUTE 2: Add a new Customer using: GET "/api/customer/addcustomers". Login required
-
 router.post('/addcustomer', fetchuser, async (req, res) => {
 	try {
 		let { title, name, phone } = req.body;
@@ -52,7 +51,6 @@ router.post('/addcustomer', fetchuser, async (req, res) => {
 
 
 // ROUTE 3: Update an existing customer using: PUT "/api/customer/updatecustomers". Login required
-
 router.put('/updatecustomer/:id', fetchuser, async (req, res) => {
 	const { title, name, phone } = req.body;
 	try {
@@ -71,7 +69,7 @@ router.put('/updatecustomer/:id', fetchuser, async (req, res) => {
 		}
 
 		const updateCustomer = await Customers.findByIdAndUpdate(req.params.id, { $set: newCustomer }, { new: true })
-		res.status(200).json(updateCustomer).select('-user -date');
+		res.status(200).json(updateCustomer);
 	}
 	catch (error) {
 		console.error(error.message);
@@ -131,7 +129,7 @@ router.get('/getCustomerTransactions/:id', fetchuser, async (req, res) => {
 		if (customer.user.toString() !== req.user.id) {
 			return res.status(401).send("Not Allowed");
 		}
-		let customerTransactions = await singleCustomerTransaction.find({ customer: req.params.id });
+		let customerTransactions = await CustomerTransactions.find({ customer: req.params.id });
 		return res.status(200).json(customerTransactions);
 
 	}
@@ -185,7 +183,7 @@ router.post('/addCustomerTransaction/:id', fetchuser, async (req, res) => {
 			res.status(500).send("Internal Server Error");
 		}
 		///////////////////////////////////////////////////////////////////////////
-		let newCustomertransaction = new singleCustomerTransaction({
+		let newCustomertransaction = new CustomerTransactions({
 			lendamount_singleCustomer, takeamount_singleCustomer, customer: req.params.id
 		})
 
@@ -207,7 +205,7 @@ router.post('/addCustomerTransaction/:id', fetchuser, async (req, res) => {
 
 // ROUTE 8: Update an existing customerTransaction  using: PUT "/api/customer/updatetransactions". Login required
 
-router.put('/updatetransactions/:id', fetchuser, async (req, res) => {
+router.put('/updateCustomerTransaction/:id', fetchuser, async (req, res) => {
 	const { title, name, lendamount, takeamount } = req.body;
 	try {
 		// Create a newNote object

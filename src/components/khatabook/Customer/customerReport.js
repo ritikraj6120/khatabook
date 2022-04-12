@@ -8,7 +8,7 @@ const generatePDF = (customers,customerBalance) => {
   const doc = new jsPDF();
 
   // define the columns we want and their titles
-  const tableColumn = ["Title", "Name", "You'll Get","You'll Give"];
+  const tableColumn = ["Title", "Name","Phone", "You'll Get","You'll Give"];
   // define an empty array of rows
   const tableRows = [];
 
@@ -17,7 +17,7 @@ const generatePDF = (customers,customerBalance) => {
 	const customerData = [];
 	customerData.push(customers[i].title);
 	customerData.push(customers[i].name);
-	// let ans=[];
+	customerData.push(customers[i].phone);
 	const result = customerBalance.filter(item => item.customer === customers[i]._id);
 	if(result.length===0)
 	{
@@ -60,7 +60,7 @@ const generatePDF = (customers,customerBalance) => {
   // we use a date string to generate our filename.
   const dateStr =  date[1] +"_"+ date[2] +"_"+ date[3] ;
   // customer title. and margin-top + margin-left
-  doc.text("Customers who have taken money from you", 14, 15);
+  doc.text("Customers list Report", 14, 15);
   // we define the name of our PDF file.
   doc.save(`Customer_report_${dateStr}.pdf`);
 };

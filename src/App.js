@@ -1,5 +1,5 @@
 import './App.css';
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route,Redirect } from "react-router-dom";
 import NoteState from './context/NoteState';
 import UserState from './context/UserState';
 import CustomerState from './context/CustomerState';
@@ -32,15 +32,15 @@ function Routerapp() {
 		<>
 			<Switch>
 				<Route exact path="/">
-					<Customers/>
+					<Redirect to="/customers" />
 				</Route>
 				<Route exact path="/notes">
 					<Notes/>
 				</Route>
-				<Route exact path="/important">
+				<Route exact path="/importantNotes">
 					<Important />
 				</Route>
-				<Route exact path="/completed">
+				<Route exact path="/completedNotes">
 					<Completed />
 				</Route>
 				<Route exact path="/about">

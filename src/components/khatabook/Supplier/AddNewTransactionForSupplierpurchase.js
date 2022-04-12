@@ -4,7 +4,6 @@ import { useHistory } from 'react-router-dom';
 import '../style.css';
 import Navbar from '../Navbar';
 import { CircularProgress } from '@mui/material';
-import { CommentsDisabledOutlined, ConstructionOutlined } from '@mui/icons-material';
 const AddNewTransactionForSupplierPurchase = () => {
 	let history = useHistory();
 	const { getSingleSupplierDetail, singleSupplierDetail, getSingleSupplierTransactions,addSingleSupplierTransaction } = useContext(SupplierContext);
@@ -19,7 +18,7 @@ const AddNewTransactionForSupplierPurchase = () => {
 	const [newTransaction, setNewTransaction] = useState(0);
 
 	const onChange = (e) => {
-		if(e.target.value.length==0)
+		if(e.target.value.length===0)
 		setNewTransaction(0);
 		else
 		setNewTransaction(parseInt(e.target.value))

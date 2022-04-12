@@ -34,7 +34,10 @@ const AddCustomer = () => {
 		e.preventDefault();
 		if (customer.name.length < 1) {
 			console.log(customer.name.length);
-			showAlert("Customer length less than 1", "danger");
+			showAlert("Customer name less than 1", "danger");
+		}
+		else if(customer.phone.length>11){
+			showAlert("Customer phone number length greater than 11 digits", "danger");
 		}
 		else {
 			await addCustomer(customer.title, customer.name, customer.phone);
@@ -66,7 +69,7 @@ const AddCustomer = () => {
 					</div>
 					<div className="col-sm col-lg-4">
 						<label htmlFor="phone">Phone</label>
-						<input required type="number" className="form-control" id="phone" name="phone"  onChange={onChange} placeholder="Enter Phone Number (Optional)"/>
+						<input required type="number" className="form-control" id="phone" name="phone"  onChange={onChange} placeholder="Enter Phone Number" />
 					</div>
 
 					{/* <div className="col-sm col-lg-4">

@@ -1,10 +1,9 @@
 import React, {  useContext, useEffect, useState} from 'react'
 import CustomerContext from '../../../context/CustomerContext'
-
+import noteContext from '../../../context/noteContext';
 const CustomerDetail = (props) => {
 	const {singleCustomer} = props; // db 
-	console.log("hello");
-	console.log(singleCustomer)
+	const {showAlert}=useContext(noteContext)
 	const {editCustomer} = useContext(CustomerContext);
 	const [credentials, setCredentials] = useState({ title: singleCustomer.title, name: singleCustomer.name, phone:singleCustomer.phone })
 	// console.log(singleCustomer.title, singleCustomer.name, singleCustomer.phone)//databse
@@ -18,7 +17,17 @@ const CustomerDetail = (props) => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		const { title, name, phone } = credentials;
-		await editCustomer(singleCustomer._id, title, name,phone);
+		if (name.length < 1) {
+			console.log(name.length);
+			showAlert("Customer name less than 1", "danger");
+		}
+		else if(phone.length>11){
+			showAlert("Customer phone number length greater than 11 digits", "danger");
+		}
+		else {
+			await editCustomer(singleCustomer._id, title, name,phone);
+			// history.push('/editcustomer');
+		}
 	}
 	return(
 	<form onSubmit={handleSubmit}>

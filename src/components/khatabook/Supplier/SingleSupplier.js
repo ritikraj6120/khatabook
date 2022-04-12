@@ -23,7 +23,7 @@ const SingleSupplier = () => {
 	const youGaveAddPage = (e) => {
 		history.push('/addNewTransactionForSupplierPayment');
 	}
-	
+
 	return (
 		<>
 			<Navbar a="/editcustomer" b="/editsupplier" />
@@ -33,13 +33,19 @@ const SingleSupplier = () => {
 						<SupplierDetail singleSupplier={singleSupplier} />
 						<div className="d-flex justify-content-center">
 							<div className='d-grid gap-2 col-6 '>
-								{SingleSupplierTransaction.map((item) => {
+								{/* sort((a, b) => {
+									return new Date(b.date) - new Date(a.date);
+									}) */}
+								{SingleSupplierTransaction.sort((a, b) => {
+									return new Date(b.date) - new Date(a.date);
+								}).map((item) => {
 									return (
 										<div key={item._id}>
 											<button className="btn btn-outline-dark" >
 												<div className="d-flex bd-highlight">
 													<div className="p-2  bd-highlight">Rs {item.purchase_singleSupplier}</div>
 													<div className="p-2 bd-highlight">Rs {item.payment_singleSupplier}</div>
+													<div><i className="fa-solid fa-trash " style={{height:"2rem",width:"2rem"}}></i></div>
 												</div>
 											</button>
 
@@ -59,4 +65,4 @@ const SingleSupplier = () => {
 	);
 };
 
-			export default SingleSupplier;
+export default SingleSupplier;

@@ -5,7 +5,7 @@ import '../style.css';
 import CustomerDetail from './CustomerDetail';
 import Navbar from '../Navbar';
 import { Stack, CircularProgress, Button } from '@mui/material';
-import { VolunteerActivismOutlined } from '@mui/icons-material';
+
 const SingleCustomer = () => {
 	let history = useHistory();
 	const { SingleCustomerTransaction, getSingleCustomerTransactions, getSingleCustomerDetail, singleCustomerDetail } = useContext(CustomerContext);
@@ -14,8 +14,6 @@ const SingleCustomer = () => {
 
 	useEffect(() => {
 		getSingleCustomerTransactions(singlecustomerid);
-		console.log("hey bhagwan");
-		console.log(singlecustomerid);
 		getSingleCustomerDetail(singlecustomerid);
 		// eslint-disable-next-line
 	}, [])
@@ -37,13 +35,25 @@ const SingleCustomer = () => {
 
 						<div className="d-flex justify-content-center">
 							<div className='d-grid gap-2 col-6 '>
-								{SingleCustomerTransaction.map((item) => {
-
-									return (<div key={item._id}>
-										<button >{item.lendamount_singleCustomer} {item.takeamount_singleCustomer}</button>
-
-									</div>)
-								})}
+								{
+									SingleCustomerTransaction.sort((a, b) => {
+										return new Date(b.date) - new Date(a.date);
+									}).map(
+										(item) => {
+											return (
+												<div key={item._id}>
+													<button className="btn btn-outline-dark">
+														<div className="d-flex bd-highlight">
+															<div className="p-2  bd-highlight">Rs {item.lendamount_singleCustomer}</div>
+															<div className="p-2 bd-highlight">Rs  {item.takeamount_singleCustomer}</div>
+															<div><i className="fa-solid fa-trash " style={{height:"2rem",width:"2rem"}}></i></div>
+														</div>
+													</button>
+												</div>
+											)
+										}
+									)
+								}
 							</div>
 						</div>
 
@@ -55,7 +65,7 @@ const SingleCustomer = () => {
 							</Stack>
 						</div>
 
-					</div>
+					</div >
 			}
 
 		</>
@@ -63,37 +73,6 @@ const SingleCustomer = () => {
 };
 
 export default SingleCustomer;
-
-
-// <form>
-//   <div className="form-row align-items-center">
-//     <div className="col-sm-3 my-1">
-//       <label className="sr-only" htmlFor="inlineFormInputName">Name</label>
-//       <input type="text" className="form-control" id="inlineFormInputName" placeholder="Jane Doe"/>
-//     </div>
-//     <div className="col-sm-3 my-1">
-//       <label className="sr-only" for="inlineFormInputGroupUsername">Username</label>
-//       <div className="input-group">
-//         <div className="input-group-prepend">
-//           <div className="input-group-text">@</div>
-//         </div>
-//         <input type="text" className="form-control" id="inlineFormInputGroupUsername" placeholder="Username"/>
-//       </div>
-//     </div>
-//     <div className="col-auto my-1">
-//       <div className="form-check">
-//         <input className="form-check-input" type="checkbox" id="autoSizingCheck2"/>
-//         <label className="form-check-label" htmlFor="autoSizingCheck2">
-//           Remember me
-//         </label>
-//       </div>
-//     </div>
-//     <div className="col-auto my-1">
-//       <button type="submit" className="btn btn-primary">Submit</button>
-//     </div>
-//   </div>
-// </form>
-
 
 
 

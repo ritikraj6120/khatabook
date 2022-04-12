@@ -25,6 +25,7 @@ const SupplierItem = (props) => {
 				<br/>
 					{ x>=0 ? x>0? <small>Advance </small>:null : <small>You'll Give</small>}
 				</div>
+				<i className="fa-solid fa-trash " style={{height:"2rem",width:"2rem"}}></i>
 			</div>
 		</button>
 

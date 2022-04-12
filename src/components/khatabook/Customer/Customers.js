@@ -17,6 +17,11 @@ const Customers = () => {
 		getCustomerBalance();
 		// eslint-disable-next-line
 	}, [])
+	useEffect(() => {
+		if (customerstate.error === 'Something Went wrong!') {
+			history.push('/login');
+		}
+	}, [customerstate.error])
 	let TotalAmounttoget = 0;
 	let TotalAmounttogive = 0;
 	// console.log("hello");

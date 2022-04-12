@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const singleSupplierTransactionSchema = new Schema({
+const SupplierTransactionsSchema = new Schema({
 	supplier: {
 		type: Schema.Types.ObjectId,
 		ref: 'suppliers'
@@ -20,4 +20,4 @@ const singleSupplierTransactionSchema = new Schema({
 	},
 });
 
-module.exports = mongoose.model('singleSupplierTransaction', singleSupplierTransactionSchema);
+module.exports = mongoose.model('SupplierTransactions', SupplierTransactionsSchema);

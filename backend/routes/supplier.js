@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const fetchuser = require('../middleware/fetchuser');
 const Suppliers = require('../models/Suppliers');
-const singleSupplierTransaction = require('../models/singleSupplierTransaction')
+const SupplierTransactions = require('../models/SupplierTransactions')
 const supplierNetBalance = require('../models/SupplierNetBalance');
 const { body, validationResult } = require('express-validator');
 
@@ -16,7 +16,7 @@ router.get('/getSingleSupplierTransactions/:id', fetchuser, async (req, res) => 
 		if (supplier.user.toString() !== req.user.id) {
 			return res.status(401).send("Not Allowed");
 		}
-		const getSingleSupplier = await singleSupplierTransaction.find({ supplier: req.params.id });
+		const getSingleSupplier = await SupplierTransactions.find({ supplier: req.params.id });
 		res.status(200).json(getSingleSupplier);
 
 	}
@@ -147,7 +147,7 @@ router.get('/getsupplierTransactions/:id', fetchuser, async (req, res) => {
 		if (supplier.user.toString() !== req.user.id) {
 			return res.status(401).send("Not Allowed");
 		}
-		let supplierTransactions = await singleSupplierTransaction.find({ supplier: req.params.id });
+		let supplierTransactions = await SupplierTransactions.find({ supplier: req.params.id });
 		return res.status(200).json(supplierTransactions);
 
 	}
@@ -208,7 +208,7 @@ router.post('/addSupplierTransaction/:id', fetchuser, async (req, res) => {
 			res.status(500).send("Internal Server Error");
 		}
 		///////////////////////////////////////////////////////////////////////////
-		let newSuppliertransaction = new singleSupplierTransaction({
+		let newSuppliertransaction = new SupplierTransactions({
 			payment_singleSupplier, purchase_singleSupplier, supplier: req.params.id
 		})
 

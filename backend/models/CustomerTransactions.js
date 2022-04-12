@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const singleCustomerTransactionSchema = new Schema({
+const CustomerTransactionsSchema = new Schema({
 	customer: {
 		type: Schema.Types.ObjectId,
 		ref: 'customers'
@@ -20,4 +20,4 @@ const singleCustomerTransactionSchema = new Schema({
 	},
 });
 
-module.exports = mongoose.model('singleCustomerTransaction', singleCustomerTransactionSchema);
+module.exports = mongoose.model('CustomerTransactions',CustomerTransactionsSchema);

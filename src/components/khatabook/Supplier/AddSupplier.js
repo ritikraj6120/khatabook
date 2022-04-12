@@ -68,7 +68,7 @@ const AddSupplier = () => {
 					</div>
 					<div className="col-sm col-lg-4">
 						<label htmlFor="phone">Phone</label>
-						<input required type="number" className="form-control" id="phone" name="phone" onChange={onChange} placeholder="Enter Phone Number (Optional)" />
+						<input required type="number" className="form-control" id="phone" name="phone" onChange={onChange} placeholder="Enter Phone Number " />
 					</div>
 				</div>
 				<div className="row mt-3">

@@ -17,19 +17,17 @@ const Suppliers = () => {
 		getSupplierBalance();
 		// eslint-disable-next-line
 	}, [])
-
-	let supplierpayment = 0;
-	let supplierpurchase = 0;
+useEffect(() => {
+	if (supplierstate.error === 'Something Went wrong!') {
+		history.push('/login');
+	}
+}, [supplierstate.error])
+	let totalpurchase = 0;
+	let remaining = 0;
 	if (loading === false) {
-		console.log(suppliers.length)
 		for (let i = 0; i < supplierBalance.length; i++) {
-			let x = supplierBalance[i].payment - supplierBalance[i].purchase;
-			if (x >= 0) {
-				supplierpayment += x;
-			}
-			else {
-				supplierpurchase += (-x);
-			}
+			totalpurchase += supplierBalance[i].purchase;
+			remaining = supplierBalance[i].purchase - supplierBalance[i].payment;
 		}
 	}
 
@@ -41,14 +39,17 @@ const Suppliers = () => {
 					<div className="card mt-5" style={{ width: "18rem" }}>
 						<div className="card-body">
 							<h5 className="card-title">Total Purchase </h5>
-							<p className="card-text">Rs {supplierpurchase}</p>
-							<h5 className="card-title">Your Advance</h5>
-							<p className="card-text">Rs {supplierpayment}</p>
-							<Button variant="contained" onClick={() => generatePDF(suppliers,supplierBalance)}>
+							<p className="card-text">Rs {totalpurchase}</p>
+							{remaining >= 0 ? <h5 className="card-title">You'll Give</h5> : <h5 className="card-title">Advance</h5>}
+							Rs {Math.abs(remaining)}
+							<br />
+							<br/>
+							<Button variant="contained" onClick={() => generatePDF(suppliers, supplierBalance)}>
 								Download Report
 							</Button>
 						</div>
 					</div>
+
 					<div className="my-3">
 						<br />
 						<div className="container mx-2 h3">
@@ -58,8 +59,8 @@ const Suppliers = () => {
 							<div className='d-grid gap-2 col-6 '>
 								{
 									suppliers.map((supplier) => {
-										return <SupplierItem key={supplier._id} supplier={supplier} 
-										supplierBalance={supplierBalance}	
+										return <SupplierItem key={supplier._id} supplier={supplier}
+											supplierBalance={supplierBalance}
 										/>
 									})
 								}

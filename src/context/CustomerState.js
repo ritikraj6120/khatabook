@@ -11,6 +11,9 @@ const CustomerState = (props) => {
 	const host = "http://localhost:5000";
 	const [customers, setCustomers] = useState([])
 	const [SingleCustomerTransaction, setSingleCustomerTransaction] = useState([]);
+	const [CustomerTransactions,setCustomerTransactions] = useState([]);
+
+
 	const initialState = {
 		loading: true,
 		error: '',
@@ -61,6 +64,7 @@ const CustomerState = (props) => {
 		}
 	}
 	const [state, dispatch] = useReducer(reducer,initialState);
+	
 	const[singleCustomerDetail,dispatchsingleCustomerDetail]=useReducer(reducersingleCustomerDetail,initialStatesingleCustomerDetail);
 
 	///////////////////////////////////////////////////////////////////////
@@ -195,7 +199,7 @@ const CustomerState = (props) => {
 		}
 	}
 
-	//get customer transcation function no 6
+	//get single customer transcation function no 6
 
 	const getSingleCustomerTransactions = async (id) => {
 		const response = await fetch(`${host}/api/customer/getCustomerTransactions/${id}`, {
@@ -214,6 +218,26 @@ const CustomerState = (props) => {
 			const json = await response.json()
 			setSingleCustomerTransaction(json);
 		}
+	}
+
+	// get whole customer transactions
+	const getCustomerTransactions= async()=>{
+		const response= await fetch(`${host}/api/customer/getCustomerTransactions/`,{
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				"auth-token": localStorage.getItem('token')
+
+			}
+		});
+			if (response.status !== 200) {
+
+				history.push("/login");
+			}
+			else {
+				const json = await response.json()
+				setCustomerTransactions(json);
+			}
 	}
 
 	//  add a transaction  using: post "/api/customer/addCustomerTransaction/" function no 7
@@ -269,23 +293,6 @@ const CustomerState = (props) => {
 			dispatch({ type: 'FETCH_ERROR' })
 			history.push("/login");
 		}
-
-
-		// const response = await fetch(`${host}/api/customer/getCustomerBalance`, {
-		// 	method: 'GET',
-		// 	headers: {
-		// 		'Content-Type': 'application/json',
-		// 		"auth-token": localStorage.getItem('token')
-
-		// 	}
-		// });
-		// if (response.status !== 200) {
-
-		// 	history.push("/login");
-		// }
-		// else {
-		// 	const json = await response.json();
-		// }
 	}
 
 	return (

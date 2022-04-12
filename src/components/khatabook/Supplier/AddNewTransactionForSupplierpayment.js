@@ -11,7 +11,7 @@ const AddNewTransactionForSupplierPayment = () => {
 	const { getSingleSupplierDetail, singleSupplierDetail, getSingleSupplierTransactions,addSingleSupplierTransaction } = useContext(SupplierContext);
 	const { singleSupplier, loading } = singleSupplierDetail;
 	const singlesupplierid = JSON.parse(localStorage.getItem('SingleSupplierId'));
-
+	
 	useEffect(() => {
 		getSingleSupplierTransactions(singlesupplierid);
 		getSingleSupplierDetail(singlesupplierid);
