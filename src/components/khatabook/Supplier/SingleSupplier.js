@@ -45,7 +45,6 @@ const SingleSupplier = () => {
 												<div className="d-flex bd-highlight">
 													<div className="p-2  bd-highlight">Rs {item.purchase_singleSupplier}</div>
 													<div className="p-2 bd-highlight">Rs {item.payment_singleSupplier}</div>
-													<div><i className="fa-solid fa-trash " style={{height:"2rem",width:"2rem"}}></i></div>
 												</div>
 											</button>
 

@@ -167,14 +167,20 @@ const SupplierState = (props) => {
 				"auth-token": localStorage.getItem('token')
 			}
 		});
+		console.log(response.status);
 		if (response.status === 400 || response.status === 401) {
 			showAlert("Invalid User", "danger");
 			history.push('/login');
 		}
-		else {
+		else if(response.status === 200){
 			// const json = await response.json();
 			const newSuppliers = suppliers.filter((supplier) => { return supplier._id !== id })
 			setSuppliers(newSuppliers);
+			history.push("/suppliers");
+		}
+		else{
+			showAlert("Internal server error", "danger");
+			history.push('/login');
 		}
 
 	}

@@ -3,7 +3,7 @@ const router = express.Router();
 const fetchuser = require('../middleware/fetchuser');
 const Suppliers = require('../models/Suppliers');
 const SupplierTransactions = require('../models/SupplierTransactions')
-const supplierNetBalance = require('../models/SupplierNetBalance');
+const SupplierNetBalance = require('../models/SupplierNetBalance');
 const { body, validationResult } = require('express-validator');
 
 // Route 1" Get single suppliers using : GET "/api/supplier/getSingleSupplier". login required
@@ -101,8 +101,9 @@ router.put('/updatesupplier/:id', fetchuser, async (req, res) => {
 // ROUTE 4: Delete an existing Note using: DELETE "/api/supplier/deletesuppliers". Login required
 router.delete('/deletesupplier/:id', fetchuser, async (req, res) => {
 	try {
+		let id = req.params.id;
 		// Find the supplier to be delete and delete it
-		let supplier = await Suppliers.findById(req.params.id);
+		let supplier = await Suppliers.findById(id);
 		if (!supplier) { return res.status(404).send("Not Found") }
 
 		// Allow deletion only if user owns this supplier
@@ -110,7 +111,9 @@ router.delete('/deletesupplier/:id', fetchuser, async (req, res) => {
 			return res.status(401).send("Not Allowed");
 		}
 
-		let deletedsupplier = await Suppliers.findByIdAndDelete(req.params.id)
+		let deletedsupplier = await Suppliers.findByIdAndDelete(id);
+		await SupplierTransactions.deleteMany({ supplier:id });
+		await SupplierNetBalance.deleteMany({ supplier: id });
 		res.json({ "Success": "supplier has been deleted", supplier: deletedsupplier });
 	} catch (error) {
 		console.error(error.message);
@@ -181,11 +184,11 @@ router.post('/addSupplierTransaction/:id', fetchuser, async (req, res) => {
 			payment += payment_singleSupplier;
 			purchase += purchase_singleSupplier;
 
-			const newSupplierNetBalance = new supplierNetBalance({
+			const newSupplierNetBalance = new SupplierNetBalance({
 				purchase, payment, supplier: req.params.id
 			})
 			console.log(req.params.id);
-			const rep = await supplierNetBalance.findOne({ supplier: req.params.id });
+			const rep = await SupplierNetBalance.findOne({ supplier: req.params.id });
 			console.log(rep);
 			console.log("bye bye");
 			if (!rep) {
@@ -194,13 +197,13 @@ router.post('/addSupplierTransaction/:id', fetchuser, async (req, res) => {
 			}
 			else {
 				console.log("mmmmmaaaaaaaaaaaai")
-				let ans = await supplierNetBalance.findOne({ supplier: req.params.id });
+				let ans = await SupplierNetBalance.findOne({ supplier: req.params.id });
 				console.log(typeof ans)
 				purchase += ans.purchase;
 				payment += ans.payment;
 				console.log(purchase);
 				console.log(payment);
-				let doc = await supplierNetBalance.findOneAndUpdate({ supplier: req.params.id }, { $set: { purchase: purchase, payment: payment } }, { new: true });
+				let doc = await SupplierNetBalance.findOneAndUpdate({ supplier: req.params.id }, { $set: { purchase: purchase, payment: payment } }, { new: true });
 			}
 		}
 		catch (error) {
@@ -260,7 +263,7 @@ router.put('/updatetransactions/:id', fetchuser, async (req, res) => {
 
 router.get('/getSupplierBalance', fetchuser, async (req, res) => {
 	try {
-		let doc = await supplierNetBalance.find({});
+		let doc = await SupplierNetBalance.find({});
 		return res.status(200).json(doc);
 	}
 	catch (error) {

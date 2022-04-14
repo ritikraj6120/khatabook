@@ -22,7 +22,6 @@ const CustomerItem = (props) => {
 					<br />
 					{x >= 0 ? x > 0 ? <small>You will get </small> : null : <small>You will give</small>}
 					</div>
-					<i className="fa-solid fa-trash " style={{height:"2rem",width:"2rem"}}></i>
 				</div>
 			</button>
 		</>

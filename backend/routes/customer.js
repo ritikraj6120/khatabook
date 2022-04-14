@@ -80,8 +80,9 @@ router.put('/updatecustomer/:id', fetchuser, async (req, res) => {
 // ROUTE 4: Delete an existing Customer using: DELETE "/api/customer/deletecustomers". Login required
 router.delete('/deletecustomer/:id', fetchuser, async (req, res) => {
 	try {
+		let id=req.params.id;
 		// Find the customer to be delete and delete it
-		let customer = await Customers.findById(req.params.id);
+		let customer = await Customers.findById(id);
 
 		if (!customer) { return res.status(404).send("Not Found") }
 
@@ -89,8 +90,10 @@ router.delete('/deletecustomer/:id', fetchuser, async (req, res) => {
 		if (customer.user.toString() !== req.user.id) {
 			return res.status(401).send("Not Allowed");
 		}
-
-		let deletedcustomer = await Customers.findByIdAndDelete(req.params.id)
+		
+		let deletedcustomer = await Customers.findByIdAndDelete(id);
+		await CustomerTransactions.deleteMany({ customer:id });
+		await customerNetBalance.deleteMany({ customer: id });
 		res.json({ "Success": "customer has been deleted", customer: deletedcustomer });
 	} catch (error) {
 		console.error(error.message);

@@ -154,7 +154,6 @@ const CustomerState = (props) => {
 		}
 
 	}
-
 	// Delete a Customer function no 4
 	const deleteCustomer = async (id) => {
 		// API Call
@@ -165,15 +164,20 @@ const CustomerState = (props) => {
 				"auth-token": localStorage.getItem('token')
 			}
 		});
+		console.log(response.status)
 		if (response.status === 400 || response.status === 401) {
 			showAlert("Invalid User", "danger");
 			history.push('/login');
 		}
-		else {
+		else if(response.status===200){
 			// const json = await response.json();
 			const newCustomers = customers.filter((customer) => { return customer._id !== id })
 			setCustomers(newCustomers);
-
+			history.push('/customers');
+		}
+		else{
+			showAlert("Internal server error", "danger");
+			history.push('/login');
 		}
 
 	}

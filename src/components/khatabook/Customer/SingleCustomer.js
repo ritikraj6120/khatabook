@@ -46,7 +46,6 @@ const SingleCustomer = () => {
 														<div className="d-flex bd-highlight">
 															<div className="p-2  bd-highlight">Rs {item.lendamount_singleCustomer}</div>
 															<div className="p-2 bd-highlight">Rs  {item.takeamount_singleCustomer}</div>
-															<div><i className="fa-solid fa-trash " style={{height:"2rem",width:"2rem"}}></i></div>
 														</div>
 													</button>
 												</div>
