@@ -45,3 +45,37 @@ function Datafetch() {
 		</div>
 	)
 }
+
+
+import Box from '@mui/material/Box';
+<Box sx={{ minWidth: 275 }}>
+<Card variant="outlined">
+	<>
+		<CardContent>
+			<Typography color="text.secondary">
+				Name
+			</Typography>
+			<Typography variant="h5" component="div">
+				{UserDetail.fname + " " + UserDetail.lname}
+			</Typography>
+			<Typography color="text.secondary">
+				Email
+			</Typography>
+			<Typography variant="body2">
+				{UserDetail.email}
+			</Typography>
+			<Typography color="text.secondary">
+				Created account on
+			</Typography>
+			<Typography variant="body2">
+				{new Date(UserDetail.date).toLocaleString()} I.S.T
+			</Typography>
+		</CardContent>
+		{/* <CardActions>
+			<Button size="small" value={props._id} onClick={handleSubmit}>
+				Delete User
+			</Button>
+		</CardActions> */}
+	</>
+</Card>
+</Box>

@@ -30,7 +30,7 @@ const User = () => {
 		// </div>
 		<Box sx={{ minWidth: 275 }}>
 			<Card variant="outlined">
-				<React.Fragment>
+				<>
 					<CardContent>
 						<Typography color="text.secondary">
 							Name
@@ -56,7 +56,7 @@ const User = () => {
 							Delete User
 						</Button>
 					</CardActions> */}
-				</React.Fragment>
+				</>
 			</Card>
 		</Box>
 	)

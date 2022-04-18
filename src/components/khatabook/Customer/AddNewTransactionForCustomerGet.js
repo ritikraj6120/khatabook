@@ -3,11 +3,14 @@ import CustomerContext from '../../../context/CustomerContext';
 import { useHistory } from 'react-router-dom';
 import '../style.css';
 import Navbar from '../Navbar';
-import { CircularProgress } from '@mui/material';
-import { CommentsDisabledOutlined, ConstructionOutlined } from '@mui/icons-material';
+import { CircularProgress, Button, Typography } from '@mui/material';
 const AddNewTransactionForCustomerGet = () => {
+	const errorStateinit = {
+		amountError: null
+	}
+	const [errorState, seterrorState] = useState(errorStateinit);
 	let history = useHistory();
-	const { getSingleCustomerDetail, singleCustomerDetail, getSingleCustomerTransactions,addSingleCustomerTransaction } = useContext(CustomerContext);
+	const { getSingleCustomerDetail, singleCustomerDetail, getSingleCustomerTransactions, addSingleCustomerTransaction } = useContext(CustomerContext);
 	const { singleCustomer, loading } = singleCustomerDetail;
 	const singlecustomerid = JSON.parse(localStorage.getItem('SingleCustomerId'));
 
@@ -19,26 +22,47 @@ const AddNewTransactionForCustomerGet = () => {
 	const [newTransaction, setNewTransaction] = useState(0);
 
 	const onChange = (e) => {
-		setNewTransaction(e.target.value)
-		console.log(newTransaction)
+		let x = e.target.value
+		if (x == '') {
+			seterrorState(previousState => {
+				return { ...previousState, amountError: null }
+			});
+			setNewTransaction(0);
+		}
+		else {
+			x = parseInt(x);
+			// console.log(x)
+			if (x === 0) {
+				seterrorState(previousState => {
+					return { ...previousState, amountError: "Invalid Amount" }
+				});
+
+			}
+			else
+				setNewTransaction(e.target.value);
+		}
 	}
 	const handlesubmit = (e) => {
 		e.preventDefault();
 		console.log(typeof parseInt(newTransaction));
-		addSingleCustomerTransaction(singleCustomer._id,0 , parseInt(newTransaction) );
+		addSingleCustomerTransaction(singleCustomer._id, 0, parseInt(newTransaction));
 		history.push('/editcustomer')
 	}
 	return (
 		<>
 			<Navbar a="/editcustomer" b="/editsupplier" />
-			{ loading === true ? <CircularProgress /> :
+			{loading === true ? <CircularProgress /> :
 				<>
 					<div>
 						<h1>You got Rs {newTransaction} from {singleCustomer.name}</h1>
 					</div>
-					<form onSubmit={handlesubmit}>
-						<input type="number" className="form-control " placeholder="Enter Amount"  onChange={onChange} />
-						<button type="submit" className="btn btn-primary">Save</button>
+					<form >
+						<input type="number" className="form-control " placeholder="Enter Amount" onChange={onChange} />
+						<span className="text-danger">{errorState.amountError}</span>
+						<br />
+						<Typography align='center'>
+							<Button onClick={handlesubmit} variant="contained">Update</Button>
+						</Typography>
 					</form>
 				</>
 			}
@@ -47,37 +71,3 @@ const AddNewTransactionForCustomerGet = () => {
 };
 
 export default AddNewTransactionForCustomerGet;
-
-
-// <form>
-//   <div className="form-row align-items-center">
-//     <div className="col-sm-3 my-1">
-//       <label className="sr-only" htmlFor="inlineFormInputName">Name</label>
-//       <input type="text" className="form-control" id="inlineFormInputName" placeholder="Jane Doe"/>
-//     </div>
-//     <div className="col-sm-3 my-1">
-//       <label className="sr-only" for="inlineFormInputGroupUsername">Username</label>
-//       <div className="input-group">
-//         <div className="input-group-prepend">
-//           <div className="input-group-text">@</div>
-//         </div>
-//         <input type="text" className="form-control" id="inlineFormInputGroupUsername" placeholder="Username"/>
-//       </div>
-//     </div>
-//     <div className="col-auto my-1">
-//       <div className="form-check">
-//         <input className="form-check-input" type="checkbox" id="autoSizingCheck2"/>
-//         <label className="form-check-label" htmlFor="autoSizingCheck2">
-//           Remember me
-//         </label>
-//       </div>
-//     </div>
-//     <div className="col-auto my-1">
-//       <button type="submit" className="btn btn-primary">Submit</button>
-//     </div>
-//   </div>
-// </form>
-
-
-
-

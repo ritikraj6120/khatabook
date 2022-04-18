@@ -4,7 +4,11 @@ import { useHistory } from 'react-router-dom';
 import '../style.css';
 import CustomerDetail from './CustomerDetail';
 import Navbar from '../Navbar';
-import { Stack, CircularProgress, Button } from '@mui/material';
+import { Stack, Typography, Button, CircularProgress, Table, TableRow, TableHead, TableBody, TableCell,TextField } from '@mui/material';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
 
 const SingleCustomer = () => {
 	let history = useHistory();
@@ -12,6 +16,15 @@ const SingleCustomer = () => {
 	const { singleCustomer, loading } = singleCustomerDetail;
 	const singlecustomerid = JSON.parse(localStorage.getItem('SingleCustomerId'));
 
+	const [transaction, setTransaction] = useState({ date:, yougave: 0, yougot:0 })
+
+	const onChange = (e) => {
+		setNote({ ...transaction, [e.target.name]: e.target.value })
+	}
+
+	const onSubmit=(e)=>{
+		
+	}
 	useEffect(() => {
 		getSingleCustomerTransactions(singlecustomerid);
 		getSingleCustomerDetail(singlecustomerid);
@@ -24,6 +37,13 @@ const SingleCustomer = () => {
 	const youGetAddPage = (e) => {
 		history.push('/addNewTransactionForCustomerGet');
 	}
+
+
+	const month = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
+	const formatdate =(d) =>{
+		return d.getDate() + month[d.getMonth()]+ ('' + d.getFullYear()).slice(2);
+	}
+
 	return (
 		<>
 			<Navbar a="/editcustomer" b="/editsupplier" />
@@ -35,24 +55,76 @@ const SingleCustomer = () => {
 
 						<div className="d-flex justify-content-center">
 							<div className='d-grid gap-2 col-6 '>
-								{
-									SingleCustomerTransaction.sort((a, b) => {
-										return new Date(b.date) - new Date(a.date);
-									}).map(
-										(item) => {
-											return (
-												<div key={item._id}>
-													<button className="btn btn-outline-dark">
-														<div className="d-flex bd-highlight">
-															<div className="p-2  bd-highlight">Rs {item.lendamount_singleCustomer}</div>
-															<div className="p-2 bd-highlight">Rs  {item.takeamount_singleCustomer}</div>
-														</div>
-													</button>
-												</div>
+								<Table>
+									<TableHead sx={{
+										background: '#ffeb3b'
+									}}>
+										<TableRow>
+											<TableCell>
+												<Typography variant="h6">
+													Entries
+												</Typography>
+
+											</TableCell>
+											<TableCell>
+											<Typography variant="h6">
+													YOU GAVE
+												</Typography>
+											</TableCell>
+											<TableCell>
+											<Typography variant="h6">
+													YOU GOT
+												</Typography>
+											</TableCell>
+											<TableCell>
+											<Typography variant="h6">
+													UPDATE
+												</Typography>
+											</TableCell>
+										</TableRow>
+									</TableHead>
+									<TableBody>
+
+										{
+											SingleCustomerTransaction.sort((a, b) => {
+												return new Date(b.date) - new Date(a.date);
+											}).map(
+												(item,i) => {
+													let d = new Date(item.date)
+													return (
+
+
+
+														<TableRow>
+															<TableCell>
+																{/* <Typography variant="body1"> */}
+																	<TextField value={formatdate(d)} variant ="contained" onChange={onChange}>
+																		{/* {d.getDate()} {month[d.getMonth()]} {('' + d.getFullYear()).slice(2)} */}
+																	</TextField>
+																{/* </Typography> */}
+															</TableCell>
+															<TableCell>
+																<Typography variant="body1">
+																	Rs {item.lendamount_singleCustomer}
+																</Typography>
+															</TableCell>
+															<TableCell>
+																<Typography variant="body1">
+																	Rs  {item.takeamount_singleCustomer}
+																</Typography>
+															</TableCell>
+															<TableCell>
+																<Typography variant="body1">
+																	<Button variant="contained" size="small"> Edit </Button>
+																</Typography>
+															</TableCell>
+														</TableRow>
+													)
+												}
 											)
 										}
-									)
-								}
+									</TableBody>
+								</Table >
 							</div>
 						</div>
 
