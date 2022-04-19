@@ -35,7 +35,7 @@ const AddNewTransactionForCustomerGave = () => {
 		else {
 			x = parseInt(x);
 			// console.log(x)
-			if (x === 0) {
+			if (x <= 0) {
 				seterrorState(previousState => {
 					return { ...previousState, amountError: "Invalid Amount" }
 				});

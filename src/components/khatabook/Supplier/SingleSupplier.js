@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import '../style.css';
 import SupplierDetail from './SupplierDetail';
 import Navbar from '../Navbar';
-import { Stack, CircularProgress, Button } from '@mui/material';
+import { Stack, Typography, Button, CircularProgress, Table, TableRow, TableHead, TableBody, TableCell } from '@mui/material';
 
 const SingleSupplier = () => {
 	let history = useHistory();
@@ -24,6 +24,11 @@ const SingleSupplier = () => {
 		history.push('/addNewTransactionForSupplierPayment');
 	}
 
+	const month = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
+	const formatdate = (d) => {
+		return d.getDate() + month[d.getMonth()] + ('' + d.getFullYear()).slice(2);
+	}
+
 	return (
 		<>
 			<Navbar a="/editcustomer" b="/editsupplier" />
@@ -33,23 +38,71 @@ const SingleSupplier = () => {
 						<SupplierDetail singleSupplier={singleSupplier} />
 						<div className="d-flex justify-content-center">
 							<div className='d-grid gap-2 col-6 '>
-								{/* sort((a, b) => {
-									return new Date(b.date) - new Date(a.date);
-									}) */}
-								{SingleSupplierTransaction.sort((a, b) => {
-									return new Date(b.date) - new Date(a.date);
-								}).map((item) => {
-									return (
-										<div key={item._id}>
-											<button className="btn btn-outline-dark" >
-												<div className="d-flex bd-highlight">
-													<div className="p-2  bd-highlight">Rs {item.purchase_singleSupplier}</div>
-													<div className="p-2 bd-highlight">Rs {item.payment_singleSupplier}</div>
-												</div>
-											</button>
+								<Table>
+									<TableHead sx={{
+										background: '#ffeb3b'
+									}}>
+										<TableRow>
+											<TableCell>
+												<Typography variant="h6">
+													Entries
+												</Typography>
 
-										</div>)
-								})}
+											</TableCell>
+											<TableCell>
+												<Typography variant="h6">
+													PURCHASE
+												</Typography>
+											</TableCell>
+											<TableCell>
+												<Typography variant="h6">
+													PAYMENT
+												</Typography>
+											</TableCell>
+											<TableCell>
+												<Typography variant="h6">
+													UPDATE
+												</Typography>
+											</TableCell>
+										</TableRow>
+									</TableHead>
+									<TableBody>
+
+										{
+											SingleSupplierTransaction.sort((a, b) => {
+												return new Date(b.date) - new Date(a.date);
+											}).map((item, i) => {
+												let d = new Date(item.date)
+												return (
+													<TableRow key={i}>
+														<TableCell>
+															<Typography variant="body1">
+																{formatdate(d)}
+															</Typography>
+														</TableCell>
+														<TableCell>
+															<Typography variant="body1">
+																Rs {item.purchase_singleSupplier}
+															</Typography>
+														</TableCell>
+														<TableCell>
+															<Typography variant="body1">
+																Rs {item.payment_singleSupplier}
+															</Typography>
+														</TableCell>
+														<TableCell>
+															<Typography variant="body1">
+																<Button variant="contained" size="small"> Edit </Button>
+															</Typography>
+														</TableCell>
+													</TableRow>
+
+												)
+											}
+											)
+										}
+									</TableBody>
+								</Table >
 							</div>
 						</div>
 						<div className='fixed'>

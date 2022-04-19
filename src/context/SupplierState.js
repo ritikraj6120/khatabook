@@ -60,7 +60,7 @@ const SupplierState = (props) => {
 					return state
 			}
 		}
-		const [state, dispatch] = useReducer(reducer,initialState);
+	const [state, dispatch] = useReducer(reducer,initialState);
 	const[singleSupplierDetail,dispatchsingleSupplierDetail]=useReducer(reducersingleSupplierDetail,initialStatesingleSupplierDetail);
 
 
@@ -260,10 +260,14 @@ const SupplierState = (props) => {
 					}
 				});
 				if (response.status === 200) {
-					const json = await response.json();
-					console.log(json);
-					// console.log(json);
-					dispatch({ type: 'FETCH_SUCCESS', payload: json })
+					const data = await response.json();
+					console.log(data);
+					if(data===null)
+					{
+						dispatch({ type: 'FETCH_SUCCESS', payload: [] })
+					}
+					else
+					dispatch({ type: 'FETCH_SUCCESS', payload: data })
 				}
 				else if (response.status !== 200) {
 					dispatch({ type: 'FETCH_ERROR' })

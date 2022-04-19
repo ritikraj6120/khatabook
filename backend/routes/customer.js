@@ -168,7 +168,7 @@ router.post('/addCustomerTransaction/:id', fetchuser, async (req, res) => {
 			
 			
 			const newCustomerNetBalance = new customerNetBalance({
-				amounttoget, amounttogive, customer: req.params.id
+				user:req.user.id,amounttoget, amounttogive, customer: req.params.id
 			})
 			const rep = await customerNetBalance.findOne({ customer: req.params.id });
 			if (!rep) {
@@ -209,25 +209,24 @@ router.post('/addCustomerTransaction/:id', fetchuser, async (req, res) => {
 // ROUTE 8: Update an existing customerTransaction  using: PUT "/api/customer/updatetransactions". Login required
 
 router.put('/updateCustomerTransaction/:id', fetchuser, async (req, res) => {
-	const { title, name, lendamount, takeamount } = req.body;
+	const { date, lendamount, takeamount } = req.body;
 	try {
 		// Create a newNote object
-		const newCustomer = {};
-		if (title) { newCustomer.title = title };
-		if (name) { newCustomer.name = name };
-		if (lendamount) { newCustomer.lendamount = lendamount };
-		if (takeamount) { newCustomer.takeamount = takeamount };
-		console.log(title, name, lendamount, takeamount);
+		const newCustomerTransaction = {};
+		if (date) { newCustomerTransaction.date = date };
+		if (lendamount) { newCustomerTransaction.lendamount = lendamount };
+		if (takeamount) { newCustomerTransaction.takeamount = takeamount };
+		console.log(date, lendamount, takeamount);
 		// Find the note to be updated and update it
-		let customer = await Customers.findById(req.params.id);
-		if (!customer) { return res.status(404).send("Not Found") }
+		// let customer = await Customers.findById(req.params.id);
+		// if (!customer) { return res.status(404).send("Not Found") }
 
-		if (customer.user.toString() !== req.user.id) {
-			return res.status(401).send("Not Allowed");
-		}
+		// if (customer.user.toString() !== req.user.id) {
+		// 	return res.status(401).send("Not Allowed");
+		// }
 
-		const updateCustomer = await Customers.findByIdAndUpdate(req.params.id, { $set: newCustomer }, { new: true })
-		res.status(200).json(updateCustomer).select('-user -date');;
+		const updateCustomer = await CustomerTransactions.findByIdAndUpdate(req.params.id, { $set: newCustomerTransaction }, { new: true })
+		res.status(200).json(updateCustomer);
 	}
 	catch (error) {
 		console.error(error.message);
@@ -239,7 +238,7 @@ router.put('/updateCustomerTransaction/:id', fetchuser, async (req, res) => {
 
 router.get('/getCustomerBalance', fetchuser, async (req, res) => {
 	try {
-		let doc = await customerNetBalance.find();
+		let doc = await customerNetBalance.findById(req.user.id);
 		return res.status(200).json(doc);
 	}
 	catch (error) {

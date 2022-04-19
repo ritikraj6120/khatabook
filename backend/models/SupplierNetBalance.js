@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const supplierNetBalanceSchema = new Schema({
+	user: {
+		type: Schema.Types.ObjectId,
+		ref: 'user'
+	},
 	supplier: {
 		type: Schema.Types.ObjectId,
 		ref: 'suppliers'

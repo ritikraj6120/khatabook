@@ -25,6 +25,7 @@ useEffect(() => {
 	let totalpurchase = 0;
 	let remaining = 0;
 	if (loading === false) {
+
 		for (let i = 0; i < supplierBalance.length; i++) {
 			totalpurchase += supplierBalance[i].purchase;
 			remaining = supplierBalance[i].purchase - supplierBalance[i].payment;

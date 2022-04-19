@@ -3,10 +3,15 @@ import SupplierContext from '../../../context/SupplierContext';
 import { useHistory } from 'react-router-dom';
 import '../style.css';
 import Navbar from '../Navbar';
-import { CircularProgress } from '@mui/material';
+import { CircularProgress ,Button, Typography } from '@mui/material';
 const AddNewTransactionForSupplierPurchase = () => {
+	const errorStateinit = {
+		amountError: null
+	}
+	const [errorState, seterrorState] = useState(errorStateinit);
+
 	let history = useHistory();
-	const { getSingleSupplierDetail, singleSupplierDetail, getSingleSupplierTransactions,addSingleSupplierTransaction } = useContext(SupplierContext);
+	const { getSingleSupplierDetail, singleSupplierDetail, getSingleSupplierTransactions, addSingleSupplierTransaction } = useContext(SupplierContext);
 	const { singleSupplier, loading } = singleSupplierDetail;
 	const singlesupplierid = JSON.parse(localStorage.getItem('SingleSupplierId'));
 
@@ -18,31 +23,49 @@ const AddNewTransactionForSupplierPurchase = () => {
 	const [newTransaction, setNewTransaction] = useState(0);
 
 	const onChange = (e) => {
-		if(e.target.value.length===0)
-		setNewTransaction(0);
-		else
-		setNewTransaction(parseInt(e.target.value))
-		// console.log(newTransaction)
+		let x = e.target.value
+		if (x == '') {
+			seterrorState(previousState => {
+				return { ...previousState, amountError: null }
+			});
+			setNewTransaction(0);
+		}
+		else {
+			x = parseInt(x);
+			// console.log(x)
+			if (x <= 0) {
+				seterrorState(previousState => {
+					return { ...previousState, amountError: "Invalid Amount" }
+				});
+
+			}
+			else
+				setNewTransaction(e.target.value);
+		}
 	}
 
 	const handlesubmit = (e) => {
 		e.preventDefault();
-		// console.log(typeof parseInt(newTransaction));
-		addSingleSupplierTransaction(singleSupplier._id,  parseInt(newTransaction),0 );
+		addSingleSupplierTransaction(singleSupplier._id, parseInt(newTransaction), 0);
 		history.push('/editsupplier')
 	}
+
 	return (
 		<>
 			<Navbar a="/editcustomer" b="/editsupplier" />
-			{ loading === true ? <CircularProgress /> :
+			{loading === true ? <CircularProgress /> :
 				<>
 					<div>
 						<h1>Purchase of Rs {newTransaction} from {singleSupplier.name}</h1>
-						
+
 					</div>
-					<form onSubmit={handlesubmit}>
-						<input type="number" className="form-control " placeholder="Enter purchase amount"  onChange={onChange} />
-						<button type="submit" className="btn btn-primary">Save</button>
+					<form >
+						<input type="number" className="form-control " placeholder="Enter purchase amount" onChange={onChange} />
+						<span className="text-danger">{errorState.amountError}</span>
+						<br />
+						<Typography align='center'>
+							<Button onClick={handlesubmit} variant="contained">Update</Button>
+						</Typography>
 					</form>
 				</>
 			}
@@ -51,37 +74,3 @@ const AddNewTransactionForSupplierPurchase = () => {
 };
 
 export default AddNewTransactionForSupplierPurchase;
-
-
-// <form>
-//   <div className="form-row align-items-center">
-//     <div className="col-sm-3 my-1">
-//       <label className="sr-only" htmlFor="inlineFormInputName">Name</label>
-//       <input type="text" className="form-control" id="inlineFormInputName" placeholder="Jane Doe"/>
-//     </div>
-//     <div className="col-sm-3 my-1">
-//       <label className="sr-only" for="inlineFormInputGroupUsername">Username</label>
-//       <div className="input-group">
-//         <div className="input-group-prepend">
-//           <div className="input-group-text">@</div>
-//         </div>
-//         <input type="text" className="form-control" id="inlineFormInputGroupUsername" placeholder="Username"/>
-//       </div>
-//     </div>
-//     <div className="col-auto my-1">
-//       <div className="form-check">
-//         <input className="form-check-input" type="checkbox" id="autoSizingCheck2"/>
-//         <label className="form-check-label" htmlFor="autoSizingCheck2">
-//           Remember me
-//         </label>
-//       </div>
-//     </div>
-//     <div className="col-auto my-1">
-//       <button type="submit" className="btn btn-primary">Submit</button>
-//     </div>
-//   </div>
-// </form>
-
-
-
-

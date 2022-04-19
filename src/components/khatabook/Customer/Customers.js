@@ -26,7 +26,7 @@ const Customers = () => {
 	let TotalAmounttogive = 0;
 	// console.log("hello");
 	// console.log(customerstate.loading);
-	if (loading===false) {
+	if (loading === false) {
 
 		for (let i = 0; i < customerBalance.length; i++) {
 			let x = customerBalance[i].amounttoget - customerBalance[i].amounttogive;
@@ -41,34 +41,35 @@ const Customers = () => {
 	return (
 		<>
 			<Navbar a="/customers" b="/suppliers" />
-			{loading===true ? <CircularProgress color="secondary" /> :
-			<>
-				<div className="card mt-5" style={{ width: "18rem" }}>
-					<div className="card-body">
-						<h5 className="card-title">You will get </h5>
-						<p className="card-text">Rs {TotalAmounttoget}</p>
-						<h5 className="card-title">You will give </h5>
-						<p className="card-text">Rs {TotalAmounttogive}</p>
-						<Button variant="contained" onClick={() => generatePDF(customers,customerBalance)}>
-							Download Report
-						</Button>
-					</div>
-				</div>
-
-				<div className=" my-3">
-					<br />
-					<div className="container mx-2 h3">
-						{customers.length === 0 && 'No Customers'}
-					</div>
-					<div className="d-flex justify-content-center">
-						<div className='d-grid gap-2 col-6 '>
-							{customers.map((customer) => {
-								return <CustomerItem key={customer._id} customer={customer} customerBalance={customerBalance} />
-							})}
+			{
+				loading === true ? <CircularProgress color="secondary" /> :
+					<>
+						<div className="card mt-5" style={{ width: "18rem" }}>
+							<div className="card-body">
+								<h5 className="card-title">You will get </h5>
+								<p className="card-text">Rs {TotalAmounttoget}</p>
+								<h5 className="card-title">You will give </h5>
+								<p className="card-text">Rs {TotalAmounttogive}</p>
+								<Button variant="contained" onClick={() => generatePDF(customers, customerBalance)}>
+									Download Report
+								</Button>
+							</div>
 						</div>
-					</div>
-				</div>
-			</>
+
+						<div className=" my-3">
+							<br />
+							<div className="container mx-2 h3">
+								{customers.length === 0 && 'No Customers'}
+							</div>
+							<div className="d-flex justify-content-center">
+								<div className='d-grid gap-2 col-6 '>
+									{customers.map((customer) => {
+										return <CustomerItem key={customer._id} customer={customer} customerBalance={customerBalance} />
+									})}
+								</div>
+							</div>
+						</div>
+					</>
 			}
 			<Link to="/addcustomer">
 				<button type="button" className="btn  sticky-btn">

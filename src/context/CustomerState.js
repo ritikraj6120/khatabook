@@ -11,7 +11,7 @@ const CustomerState = (props) => {
 	const host = "http://localhost:5000";
 	const [customers, setCustomers] = useState([])
 	const [SingleCustomerTransaction, setSingleCustomerTransaction] = useState([]);
-	const [CustomerTransactions,setCustomerTransactions] = useState([]);
+	const [CustomerTransactions, setCustomerTransactions] = useState([]);
 
 
 	const initialState = {
@@ -63,9 +63,9 @@ const CustomerState = (props) => {
 				return state
 		}
 	}
-	const [state, dispatch] = useReducer(reducer,initialState);
-	
-	const[singleCustomerDetail,dispatchsingleCustomerDetail]=useReducer(reducersingleCustomerDetail,initialStatesingleCustomerDetail);
+	const [state, dispatch] = useReducer(reducer, initialState);
+
+	const [singleCustomerDetail, dispatchsingleCustomerDetail] = useReducer(reducersingleCustomerDetail, initialStatesingleCustomerDetail);
 
 	///////////////////////////////////////////////////////////////////////
 	// Get all Customers function no 1
@@ -169,13 +169,13 @@ const CustomerState = (props) => {
 			showAlert("Invalid User", "danger");
 			history.push('/login');
 		}
-		else if(response.status===200){
+		else if (response.status === 200) {
 			// const json = await response.json();
 			const newCustomers = customers.filter((customer) => { return customer._id !== id })
 			setCustomers(newCustomers);
 			history.push('/customers');
 		}
-		else{
+		else {
 			showAlert("Internal server error", "danger");
 			history.push('/login');
 		}
@@ -225,8 +225,8 @@ const CustomerState = (props) => {
 	}
 
 	// get whole customer transactions
-	const getCustomerTransactions= async()=>{
-		const response= await fetch(`${host}/api/customer/getCustomerTransactions/`,{
+	const getCustomerTransactions = async () => {
+		const response = await fetch(`${host}/api/customer/getCustomerTransactions/`, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json',
@@ -234,14 +234,14 @@ const CustomerState = (props) => {
 
 			}
 		});
-			if (response.status !== 200) {
+		if (response.status !== 200) {
 
-				history.push("/login");
-			}
-			else {
-				const json = await response.json()
-				setCustomerTransactions(json);
-			}
+			history.push("/login");
+		}
+		else {
+			const json = await response.json()
+			setCustomerTransactions(json);
+		}
 	}
 
 	//  add a transaction  using: post "/api/customer/addCustomerTransaction/" function no 7
@@ -271,7 +271,46 @@ const CustomerState = (props) => {
 	}
 
 	//	 Update an existing customerTransaction  using: PUT "/api/customer/updatetransactions/" function no 8
+	const updateCustomerTransaction = async (id, date, lendamount, takeamount) => {
+		try {
 
+			const response = await fetch(`${host}/api/customer/updateCustomerTransaction/${id}`, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+					"auth-token": localStorage.getItem('token')
+				},
+				body: JSON.stringify({ date, lendamount, takeamount })
+			}); 
+			if (response.status === 200) {
+					// const newCustomerTransaction = {};
+					// if (date) { newCustomerTransaction.date = date };
+					// if (lendamount) { newCustomerTransaction.lendamount = lendamount };
+					// if (takeamount) { newCustomerTransaction.takeamount = takeamount };
+					// Logic to edit in client
+					for (let index = 0; index < SingleCustomerTransaction.length; index++) {
+						const element = SingleCustomerTransaction[index];
+						if (element._id === id) {
+							if (date)
+								SingleCustomerTransaction[index].date = date;
+							if (lendamount)
+								SingleCustomerTransaction[index].lendamount = lendamount;
+							if (takeamount)
+								SingleCustomerTransaction[index].takeamount = takeamount;
+							break;
+						}
+					}
+					setSingleCustomerTransaction(SingleCustomerTransaction)
+					showAlert("Customer Transaction  Updated Succcessfully", "success")
+			}
+			else{
+				history.push("/login");
+			}
+		}
+		catch (error) {
+			history.push("/login");
+		}
+	}
 	// fetch balance of each customer function no 9
 	const getCustomerBalance = async () => {
 		try {
@@ -280,13 +319,17 @@ const CustomerState = (props) => {
 				headers: {
 					'Content-Type': 'application/json',
 					"auth-token": localStorage.getItem('token')
-	
+
 				}
 			});
 			if (response.status === 200) {
-				const json = await response.json();
-				// console.log(json);
-				dispatch({ type: 'FETCH_SUCCESS', payload: json })
+				const data = await response.json();
+				if(data===null)
+				{
+					dispatch({ type: 'FETCH_SUCCESS', payload: [] })
+				}
+				else
+				dispatch({ type: 'FETCH_SUCCESS', payload: data })
 			}
 			else if (response.status !== 200) {
 				dispatch({ type: 'FETCH_ERROR' })
@@ -312,6 +355,7 @@ const CustomerState = (props) => {
 				SingleCustomerTransaction, // contains all  transactions for a customer
 				getSingleCustomerTransactions,  // fetches all transcations of a given customer
 				addSingleCustomerTransaction, //  adds a new transaction for a given customer
+				updateCustomerTransaction, // update existing transaction for a given customer
 				getCustomerBalance,// fetch balance of all customer
 				customerstate: state,  // contains balance of all customer 
 			}

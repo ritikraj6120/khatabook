@@ -118,12 +118,12 @@ export default function Login() {
 			// Save the auth token and redirect
 			localStorage.setItem('token', json.authtoken);
 			localStorage.setItem('admin',json.isadmin);
-			showAlert("Login Successfully", "success")
+			showAlert(json.error, "success")
 			history.push("/");
 
 		}
 		else {
-			showAlert("Invalid Credentals", "danger")
+			showAlert(json.error, "danger")
 		}
 
 	};

@@ -31,7 +31,7 @@ router.get('/getSingleSupplierTransactions/:id', fetchuser, async (req, res) => 
 // ROUTE 1: Get All the Suppliers using: GET "/api/supplier/getsuppliers". Login required
 router.get('/getsuppliers', fetchuser, async (req, res) => {
 	try {
-		const suppliers = await Suppliers.find({ user: req.user.id }).select('-user -date');;
+		const suppliers = await Suppliers.find({ user: req.user.id }).select('-user -date');
 		res.json(suppliers)
 	} catch (error) {
 		console.error(error.message);
@@ -167,7 +167,7 @@ router.post('/addSupplierTransaction/:id', fetchuser, async (req, res) => {
 
 		let supplier = await Suppliers.findById(req.params.id);
 
-		if (!supplier) { return res.status(404).send("Not Found") }
+		if (!supplier) { return res.status(404).send("Supplier Not Found") }
 
 		if (supplier.user.toString() !== req.user.id) {
 			return res.status(401).send("Not Allowed");
@@ -175,7 +175,6 @@ router.post('/addSupplierTransaction/:id', fetchuser, async (req, res) => {
 
 
 
-		/////gddigskgdkadgkjakakfkfgk
 		const { purchase_singleSupplier, payment_singleSupplier } = req.body;
 		//////////////////////////////////////////hello
 		try {
@@ -185,7 +184,7 @@ router.post('/addSupplierTransaction/:id', fetchuser, async (req, res) => {
 			purchase += purchase_singleSupplier;
 
 			const newSupplierNetBalance = new SupplierNetBalance({
-				purchase, payment, supplier: req.params.id
+				user:req.user.id, purchase, payment, supplier: req.params.id
 			})
 			console.log(req.params.id);
 			const rep = await SupplierNetBalance.findOne({ supplier: req.params.id });
@@ -259,11 +258,14 @@ router.put('/updatetransactions/:id', fetchuser, async (req, res) => {
 		res.status(500).send("Internal Server Error");
 	}
 })
-// Route 9 fetch balance of each customer
+// Route 9 fetch balance of each supplier
 
 router.get('/getSupplierBalance', fetchuser, async (req, res) => {
 	try {
-		let doc = await SupplierNetBalance.find({});
+		console.log(req.user.id)
+		let doc = await SupplierNetBalance.find({user:req.user.id});
+		console.log("hello")
+		console.log(doc);
 		return res.status(200).json(doc);
 	}
 	catch (error) {

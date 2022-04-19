@@ -4,10 +4,10 @@ import { useHistory } from 'react-router-dom';
 import '../style.css';
 import CustomerDetail from './CustomerDetail';
 import Navbar from '../Navbar';
-import { Stack, Typography, Button, CircularProgress, Table, TableRow, TableHead, TableBody, TableCell,TextField } from '@mui/material';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { Stack, Typography, Button, CircularProgress, Table, TableRow, TableHead, TableBody, TableCell, TextField } from '@mui/material';
+// import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 
 const SingleCustomer = () => {
@@ -16,15 +16,7 @@ const SingleCustomer = () => {
 	const { singleCustomer, loading } = singleCustomerDetail;
 	const singlecustomerid = JSON.parse(localStorage.getItem('SingleCustomerId'));
 
-	const [transaction, setTransaction] = useState({ date:, yougave: 0, yougot:0 })
 
-	const onChange = (e) => {
-		setNote({ ...transaction, [e.target.name]: e.target.value })
-	}
-
-	const onSubmit=(e)=>{
-		
-	}
 	useEffect(() => {
 		getSingleCustomerTransactions(singlecustomerid);
 		getSingleCustomerDetail(singlecustomerid);
@@ -40,8 +32,8 @@ const SingleCustomer = () => {
 
 
 	const month = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
-	const formatdate =(d) =>{
-		return d.getDate() + month[d.getMonth()]+ ('' + d.getFullYear()).slice(2);
+	const formatdate = (d) => {
+		return d.getDate() + month[d.getMonth()] + ('' + d.getFullYear()).slice(2);
 	}
 
 	return (
@@ -67,17 +59,17 @@ const SingleCustomer = () => {
 
 											</TableCell>
 											<TableCell>
-											<Typography variant="h6">
+												<Typography variant="h6">
 													YOU GAVE
 												</Typography>
 											</TableCell>
 											<TableCell>
-											<Typography variant="h6">
+												<Typography variant="h6">
 													YOU GOT
 												</Typography>
 											</TableCell>
 											<TableCell>
-											<Typography variant="h6">
+												<Typography variant="h6">
 													UPDATE
 												</Typography>
 											</TableCell>
@@ -89,19 +81,14 @@ const SingleCustomer = () => {
 											SingleCustomerTransaction.sort((a, b) => {
 												return new Date(b.date) - new Date(a.date);
 											}).map(
-												(item,i) => {
+												(item, i) => {
 													let d = new Date(item.date)
 													return (
-
-
-
-														<TableRow>
+														<TableRow key={i}>
 															<TableCell>
-																{/* <Typography variant="body1"> */}
-																	<TextField value={formatdate(d)} variant ="contained" onChange={onChange}>
-																		{/* {d.getDate()} {month[d.getMonth()]} {('' + d.getFullYear()).slice(2)} */}
-																	</TextField>
-																{/* </Typography> */}
+																<Typography variant="body1">
+																	{formatdate(d)}
+																</Typography>
 															</TableCell>
 															<TableCell>
 																<Typography variant="body1">
