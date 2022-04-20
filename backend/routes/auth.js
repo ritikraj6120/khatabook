@@ -50,7 +50,7 @@ router.post('/signup', [
 		// res.json(user)
 		isAuthenticated = true;
 
-		res.json({ isAuthenticated, authtoken, isadmin: user.isadmin })
+		res.status(200).json({ isAuthenticated, authtoken, isadmin: user.isadmin })
 	} catch (error) {
 		console.error(error.message);
 		res.status(500).send("Internal Server Error");
@@ -100,8 +100,6 @@ async (req, res) => {
 		console.error(error.message);
 		res.status(500).json({success:false,error: "Internal Server Error"});
 	}
-
-
 });
 
 

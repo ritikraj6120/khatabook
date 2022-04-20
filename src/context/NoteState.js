@@ -102,7 +102,8 @@ const NoteState = (props) => {
 
 		}
 		else {
-			let newNotes = JSON.parse(JSON.stringify(notes))
+			let newNotes = notes;
+			// let newNotes = JSON.parse(JSON.stringify(notes))
 			// Logic to edit in client
 			for (let index = 0; index < newNotes.length; index++) {
 				const element = newNotes[index];

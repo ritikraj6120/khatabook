@@ -39,6 +39,9 @@ const AddCustomer = () => {
 		else if(customer.phone.length>11){
 			showAlert("Customer phone number length greater than 11 digits", "danger");
 		}
+		else if(customer.phone.length<3){
+			showAlert("Customer phone number length lesser than 3 digits", "danger");
+		}
 		else {
 			await addCustomer(customer.title, customer.name, customer.phone);
 			setCustomer({ title: "Mr", name: "", phone:0 });

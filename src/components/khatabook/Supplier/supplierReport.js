@@ -63,7 +63,7 @@ const generatePDF = (suppliers,supplierBalance) => {
 	// we use a date string to generate our filename.
 	const dateStr = date[1] + "_" + date[2] + "_" + date[3];
 	// ticket title. and margin-top + margin-left
-	doc.text("Suppliers List Report ", 14, 15);
+	doc.text("Suppliers List Report ", 70, 15);
 	// we define the name of our PDF file.
 	doc.save(`Supplier_report_${dateStr}.pdf`);
 };

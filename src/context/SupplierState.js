@@ -116,8 +116,6 @@ const SupplierState = (props) => {
 			const supplier = await response.json();
 			setSuppliers(suppliers.concat(supplier))
 			localStorage.setItem("SingleSupplierId", JSON.stringify(supplier._id))
-			console.log("mar jao");
-			console.log(localStorage.getItem("SingleSupplierId"));
 			showAlert("Supplier Added Succcessfully", "success")
 		}
 	}

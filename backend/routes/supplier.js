@@ -264,8 +264,6 @@ router.get('/getSupplierBalance', fetchuser, async (req, res) => {
 	try {
 		console.log(req.user.id)
 		let doc = await SupplierNetBalance.find({user:req.user.id});
-		console.log("hello")
-		console.log(doc);
 		return res.status(200).json(doc);
 	}
 	catch (error) {

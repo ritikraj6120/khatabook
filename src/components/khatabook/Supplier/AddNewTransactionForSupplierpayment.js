@@ -26,7 +26,7 @@ const AddNewTransactionForSupplierPayment = () => {
 	const onChange = (e) => {
 
 		let x = e.target.value
-		if (x == '') {
+		if (x === '') {
 			seterrorState(previousState => {
 				return { ...previousState, amountError: null }
 			});

@@ -60,7 +60,7 @@ const generatePDF = (customers,customerBalance) => {
   // we use a date string to generate our filename.
   const dateStr =  date[1] +"_"+ date[2] +"_"+ date[3] ;
   // customer title. and margin-top + margin-left
-  doc.text("Customers list Report", 14, 15);
+  doc.text("Customers list Report", 70, 15);
   // we define the name of our PDF file.
   doc.save(`Customer_report_${dateStr}.pdf`);
 };

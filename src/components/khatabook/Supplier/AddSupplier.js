@@ -38,9 +38,14 @@ const AddSupplier = () => {
 			console.log(supplier.name.length);
 			showAlert("Supplier length less than 1", "danger");
 		}
+		else if(supplier.phone.length>11){
+			showAlert("Supplier phone number length greater than 11 digits", "danger");
+		}
+		else if(supplier.phone.length<3){
+			showAlert("Supplier phone number length lesser than 3 digits", "danger");
+		}
 		else {
 			await addSupplier(supplier.title, supplier.name, supplier.phone);
-			console.log("shyam")
 			setSupplier({ title: "Mr", name: "", phone: 0 });
 			history.push('/editsupplier');
 		}

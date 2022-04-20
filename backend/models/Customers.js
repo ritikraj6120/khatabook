@@ -18,7 +18,7 @@ const CustomerSchema = new Schema({
 	phone:{
 		type:Number,
 		required:true,
-		min: 9, max: 111111111111
+		min: 100, max: 99999999999
 	},
 	date: {
 		type: Date,

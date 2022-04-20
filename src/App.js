@@ -1,5 +1,5 @@
 import './App.css';
-import { Switch, Route,Redirect } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import NoteState from './context/NoteState';
 import UserState from './context/UserState';
 import CustomerState from './context/CustomerState';
@@ -20,9 +20,9 @@ import Suppliers from './components/khatabook/Supplier/Suppliers'
 import Customers from './components/khatabook/Customer/Customers'
 import AddCustomer from './components/khatabook/Customer/AddCustomer';
 import AddNewTransactionForCustomerGave from './components/khatabook/Customer/AddNewTransactionForCustomerGave';
-import AddNewTransactionForCustomerGet from './components/khatabook/Customer/AddNewTransactionForCustomerGet'; 
-import AddNewTransactionForSupplierPayment from './components/khatabook/Supplier/AddNewTransactionForSupplierPayment'
-import AddNewTransactionForSupplierPurchase from './components/khatabook/Supplier/AddNewTransactionForSupplierPurchase'
+import AddNewTransactionForCustomerGet from './components/khatabook/Customer/AddNewTransactionForCustomerGet';
+import AddNewTransactionForSupplierPayment from './components/khatabook/Supplier/AddNewTransactionForSupplierpayment'
+import AddNewTransactionForSupplierPurchase from './components/khatabook/Supplier/AddNewTransactionForSupplierpurchase'
 import AddSupplier from './components/khatabook/Supplier/AddSupplier';
 import SingleCustomer from './components/khatabook/Customer/SingleCustomer';
 import SingleSupplier from './components/khatabook/Supplier/SingleSupplier';
@@ -35,7 +35,7 @@ function Routerapp() {
 					<Redirect to="/customers" />
 				</Route>
 				<Route exact path="/notes">
-					<Notes/>
+					<Notes />
 				</Route>
 				<Route exact path="/importantNotes">
 					<Important />
@@ -59,16 +59,16 @@ function Routerapp() {
 					<User />
 				</Route>
 				<Route exact path="/addNewTransactionForCustomerGave">
-					<AddNewTransactionForCustomerGave/>
+					<AddNewTransactionForCustomerGave />
 				</Route>
 				<Route exact path="/addNewTransactionForCustomerGet">
-					<AddNewTransactionForCustomerGet/>
+					<AddNewTransactionForCustomerGet />
 				</Route>
 				<Route exact path="/addNewTransactionForSupplierPayment">
-					<AddNewTransactionForSupplierPayment/>
+					<AddNewTransactionForSupplierPayment />
 				</Route>
 				<Route exact path="/addNewTransactionForSupplierPurchase">
-					<AddNewTransactionForSupplierPurchase/>
+					<AddNewTransactionForSupplierPurchase />
 				</Route>
 				<Route exact path="/customers">
 					<Customers />

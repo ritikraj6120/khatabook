@@ -49,7 +49,7 @@ const Noteitem = (props) => {
 								<Tooltip sx={{ mx: 2 }} title="Mark as Completed" placement="top" arrow><CircleOutlinedIcon style={{ cursor: "pointer", color: "#3e69e4" }} onClick={handleCompleted} /></Tooltip>
 
 						}
-
+						
 						{
 							note.important ? <Tooltip title="Remove Importance" placement="top" arrow><StarPurple500OutlinedIcon style={{ cursor: "pointer", color: "#3e69e4" }} onClick={handleimportant} />
 							</Tooltip>

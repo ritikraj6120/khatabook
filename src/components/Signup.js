@@ -130,7 +130,7 @@ export default function SignUp() {
 			email: data.get("email"),
 			password: data.get("password")
 		};
-		const response = await fetch("http://localhost:5000/api/auth//createuser", {
+		const response = await fetch("http://localhost:5000/api/auth/signup", {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -138,7 +138,8 @@ export default function SignUp() {
 			body: JSON.stringify(user)
 		});
 		const json = await response.json()
-		if (json.success) {
+		console.log(json);
+		if (json.isAuthenticated) {
 			// Save the auth token and redirect
 			showAlert("Account Created Successfully", "success")
 			history.push("/login");

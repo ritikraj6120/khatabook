@@ -238,7 +238,9 @@ router.put('/updateCustomerTransaction/:id', fetchuser, async (req, res) => {
 
 router.get('/getCustomerBalance', fetchuser, async (req, res) => {
 	try {
-		let doc = await customerNetBalance.findById(req.user.id);
+		let doc = await customerNetBalance.find({user:req.user.id});
+		// console.log("shyam")
+		// console.log(doc)
 		return res.status(200).json(doc);
 	}
 	catch (error) {
