@@ -17,11 +17,11 @@ const Suppliers = () => {
 		getSupplierBalance();
 		// eslint-disable-next-line
 	}, [])
-useEffect(() => {
-	if (supplierstate.error === 'Something Went wrong!') {
-		history.push('/login');
-	}
-}, [supplierstate.error])
+	useEffect(() => {
+		if (supplierstate.error === 'Something Went wrong!') {
+			history.push('/login');
+		}
+	}, [supplierstate.error])
 	let totalpurchase = 0;
 	let remaining = 0;
 	if (loading === false) {
@@ -42,9 +42,9 @@ useEffect(() => {
 							<h5 className="card-title">Total Purchase </h5>
 							<p className="card-text">Rs {totalpurchase}</p>
 							{remaining >= 0 ? <h5 className="card-title">You'll Give</h5> : <h5 className="card-title">Advance</h5>}
-							Rs {Math.abs(remaining)}
-							<br />
-							<br/>
+							<p>
+								Rs {Math.abs(remaining)}
+							</p>
 							<Button variant="contained" onClick={() => generatePDF(suppliers, supplierBalance)}>
 								Download Report
 							</Button>
