@@ -14,6 +14,12 @@ const SupplierTransactionsSchema = new Schema({
 		type: Number,
 		default: 0,
 	},
+	billDetails:{
+		type:String
+	},
+	billNo:{
+		type:String
+	},
 	date: {
 		type: Date,
 		default: Date.now

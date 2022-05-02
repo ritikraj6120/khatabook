@@ -59,23 +59,29 @@ const NoteState = (props) => {
 	// Delete a Note
 	const deleteNote = async (id) => {
 		// API Call
-		const response = await fetch(`${host}/api/notes/deletenote/${id}`, {
-			method: 'DELETE',
-			headers: {
-				'Content-Type': 'application/json',
-				"auth-token": localStorage.getItem('token')
+		try{
+			const response = await fetch(`${host}/api/notes/deletenote/${id}`, {
+				method: 'DELETE',
+				headers: {
+					'Content-Type': 'application/json',
+					"auth-token": localStorage.getItem('token')
+				}
+			});
+			if(response.status===400 || response.status===401)
+			{
+				showAlert("Invalid User","danger");
+				history.push('/login');
 			}
-		});
-		if(response.status===400 || response.status===401)
-		{
-			showAlert("Invalid User","danger");
+			else{
+				const newNotes = notes.filter((note) => { return note._id !== id })
+				setNotes(newNotes)
+				showAlert("Deleted successfully", "success");
+			}
+		}
+		catch(error){
 			history.push('/login');
 		}
-		else{
-			const newNotes = notes.filter((note) => { return note._id !== id })
-			setNotes(newNotes)
-			showAlert("Deleted successfully", "success");
-		}
+		
 		
 	}
 

@@ -9,7 +9,7 @@ const CustomerDetail = (props) => {
 	const { editCustomer, deleteCustomer } = useContext(CustomerContext);
 	const [credentials, setCredentials] = useState({ title: singleCustomer.title, name: singleCustomer.name, phone: singleCustomer.phone })
 	// console.log(singleCustomer.title, singleCustomer.name, singleCustomer.phone)//databse
-	console.log(credentials.title, credentials.name, credentials.phone)//usestate
+	// console.log(credentials.title, credentials.name, credentials.phone)//usestate
 
 	useEffect(() => {
 		setCredentials({ title: singleCustomer.title, name: singleCustomer.name, phone: singleCustomer.phone })

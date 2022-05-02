@@ -26,8 +26,14 @@ import AddNewTransactionForSupplierPurchase from './components/khatabook/Supplie
 import AddSupplier from './components/khatabook/Supplier/AddSupplier';
 import SingleCustomer from './components/khatabook/Customer/SingleCustomer';
 import SingleSupplier from './components/khatabook/Supplier/SingleSupplier';
+import SingleCustomerReport from './components/khatabook/Customer/SingleCustomerReport';
+import Reminder from './components/khatabook/Customer/Reminder';
+import SingleSupplierReport from './components/khatabook/Supplier/SingleSupplierReport';
+import EditSingleCustomerTransactionForGaveAmount from './components/khatabook/Customer/EditSingleCustomerTransactionForGaveAmount';
+import EditSingleCustomerTransactionForGetAmount from './components/khatabook/Customer/EditSingleCustomerTransactionForGetAmount';
+import EditSingleSupplierTransactionForPayment from './components/khatabook/Supplier/EditSingleSupplierTransactionForPayment';
+import EditSingleSupplierTransactionForPurchase from './components/khatabook/Supplier/EditSingleSupplierTransactionForPurchase';
 function Routerapp() {
-
 	return (
 		<>
 			<Switch>
@@ -82,12 +88,38 @@ function Routerapp() {
 				<Route exact path="/addcustomer">
 					<AddCustomer />
 				</Route>
-				<Route exact path="/editcustomer">
+				<Route exact path="/singlecustomer">
 					<SingleCustomer />
 				</Route>
-				<Route exact path="/editsupplier">
+				<Route exact path="/singlesupplier">
 					<SingleSupplier />
 				</Route>
+				<Route exact path="/singleCustomerReport">
+					<SingleCustomerReport />
+				</Route>
+				<Route exact path="/reminder">
+					<Reminder />
+				</Route>
+				<Route exact path="/singlesupplierReport">
+					<SingleSupplierReport />
+				</Route>
+
+				<Route exact path="/editcustomertransactionforgetamount"  >
+					<EditSingleCustomerTransactionForGetAmount />
+				</Route>
+
+				<Route exact path="/editcustomertransactionforgaveamount"  >
+					<EditSingleCustomerTransactionForGaveAmount />
+				</Route>
+
+				<Route exact path="/editsinglesuppliertransactionforpayment" >
+					<EditSingleSupplierTransactionForPayment />
+				</Route>
+
+				<Route exact path="/editsinglesuppliertransactionforpurchase" >
+					<EditSingleSupplierTransactionForPurchase />
+				</Route>
+
 				<Route>
 					<Error />
 				</Route>

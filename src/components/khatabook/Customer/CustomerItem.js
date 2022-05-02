@@ -1,5 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import Avatar from '@mui/material/Avatar';
 const CustomerItem = (props) => {
 	let history = useHistory();
 	const { customer, customerBalance } = props;
@@ -10,7 +11,7 @@ const CustomerItem = (props) => {
 		x = result[0].amounttoget - result[0].amounttogive;
 	const edit = () => {
 		localStorage.setItem("SingleCustomerId", JSON.stringify(customer._id));
-		history.push('/editcustomer');
+		history.push('/singlecustomer');
 	}
 	return (
 		<>

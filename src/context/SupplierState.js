@@ -1,6 +1,6 @@
 import SupplierContext from "./SupplierContext";
 import noteContext from "./noteContext";
-import { useState, useContext,useReducer } from "react";
+import { useState, useContext, useReducer } from "react";
 import { useHistory } from "react-router-dom";
 
 const SupplierState = (props) => {
@@ -9,59 +9,58 @@ const SupplierState = (props) => {
 	let history = useHistory();
 	const host = "http://localhost:5000";
 	const [suppliers, setSuppliers] = useState([])
-
 	const [SingleSupplierTransaction, setSingleSupplierTransaction] = useState([]);
+	const [SingleTransactionOfParticularSupplier, setSingleTransactionOfParticularSupplier] = useState({});
 	const initialState = {
-			loading: true,
-			error: '',
-			supplierBalance: []
+		loading: true,
+		error: '',
+		supplierBalance: []
+	}
+	const reducer = (state, action) => {
+		switch (action.type) {
+			case 'FETCH_SUCCESS':
+				return {
+					loading: false,
+					error: '',
+					supplierBalance: action.payload
+				}
+			case 'FETCH_ERROR':
+				return {
+					loading: false,
+					error: 'Something Went wrong!',
+					supplierBalance: []
+				}
+			default:
+				return state
 		}
-		const reducer = (state, action) => {
-			switch (action.type) {
-				case 'FETCH_SUCCESS':
-					return {
-						loading: false,
-						error: '',
-						supplierBalance: action.payload
-					}
-				case 'FETCH_ERROR':
-					return {
-						loading: false,
-						error: 'Something Went wrong!',
-						supplierBalance: []
-					}
-				default:
-					return state
-			}
-		}
+	}
 
 
-		const initialStatesingleSupplierDetail = {
-			loading: true,
-			error: '',
-			singleSupplier: {}
+	const initialStatesingleSupplierDetail = {
+		loading: true,
+		error: '',
+		singleSupplier: {}
+	}
+	const reducersingleSupplierDetail = (state, action) => {
+		switch (action.type) {
+			case 'FETCH_SUCCESS':
+				return {
+					loading: false,
+					error: '',
+					singleSupplier: action.payload
+				}
+			case 'FETCH_ERROR':
+				return {
+					loading: false,
+					error: 'Something Went wrong!',
+					singleSupplier: {}
+				}
+			default:
+				return state
 		}
-		const reducersingleSupplierDetail = (state, action) => {
-			switch (action.type) {
-				case 'FETCH_SUCCESS':
-					console.log("hurray current");
-					return {
-						loading: false,
-						error: '',
-						singleSupplier: action.payload
-					}
-				case 'FETCH_ERROR':
-					return {
-						loading: false,
-						error: 'Something Went wrong!',
-						singleSupplier: {}
-					}
-				default:
-					return state
-			}
-		}
-	const [state, dispatch] = useReducer(reducer,initialState);
-	const[singleSupplierDetail,dispatchsingleSupplierDetail]=useReducer(reducersingleSupplierDetail,initialStatesingleSupplierDetail);
+	}
+	const [state, dispatch] = useReducer(reducer, initialState);
+	const [singleSupplierDetail, dispatchsingleSupplierDetail] = useReducer(reducersingleSupplierDetail, initialStatesingleSupplierDetail);
 
 
 	/////////////////////////////////////////////////////////////
@@ -123,7 +122,7 @@ const SupplierState = (props) => {
 	// Edit a supplier function no 3
 	const editSupplier = async (id, title, name, phone) => {
 		// API Call 
-		console.log(title, name,phone);
+		console.log(title, name, phone);
 		const response = await fetch(`${host}/api/supplier/updatesupplier/${id}`, {
 			method: 'PUT',
 			headers: {
@@ -146,7 +145,7 @@ const SupplierState = (props) => {
 					newSuppliers[index].title = title;
 					newSuppliers[index].name = name;
 					newSuppliers[index].phone = phone;
-					
+
 					break;
 				}
 			}
@@ -170,13 +169,13 @@ const SupplierState = (props) => {
 			showAlert("Invalid User", "danger");
 			history.push('/login');
 		}
-		else if(response.status === 200){
+		else if (response.status === 200) {
 			// const json = await response.json();
 			const newSuppliers = suppliers.filter((supplier) => { return supplier._id !== id })
 			setSuppliers(newSuppliers);
 			history.push("/suppliers");
 		}
-		else{
+		else {
 			showAlert("Internal server error", "danger");
 			history.push('/login');
 		}
@@ -224,7 +223,7 @@ const SupplierState = (props) => {
 
 	//  add a transaction  using: post "/api/supplier/addSupplierTransaction/" function no 7
 
-	const addSingleSupplierTransaction = async (id, purchase_singleSupplier, payment_singleSupplier) => {
+	const addSingleSupplierTransaction = async (id, purchase_singleSupplier, payment_singleSupplier, billDetails, billNo, date) => {
 
 		const response = await fetch(`${host}/api/supplier/addSupplierTransaction/${id}`, {
 			method: 'POST',
@@ -232,7 +231,7 @@ const SupplierState = (props) => {
 				'Content-Type': 'application/json',
 				"auth-token": localStorage.getItem('token')
 			},
-			body: JSON.stringify({ purchase_singleSupplier, payment_singleSupplier })
+			body: JSON.stringify({ purchase_singleSupplier, payment_singleSupplier, billDetails, billNo, date })
 		});
 		if (response.status !== 200) {
 			history.push('/login');
@@ -244,39 +243,87 @@ const SupplierState = (props) => {
 		}
 	}
 
-		//	Update an existing supplierTransaction  using: PUT "/api/supplier/updateTransactions/" function no 8
-
-		// fetch balance of each supplier function no 9
-		const getSupplierBalance = async () => {
-			try {
-				const response = await fetch(`${host}/api/supplier/getSupplierBalance`, {
-					method: 'GET',
-					headers: {
-						'Content-Type': 'application/json',
-						"auth-token": localStorage.getItem('token')
-		
+	//Update an existing customerTransaction  using: PUT "/api/customer/updatetransactions/" function no 8
+	const updateSupplierTransaction = async (transactionid, singlesupplierid, purchase_singleSupplier, payment_singleSupplier, billdetails, billNo, date) => {
+		try {
+			const response = await fetch(`${host}/api/supplier/updateSupplierTransaction/${transactionid}`, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+					"auth-token": localStorage.getItem('token'),
+					"supplier-token": singlesupplierid
+				},
+				body: JSON.stringify({ purchase_singleSupplier, payment_singleSupplier, billdetails, billNo, date })
+			});
+			if (response.status === 200) {
+				// const newCustomerTransaction = {};
+				// if (date) { newCustomerTransaction.date = date };
+				// if (lendamount) { newCustomerTransaction.lendamount = lendamount };
+				// if (takeamount) { newCustomerTransaction.takeamount = takeamount };
+				// Logic to edit in client
+				for (let index = 0; index < SingleSupplierTransaction.length; index++) {
+					const element = SingleSupplierTransaction[index];
+					if (element._id === transactionid) {
+						if (date)
+							SingleSupplierTransaction[index].date = date;
+						if (purchase_singleSupplier)
+							SingleSupplierTransaction[index].purchase_singleSupplier = purchase_singleSupplier;
+						if (payment_singleSupplier)
+							SingleSupplierTransaction[index].payment_singleSupplier = payment_singleSupplier;
+						if (billdetails)
+							SingleSupplierTransaction[index].billdetails = billdetails;
+						if (billNo)
+							SingleSupplierTransaction[index].billNo = billNo;
+						break;
 					}
-				});
-				if (response.status === 200) {
-					const data = await response.json();
-					console.log(data);
-					if(data===null)
-					{
-						dispatch({ type: 'FETCH_SUCCESS', payload: [] })
-					}
-					else
-					dispatch({ type: 'FETCH_SUCCESS', payload: data })
 				}
-				else if (response.status !== 200) {
-					dispatch({ type: 'FETCH_ERROR' })
-					history.push("/login");
-				}
+				setSingleSupplierTransaction(SingleSupplierTransaction)
+				showAlert("Supplier Transaction  Updated Succcessfully", "success")
+				history.push('/singlesupplier');
 			}
-			catch (error) {
+			else if (response.status === 400 || response.status === 401) {
+				showAlert("Unauthorized User Access", "danger")
+				history.push("/login");
+			}
+			else {
+				history.push("/login");
+			}
+		}
+		catch (error) {
+			history.push("/login");
+		}
+	}
+
+	// fetch balance of each supplier function no 9
+	const getSupplierBalance = async () => {
+		try {
+			const response = await fetch(`${host}/api/supplier/getSupplierBalance`, {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+					"auth-token": localStorage.getItem('token')
+
+				}
+			});
+			if (response.status === 200) {
+				const data = await response.json();
+				console.log(data);
+				if (data === null) {
+					dispatch({ type: 'FETCH_SUCCESS', payload: [] })
+				}
+				else
+					dispatch({ type: 'FETCH_SUCCESS', payload: data })
+			}
+			else if (response.status !== 200) {
 				dispatch({ type: 'FETCH_ERROR' })
 				history.push("/login");
 			}
-		}	
+		}
+		catch (error) {
+			dispatch({ type: 'FETCH_ERROR' })
+			history.push("/login");
+		}
+	}
 
 	return (
 		<SupplierContext.Provider value={
@@ -293,8 +340,11 @@ const SupplierState = (props) => {
 
 				getSingleSupplierTransactions, // fetches all transaction of a given supplier
 				addSingleSupplierTransaction,// adds a new transaction for a given supplier
-				 getSupplierBalance, // fetch balance of all supplier
-				supplierstate: state,  // contains balance of all supplier  
+				updateSupplierTransaction, // update existing transaction for a given supplier
+				getSupplierBalance, // fetch balance of all supplier
+				supplierstate: state,  // contains balance of all supplier
+				SingleTransactionOfParticularSupplier, // contains info about a single transaction of a particular supplier 
+				setSingleTransactionOfParticularSupplier //  sets info about a single transaction of a particular supplier 
 			}
 		}>
 			{props.children}

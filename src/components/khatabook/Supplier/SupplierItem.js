@@ -1,6 +1,6 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'; 
-
+import Avatar from '@mui/material/Avatar';
 const SupplierItem = (props) => {
 	let history=useHistory();
 	
@@ -12,8 +12,7 @@ const SupplierItem = (props) => {
 	x= result[0].payment -result[0].purchase;
 	const edit =()=>{
 		localStorage.setItem("SingleSupplierId",JSON.stringify(supplier._id));
-		history.push('/editsupplier');
-
+		history.push('/singlesupplier');
 	}
 
 	return (

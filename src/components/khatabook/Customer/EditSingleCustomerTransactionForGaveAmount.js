@@ -1,33 +1,61 @@
 import React, { useContext, useState, useEffect } from 'react';
 import CustomerContext from '../../../context/CustomerContext';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import DeleteIcon from '@mui/icons-material/Delete';
 import '../style.css';
-// import CustomerDetail from './CustomerDetail';
 import Navbar from '../Navbar';
 import { CircularProgress, Button, TextField, Typography } from '@mui/material';
-const AddNewTransactionForCustomerGave = () => {
-	let history = useHistory();
+const EditSingleCustomerTransactionForGaveAmount = () => {
+	const location = useLocation();
+	const { transactionid, name, ...item } = location.state;
+	const { updateCustomerTransaction, SingleTransactionOfParticularCustomer } = useContext(CustomerContext);
+	const singlecustomerid = JSON.parse(localStorage.getItem('SingleCustomerId'));
+
 	const errorStateinit = {
 		amountError: null
 	}
 	const [errorState, seterrorState] = useState(errorStateinit);
-	const { getSingleCustomerDetail, singleCustomerDetail, getSingleCustomerTransactions, addSingleCustomerTransaction } = useContext(CustomerContext);
-	const { singleCustomer, loading } = singleCustomerDetail;
-	const singlecustomerid = JSON.parse(localStorage.getItem('SingleCustomerId'));
-
-	useEffect(() => {
-		getSingleCustomerDetail(singlecustomerid);
-		// eslint-disable-next-line
-	}, [])
 	const [newTransaction, setNewTransaction] = useState('');
 	const [newTransactiondate, setNewTransactiondate] = useState(new Date());
 	const [newTransactionBilldetails, setNewTransactiondateBilldetails] = useState("");
-	const [toggleAddBillNo, settoggleAddBillNo] = useState(false);
 	const [addBillNo, setAddBillNo] = useState("");
-	const onChange =  (e) => {
+	const [toggleAddBillNo, settoggleAddBillNo] = useState(false);
+	let loading = false;
+	useEffect(() => {
+		setNewTransaction(item.lendamount_singleCustomer);
+		setNewTransactiondate(item.date);
+		if ('billDetails' in item)
+			setNewTransactiondateBilldetails(item.billDetails);
+		if ('billNo' in item) {
+			console.log("hello");
+			setAddBillNo(item.billNo);
+			settoggleAddBillNo(true);
+		}
+		else {
+			settoggleAddBillNo(false);
+			console.log("hh")
+		}
+		console.log(item);
+	}, [item._id])
+	// setNewTransaction(SingleTransactionOfParticularCustomer.lendamount_singleCustomer);
+	// setNewTransactiondate(SingleTransactionOfParticularCustomer.date);
+	// if ('billDetails' in SingleTransactionOfParticularCustomer)
+	// 	setNewTransactiondateBilldetails(SingleTransactionOfParticularCustomer.billDetails);
+	// if ('billNo' in SingleTransactionOfParticularCustomer) {
+	// 	setAddBillNo(SingleTransactionOfParticularCustomer.addBillNo);
+	// 	settoggleAddBillNo(true);
+	// }
+	// else {
+	// 	settoggleAddBillNo(false);
+	// }
+	// loading = false;
+
+
+
+	const onChange = (e) => {
 		let x = e.target.value
 		if (x === '') {
 			seterrorState(previousState => {
@@ -45,17 +73,16 @@ const AddNewTransactionForCustomerGave = () => {
 				});
 				setNewTransaction('0');
 			}
-			else
-				{
-					seterrorState({ ...errorState, amountError: null })
-					setNewTransaction(x.toString());
-				}
+			else {
+				seterrorState({ ...errorState, amountError: null })
+				setNewTransaction(x.toString());
+			}
 		}
 	}
-	const handlesubmit = (e) => {
+
+	const handleSubmit =async (e) => {
 		e.preventDefault();
-		addSingleCustomerTransaction(singleCustomer._id, parseInt(newTransaction), 0, newTransactionBilldetails, addBillNo, newTransactiondate);
-		history.push('/singlecustomer')
+		await updateCustomerTransaction(transactionid, singlecustomerid, parseInt(newTransaction), 0, newTransactionBilldetails, addBillNo, newTransactiondate);
 	}
 
 	return (
@@ -64,27 +91,21 @@ const AddNewTransactionForCustomerGave = () => {
 			{loading === true ? <CircularProgress /> :
 				<>
 					<div>
-						<h1>You gave Rs {newTransaction===''? 0:newTransaction} to {singleCustomer.name}</h1>
+						<h1>You gave Rs {newTransaction === '' ? 0 : newTransaction} to {name}</h1>
 					</div>
 					<form >
 						<input type="number" className="form-control " placeholder="Enter Amount" value={newTransaction} onChange={onChange} />
-						{/* <TextField
-							variant='outlined'
-							color='secondary'
-							label="Enter Amount"
-							onChange={onChange}
-							type="number"
-						/> */}
 						<span className="text-danger">{errorState.amountError}</span>
 						<br />
 
-						<input type="text" className="form-control " placeholder="Enter Details (Item Name, Bill No, Quantity...)" value={newTransactionBilldetails} onChange={(e) => {
-							setNewTransactiondateBilldetails(e.target.value);
-						}} />
+						<input type="text" className="form-control " placeholder="Enter Details (Item Name, Bill No, Quantity...)" value={newTransactionBilldetails} onChange={(e) =>
+							setNewTransactiondateBilldetails(e.target.value)} />
 						<br />
 						{toggleAddBillNo === false ?
 							<Button onClick={(e) => {
+								console.log("bye");
 								settoggleAddBillNo(true);
+								console.log(toggleAddBillNo)
 							}} >Add Bill No.</Button>
 							: <input type="text" className="form-control " placeholder="Add Bill No." value={addBillNo} onChange={(e) => {
 								setAddBillNo(e.target.value);
@@ -106,20 +127,23 @@ const AddNewTransactionForCustomerGave = () => {
 							/>
 						</LocalizationProvider>
 						<br />
+						<br/>
 						<Typography align='center'>
 							{
 								newTransaction > 0 ? <Button sx={{
 									width: 1 / 4, backgroundColor: "#f2183d", '&:hover': {
 										background: "#f2183d",
 									}
-								}} onClick={handlesubmit} variant="contained">SAVE</Button> :
+								}} onClick={handleSubmit} variant="contained">UPDATE</Button> :
 									<Button disabled sx={{
 										width: 1 / 4, backgroundColor: "#f2183d", '&:hover': {
 											background: "#f2183d",
 										}
-									}} onClick={handlesubmit} variant="contained">SAVE</Button>
+									}} onClick={handleSubmit} variant="contained">UPDATE</Button>
 							}
-
+							<Button variant="outlined" color="error" sx={{ marginLeft: "1rem", color: "red", width: 1 / 4 }} startIcon={<DeleteIcon />}>
+								DELETE
+							</Button>
 						</Typography>
 
 
@@ -127,7 +151,7 @@ const AddNewTransactionForCustomerGave = () => {
 				</>
 			}
 		</>
-	);
-};
+	)
+}
 
-export default AddNewTransactionForCustomerGave;
+export default EditSingleCustomerTransactionForGaveAmount

@@ -80,7 +80,7 @@ router.put('/updatecustomer/:id', fetchuser, async (req, res) => {
 // ROUTE 4: Delete an existing Customer using: DELETE "/api/customer/deletecustomers". Login required
 router.delete('/deletecustomer/:id', fetchuser, async (req, res) => {
 	try {
-		let id=req.params.id;
+		let id = req.params.id;
 		// Find the customer to be delete and delete it
 		let customer = await Customers.findById(id);
 
@@ -90,9 +90,9 @@ router.delete('/deletecustomer/:id', fetchuser, async (req, res) => {
 		if (customer.user.toString() !== req.user.id) {
 			return res.status(401).send("Not Allowed");
 		}
-		
+
 		let deletedcustomer = await Customers.findByIdAndDelete(id);
-		await CustomerTransactions.deleteMany({ customer:id });
+		await CustomerTransactions.deleteMany({ customer: id });
 		await customerNetBalance.deleteMany({ customer: id });
 		res.json({ "Success": "customer has been deleted", customer: deletedcustomer });
 	} catch (error) {
@@ -152,7 +152,7 @@ router.post('/addCustomerTransaction/:id', fetchuser, async (req, res) => {
 		if (customer.user.toString() !== req.user.id) {
 			return res.status(401).send("Not Allowed");
 		}
-		const { lendamount_singleCustomer, takeamount_singleCustomer } = req.body;
+		const { lendamount_singleCustomer, takeamount_singleCustomer, billDetails, billNo, date } = req.body;
 
 		try {
 
@@ -165,20 +165,20 @@ router.post('/addCustomerTransaction/:id', fetchuser, async (req, res) => {
 			}
 
 
-			
-			
+
+
 			const newCustomerNetBalance = new customerNetBalance({
-				user:req.user.id,amounttoget, amounttogive, customer: req.params.id
+				user: req.user.id, amounttoget, amounttogive, customer: req.params.id
 			})
 			const rep = await customerNetBalance.findOne({ customer: req.params.id });
 			if (!rep) {
 				let doc = await newCustomerNetBalance.save();
 			}
 			else {
-				let ans=await customerNetBalance.findOne({customer: req.params.id});
-				amounttoget= amounttoget + ans.amounttoget;
+				let ans = await customerNetBalance.findOne({ customer: req.params.id });
+				amounttoget = amounttoget + ans.amounttoget;
 				amounttogive += ans.amounttogive;
-				let doc = await customerNetBalance.findOneAndUpdate({ customer: req.params.id }, {$set: {amounttoget:amounttoget,amounttogive:amounttogive}}, { new: true });
+				let doc = await customerNetBalance.findOneAndUpdate({ customer: req.params.id }, { $set: { amounttoget: amounttoget, amounttogive: amounttogive } }, { new: true });
 			}
 		}
 		catch (error) {
@@ -186,10 +186,17 @@ router.post('/addCustomerTransaction/:id', fetchuser, async (req, res) => {
 			res.status(500).send("Internal Server Error");
 		}
 		///////////////////////////////////////////////////////////////////////////
+		let newtransaction = {
+			lendamount_singleCustomer: lendamount_singleCustomer,
+			takeamount_singleCustomer: takeamount_singleCustomer
+		};
+		if (billNo !== null)
+			newtransaction.billNo = billNo;
+		if (billDetails !== null)
+			newtransaction.billDetails = billDetails;
 		let newCustomertransaction = new CustomerTransactions({
-			lendamount_singleCustomer, takeamount_singleCustomer, customer: req.params.id
+			...newtransaction, customer: req.params.id, date
 		})
-
 		try {
 			let doc = await newCustomertransaction.save();
 			res.status(200).json(doc);
@@ -209,24 +216,40 @@ router.post('/addCustomerTransaction/:id', fetchuser, async (req, res) => {
 // ROUTE 8: Update an existing customerTransaction  using: PUT "/api/customer/updatetransactions". Login required
 
 router.put('/updateCustomerTransaction/:id', fetchuser, async (req, res) => {
-	const { date, lendamount, takeamount } = req.body;
+	const { lendamount_singleCustomer, takeamount_singleCustomer, billdetails, billNo, date } = req.body;
 	try {
 		// Create a newNote object
 		const newCustomerTransaction = {};
+
+		if (lendamount_singleCustomer) { newCustomerTransaction.lendamount_singleCustomer = lendamount_singleCustomer };
+		if (takeamount_singleCustomer) { newCustomerTransaction.takeamount_singleCustomer = takeamount_singleCustomer };
+		if (billdetails) { newCustomerTransaction.billdetails = billdetails };
+		if (billNo) { newCustomerTransaction.billNo = billNo };
 		if (date) { newCustomerTransaction.date = date };
-		if (lendamount) { newCustomerTransaction.lendamount = lendamount };
-		if (takeamount) { newCustomerTransaction.takeamount = takeamount };
-		console.log(date, lendamount, takeamount);
-		// Find the note to be updated and update it
-		// let customer = await Customers.findById(req.params.id);
-		// if (!customer) { return res.status(404).send("Not Found") }
-
-		// if (customer.user.toString() !== req.user.id) {
-		// 	return res.status(401).send("Not Allowed");
-		// }
-
-		const updateCustomer = await CustomerTransactions.findByIdAndUpdate(req.params.id, { $set: newCustomerTransaction }, { new: true })
-		res.status(200).json(updateCustomer);
+		let currCustomerTransaction = await CustomerTransactions.findById(req.params.id);
+		const custtoken = req.header('cust-token');
+		let currCustomerBalance = await customerNetBalance.findOne({ customer: custtoken });
+		if (lendamount_singleCustomer > 0) {
+			let res = currCustomerBalance.amounttoget;
+			res -= currCustomerTransaction.lendamount_singleCustomer;
+			res += lendamount_singleCustomer;
+			res = parseInt(res);
+			try {
+				await customerNetBalance.findOneAndUpdate({ customer: custtoken }, { $set: { amounttoget: res } }, { new: true });
+			}
+			catch (err) {
+				console.log(err);
+			}
+		}
+		else {
+			let res = currCustomerBalance.amounttogive;
+			res -= currCustomerTransaction.takeamount_singleCustomer;
+			res += takeamount_singleCustomer;
+			await customerNetBalance.findOneAndUpdate({ customer: custtoken }, { $set: { amounttogive: res } }, { new: true });
+		}
+		
+		const updateCustomerTransaction = await CustomerTransactions.findByIdAndUpdate(req.params.id, { $set: newCustomerTransaction }, { new: true })
+		res.status(200).json(updateCustomerTransaction);
 	}
 	catch (error) {
 		console.error(error.message);
@@ -238,7 +261,7 @@ router.put('/updateCustomerTransaction/:id', fetchuser, async (req, res) => {
 
 router.get('/getCustomerBalance', fetchuser, async (req, res) => {
 	try {
-		let doc = await customerNetBalance.find({user:req.user.id});
+		let doc = await customerNetBalance.find({ user: req.user.id });
 		// console.log("shyam")
 		// console.log(doc)
 		return res.status(200).json(doc);

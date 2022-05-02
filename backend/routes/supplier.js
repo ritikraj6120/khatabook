@@ -6,7 +6,7 @@ const SupplierTransactions = require('../models/SupplierTransactions')
 const SupplierNetBalance = require('../models/SupplierNetBalance');
 const { body, validationResult } = require('express-validator');
 
-// Route 1" Get single suppliers using : GET "/api/supplier/getSingleSupplier". login required
+// Route 0" Get single suppliers using : GET "/api/supplier/getSingleSupplier". login required
 router.get('/getSingleSupplierTransactions/:id', fetchuser, async (req, res) => {
 	try {
 
@@ -112,7 +112,7 @@ router.delete('/deletesupplier/:id', fetchuser, async (req, res) => {
 		}
 
 		let deletedsupplier = await Suppliers.findByIdAndDelete(id);
-		await SupplierTransactions.deleteMany({ supplier:id });
+		await SupplierTransactions.deleteMany({ supplier: id });
 		await SupplierNetBalance.deleteMany({ supplier: id });
 		res.json({ "Success": "supplier has been deleted", supplier: deletedsupplier });
 	} catch (error) {
@@ -175,7 +175,7 @@ router.post('/addSupplierTransaction/:id', fetchuser, async (req, res) => {
 
 
 
-		const { purchase_singleSupplier, payment_singleSupplier } = req.body;
+		const { purchase_singleSupplier, payment_singleSupplier, billDetails, billNo, date } = req.body;
 		//////////////////////////////////////////hello
 		try {
 
@@ -184,24 +184,18 @@ router.post('/addSupplierTransaction/:id', fetchuser, async (req, res) => {
 			purchase += purchase_singleSupplier;
 
 			const newSupplierNetBalance = new SupplierNetBalance({
-				user:req.user.id, purchase, payment, supplier: req.params.id
+				user: req.user.id, purchase, payment, supplier: req.params.id
 			})
-			console.log(req.params.id);
 			const rep = await SupplierNetBalance.findOne({ supplier: req.params.id });
-			console.log(rep);
-			console.log("bye bye");
 			if (!rep) {
-				console.log("hhhhhh")
 				let doc = await newSupplierNetBalance.save();
 			}
 			else {
-				console.log("mmmmmaaaaaaaaaaaai")
 				let ans = await SupplierNetBalance.findOne({ supplier: req.params.id });
-				console.log(typeof ans)
 				purchase += ans.purchase;
 				payment += ans.payment;
-				console.log(purchase);
-				console.log(payment);
+				// console.log(purchase);
+				// console.log(payment);
 				let doc = await SupplierNetBalance.findOneAndUpdate({ supplier: req.params.id }, { $set: { purchase: purchase, payment: payment } }, { new: true });
 			}
 		}
@@ -210,8 +204,16 @@ router.post('/addSupplierTransaction/:id', fetchuser, async (req, res) => {
 			res.status(500).send("Internal Server Error");
 		}
 		///////////////////////////////////////////////////////////////////////////
+		let newtransaction = {
+			payment_singleSupplier: payment_singleSupplier,
+			purchase_singleSupplier: purchase_singleSupplier
+		};
+		if (billNo !== null)
+			newtransaction.billNo = billNo;
+		if (billDetails !== null)
+			newtransaction.billDetails = billDetails;
 		let newSuppliertransaction = new SupplierTransactions({
-			payment_singleSupplier, purchase_singleSupplier, supplier: req.params.id
+			...newtransaction, supplier: req.params.id, date: date
 		})
 
 		try {
@@ -232,26 +234,50 @@ router.post('/addSupplierTransaction/:id', fetchuser, async (req, res) => {
 
 // // ROUTE 8: Update an existing supplierTransaction  using: PUT "/api/supplier/updatetransactions". Login required
 
-router.put('/updatetransactions/:id', fetchuser, async (req, res) => {
-	const { title, name, lendamount, takeamount } = req.body;
+router.put('/updateSupplierTransaction/:id', fetchuser, async (req, res) => {
+	const { purchase_singleSupplier, payment_singleSupplier, billdetails, billNo, date } = req.body;
 	try {
 		// Create a newNote object
-		const newSupplier = {};
-		if (title) { newSupplier.title = title };
-		if (name) { newSupplier.name = name };
-		if (lendamount) { newSupplier.lendamount = lendamount };
-		if (takeamount) { newSupplier.takeamount = takeamount };
-		console.log(title, name, lendamount, takeamount);
-		// Find the note to be updated and update it
-		let supplier = await Suppliers.findById(req.params.id);
-		if (!supplier) { return res.status(404).send("Not Found") }
+		const newSupplierTransaction = {};
 
-		if (supplier.user.toString() !== req.user.id) {
-			return res.status(401).send("Not Allowed");
+		if (purchase_singleSupplier) { newSupplierTransaction.purchase_singleSupplier = purchase_singleSupplier };
+		if (payment_singleSupplier) { newSupplierTransaction.payment_singleSupplier = payment_singleSupplier };
+		if (billdetails) { newSupplierTransaction.billdetails = billdetails };
+		if (billNo) { newSupplierTransaction.billNo = billNo };
+		if (date) { newSupplierTransaction.date = date };
+
+		let currSupplierTransaction = await SupplierTransactions.findById(req.params.id);
+		const supltoken = req.header('supplier-token');
+		let currSupplierBalance = await SupplierNetBalance.findOne({ supplier: supltoken });
+
+		if (payment_singleSupplier > 0) {
+			let res = currSupplierBalance.payment;
+			res -= currSupplierTransaction.payment_singleSupplier;
+			res += payment_singleSupplier;
+			res = parseInt(res);
+			try {
+				await SupplierNetBalance.findOneAndUpdate({ supplier: supltoken }, { $set: { payment : res } }, { new: true });
+			}
+			catch (err) {
+				console.log(err);
+			}
+		}
+		else {
+			let res = currSupplierBalance.purchase;
+			res -= currSupplierTransaction.purchase_singleSupplier;
+			res += purchase_singleSupplier;
+			res = parseInt(res);
+			try {
+				await SupplierNetBalance.findOneAndUpdate({ supplier: supltoken }, { $set: { purchase : res } }, { new: true });
+			}
+			catch (err) {
+				console.log(err);
+			}
+
 		}
 
-		const updateSupplier = await Suppliers.findByIdAndUpdate(req.params.id, { $set: newSupplier }, { new: true });
-		res.status(200).json(updateSupplier).select('-user -date');
+		const updateSupplierTransaction = await SupplierTransactions.findByIdAndUpdate(req.params.id, { $set: newSupplierTransaction }, { new: true })
+		res.status(200).json(updateSupplierTransaction);
 	}
 	catch (error) {
 		console.error(error.message);
@@ -262,8 +288,7 @@ router.put('/updatetransactions/:id', fetchuser, async (req, res) => {
 
 router.get('/getSupplierBalance', fetchuser, async (req, res) => {
 	try {
-		console.log(req.user.id)
-		let doc = await SupplierNetBalance.find({user:req.user.id});
+		let doc = await SupplierNetBalance.find({ user: req.user.id });
 		return res.status(200).json(doc);
 	}
 	catch (error) {

@@ -5,29 +5,9 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 // import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-// const bull = (
-// 	<Box
-// 		component="span"
-// 		sx={{ display: "inline-block", mx: "2px", transform: "scale(0.8)" }}
-// 	>
-// 		•
-// 	</Box>
-// );
 
 const OutlinedCard = (props) => {
-	const { deleteuser } = useContext(AdminContext);
-	// const handleSubmit = (e) => {
-	// 	e.preventDefault();
-	// 	console.log(e.target.value);
-	// 	deleteuser(Cookies, e.target.value);
-	// 	window.location.reload();
-	// };
-	const handleSubmit = (e) => {
-		e.preventDefault();
-		deleteuser(e.target.value);	
-	};
 	return (
 		<Box sx={{ minWidth: 275 }}>
 			<Card variant="outlined">
@@ -90,15 +70,3 @@ const AdminPage = () => {
 };
 
 export default AdminPage;
-
-// import React from 'react'
-
-// const About = () => {
-//     return (
-//         <div>
-//             This is About page
-//         </div>
-//     )
-// }
-
-// export default About

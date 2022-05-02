@@ -12,7 +12,7 @@ const CustomerState = (props) => {
 	const [customers, setCustomers] = useState([])
 	const [SingleCustomerTransaction, setSingleCustomerTransaction] = useState([]);
 	const [CustomerTransactions, setCustomerTransactions] = useState([]);
-
+	const [SingleTransactionOfParticularCustomer, setSingleTransactionOfParticularCustomer] = useState({});
 
 	const initialState = {
 		loading: true,
@@ -47,7 +47,6 @@ const CustomerState = (props) => {
 	const reducersingleCustomerDetail = (state, action) => {
 		switch (action.type) {
 			case 'FETCH_SUCCESS':
-				console.log("hurray current");
 				return {
 					loading: false,
 					error: '',
@@ -103,7 +102,6 @@ const CustomerState = (props) => {
 			body: JSON.stringify({ title, name, phone })
 		});
 		if (response.status === 409) {
-			console.log(response.status);
 			showAlert("User already exists", "danger")
 
 		}
@@ -138,7 +136,7 @@ const CustomerState = (props) => {
 			showAlert("Invalid User", "danger");
 			history.push('/login');
 		}
-		else {
+		else if (response.status === 200) {
 			let newCustomers = JSON.parse(JSON.stringify(customers))
 			// Logic to edit in client
 			for (let index = 0; index < newCustomers.length; index++) {
@@ -151,6 +149,9 @@ const CustomerState = (props) => {
 				}
 			}
 			setCustomers(newCustomers);
+			showAlert("Customer Updated Succcessfully", "success")
+		} else {
+			history.push('/');
 		}
 
 	}
@@ -184,7 +185,6 @@ const CustomerState = (props) => {
 
 	// Get single Customer function no 5
 	const getSingleCustomerDetail = async (id) => {
-		// console.log("hello i am here")
 		const response = await fetch(`${host}/api/customer/getSingleCustomerDetail/${id}`, {
 			method: 'GET',
 			headers: {
@@ -246,16 +246,18 @@ const CustomerState = (props) => {
 
 	//  add a transaction  using: post "/api/customer/addCustomerTransaction/" function no 7
 
-	const addSingleCustomerTransaction = async (id, lendamount_singleCustomer, takeamount_singleCustomer) => {
-
-
+	const addSingleCustomerTransaction = async (id, lendamount_singleCustomer, takeamount_singleCustomer, billDetails, billNo, date) => {
+		if (billDetails === "")
+			billDetails = null
+		if (billNo === "")
+			billNo = null
 		const response = await fetch(`${host}/api/customer/addCustomerTransaction/${id}`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 				"auth-token": localStorage.getItem('token')
 			},
-			body: JSON.stringify({ lendamount_singleCustomer, takeamount_singleCustomer })
+			body: JSON.stringify({ lendamount_singleCustomer, takeamount_singleCustomer, billDetails, billNo, date })
 		});
 		if (response.status !== 200) {
 			history.push('/login');
@@ -271,39 +273,48 @@ const CustomerState = (props) => {
 	}
 
 	//	 Update an existing customerTransaction  using: PUT "/api/customer/updatetransactions/" function no 8
-	const updateCustomerTransaction = async (id, date, lendamount, takeamount) => {
+	const updateCustomerTransaction = async (transactionid, singlecustomerid, lendamount_singleCustomer, takeamount_singleCustomer, billdetails, billNo, date) => {
 		try {
-
-			const response = await fetch(`${host}/api/customer/updateCustomerTransaction/${id}`, {
+			const response = await fetch(`${host}/api/customer/updateCustomerTransaction/${transactionid}`, {
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json',
-					"auth-token": localStorage.getItem('token')
+					"auth-token": localStorage.getItem('token'),
+					"cust-token": singlecustomerid
 				},
-				body: JSON.stringify({ date, lendamount, takeamount })
-			}); 
+				body: JSON.stringify({ lendamount_singleCustomer, takeamount_singleCustomer, billdetails, billNo, date })
+			});
 			if (response.status === 200) {
-					// const newCustomerTransaction = {};
-					// if (date) { newCustomerTransaction.date = date };
-					// if (lendamount) { newCustomerTransaction.lendamount = lendamount };
-					// if (takeamount) { newCustomerTransaction.takeamount = takeamount };
-					// Logic to edit in client
-					for (let index = 0; index < SingleCustomerTransaction.length; index++) {
-						const element = SingleCustomerTransaction[index];
-						if (element._id === id) {
-							if (date)
-								SingleCustomerTransaction[index].date = date;
-							if (lendamount)
-								SingleCustomerTransaction[index].lendamount = lendamount;
-							if (takeamount)
-								SingleCustomerTransaction[index].takeamount = takeamount;
-							break;
-						}
+				// const newCustomerTransaction = {};
+				// if (date) { newCustomerTransaction.date = date };
+				// if (lendamount) { newCustomerTransaction.lendamount = lendamount };
+				// if (takeamount) { newCustomerTransaction.takeamount = takeamount };
+				// Logic to edit in client
+				for (let index = 0; index < SingleCustomerTransaction.length; index++) {
+					const element = SingleCustomerTransaction[index];
+					if (element._id === transactionid) {
+						if (date)
+							SingleCustomerTransaction[index].date = date;
+						if (lendamount_singleCustomer)
+							SingleCustomerTransaction[index].lendamount_singleCustomer = lendamount_singleCustomer;
+						if (takeamount_singleCustomer)
+							SingleCustomerTransaction[index].takeamount_singleCustomer = takeamount_singleCustomer;
+						if (billdetails)
+							SingleCustomerTransaction[index].billdetails = billdetails;
+						if (billNo)
+							SingleCustomerTransaction[index].billNo = billNo;
+						break;
 					}
-					setSingleCustomerTransaction(SingleCustomerTransaction)
-					showAlert("Customer Transaction  Updated Succcessfully", "success")
+				}
+				setSingleCustomerTransaction(SingleCustomerTransaction)
+				showAlert("Customer Transaction  Updated Succcessfully", "success")
+				history.push('/singlecustomer');
 			}
-			else{
+			else if (response.status === 400 || response.status === 401) {
+				showAlert("Unauthorized User Access", "danger")
+				history.push("/login");
+			}
+			else {
 				history.push("/login");
 			}
 		}
@@ -324,12 +335,11 @@ const CustomerState = (props) => {
 			});
 			if (response.status === 200) {
 				const data = await response.json();
-				if(data===null)
-				{
+				if (data === null) {
 					dispatch({ type: 'FETCH_SUCCESS', payload: [] })
 				}
 				else
-				dispatch({ type: 'FETCH_SUCCESS', payload: data })
+					dispatch({ type: 'FETCH_SUCCESS', payload: data })
 			}
 			else if (response.status !== 200) {
 				dispatch({ type: 'FETCH_ERROR' })
@@ -357,7 +367,9 @@ const CustomerState = (props) => {
 				addSingleCustomerTransaction, //  adds a new transaction for a given customer
 				updateCustomerTransaction, // update existing transaction for a given customer
 				getCustomerBalance,// fetch balance of all customer
-				customerstate: state,  // contains balance of all customer 
+				customerstate: state,  // contains balance of all customer  
+				SingleTransactionOfParticularCustomer, // contains info about a single transaction of a particular customer 
+				setSingleTransactionOfParticularCustomer// sets info about a single transaction of a particular customer 
 			}
 		}>
 			{props.children}
