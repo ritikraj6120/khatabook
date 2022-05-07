@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react'
 import { useHistory } from "react-router-dom";
 import CustomerContext from "../../../context/CustomerContext"
 import noteContext from '../../../context/noteContext';
-import Navbar from '../Navbar';
+// import Navbar from '../Navbar';
 const Navbar2 = () => {
 	return (
 		<nav className="navbar navbar-expand-lg  navbar-dark bg-primary" style={{ color: "#ffffff" }}>
@@ -45,13 +45,13 @@ const AddCustomer = () => {
 		else {
 			await addCustomer(customer.title, customer.name, customer.phone);
 			setCustomer({ title: "Mr", name: "", phone:0 });
-			history.push('/editcustomer');
+			// history.push('/editcustomer');
 		}
 	}
 
 	return (
 		<>
-			<Navbar a="/addcustomer" b="/addsupplier" />
+			{/* <Navbar a="/addcustomer" b="/addsupplier" /> */}
 			<br />
 			<Navbar2 />
 			<br />

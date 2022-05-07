@@ -5,7 +5,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import '../style.css';
-import Navbar from '../Navbar';
+// import Navbar from '../Navbar';
 import { CircularProgress, Button, Typography, TextField } from '@mui/material';
 
 const AddNewTransactionForCustomerGet = () => {
@@ -59,7 +59,7 @@ const AddNewTransactionForCustomerGet = () => {
 	}
 	return (
 		<>
-			<Navbar a="/singlecustomer" b="/singlesupplier" />
+			{/* <Navbar a="/singlecustomer" b="/singlesupplier" /> */}
 			{loading === true ? <CircularProgress /> :
 				<>
 					<div>

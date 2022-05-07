@@ -3,7 +3,7 @@ import SupplierContext from '../../../context/SupplierContext';
 import { useHistory, Link, NavLink } from 'react-router-dom';
 import '../style.css';
 import SupplierDetail from './SupplierDetail';
-import Navbar from '../Navbar';
+// import Navbar from '../Navbar';
 import { Typography, Button, CircularProgress, Table, TableRow, TableHead, TableBody, TableCell, CardContent, Card } from '@mui/material';
 import PictureAsPdfOutlinedIcon from '@mui/icons-material/PictureAsPdfOutlined';
 import WhatsappOutlinedIcon from '@mui/icons-material/WhatsappOutlined';
@@ -56,7 +56,7 @@ const SingleSupplier = () => {
 
 	return (
 		<>
-			<Navbar a="/editcustomer" b="/editsupplier" />
+			{/* <Navbar a="/editcustomer" b="/editsupplier" /> */}
 			{
 				loading === true ? <CircularProgress color="secondary" /> :
 					<>

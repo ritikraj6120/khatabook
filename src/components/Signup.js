@@ -85,13 +85,11 @@
 
 import React, {  useContext } from "react";
 import { useHistory } from "react-router-dom";
-import noteContext from "../context/noteContext";
+import { toast } from 'react-toastify';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-// import FormControlLabel from '@mui/material/FormControlLabel';
-// import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -115,9 +113,18 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignUp() {
-
-	const context = useContext(noteContext);
-	const { showAlert } = context;
+	const notifySuccess = (x) => {
+		toast.success(x, {
+			autoClose: 2000,
+			position: "top-center",
+		});
+	}
+	const notifyError = (x) => {
+		toast.error(x, {
+			autoClose: 2000,
+			position: "top-right",
+		});
+	}
 	let history = useHistory();
 
 
@@ -138,17 +145,16 @@ export default function SignUp() {
 			body: JSON.stringify(user)
 		});
 		const json = await response.json()
-		console.log(json);
+		// console.log(json);
 		if (json.isAuthenticated) {
 			// Save the auth token and redirect
-			showAlert("Account Created Successfully", "success")
+			notifySuccess("Account Created Successfully")
 			history.push("/login");
-			
-			
-
 		}
 		else {
-			showAlert("Invalid Details", "danger")
+			let x=json.error;
+			x=x[0];
+			notifyError(x.msg);
 		}
 	}
 

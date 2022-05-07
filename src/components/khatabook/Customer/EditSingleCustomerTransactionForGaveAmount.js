@@ -6,7 +6,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import DeleteIcon from '@mui/icons-material/Delete';
 import '../style.css';
-import Navbar from '../Navbar';
+// import Navbar from '../Navbar';
 import { CircularProgress, Button, TextField, Typography } from '@mui/material';
 const EditSingleCustomerTransactionForGaveAmount = () => {
 	const location = useLocation();
@@ -87,7 +87,7 @@ const EditSingleCustomerTransactionForGaveAmount = () => {
 
 	return (
 		<>
-			<Navbar a="/singlecustomer" b="/singlesupplier" />
+			{/* <Navbar a="/singlecustomer" b="/singlesupplier" /> */}
 			{loading === true ? <CircularProgress /> :
 				<>
 					<div>

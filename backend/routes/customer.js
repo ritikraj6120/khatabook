@@ -39,10 +39,8 @@ router.post('/addcustomer', fetchuser, async (req, res) => {
 			res.status(200).json(savedCustomer);
 		}
 		else {
-			res.status(409).json({ "danger": "Customer already exist" })
+			res.status(404).json({ "danger": "Customer already exist" })
 		}
-
-
 	} catch (error) {
 		console.error(error.message);
 		res.status(500).send("Internal Server Error");
@@ -62,7 +60,7 @@ router.put('/updatecustomer/:id', fetchuser, async (req, res) => {
 		console.log(title, name, phone);
 		// Find the note to be updated and update it
 		let customer = await Customers.findById(req.params.id);
-		if (!customer) { return res.status(404).send("Not Found") }
+		if (!customer) { return res.status(404).send("Customer Not Found") }
 
 		if (customer.user.toString() !== req.user.id) {
 			return res.status(401).send("Not Allowed");
@@ -84,11 +82,11 @@ router.delete('/deletecustomer/:id', fetchuser, async (req, res) => {
 		// Find the customer to be delete and delete it
 		let customer = await Customers.findById(id);
 
-		if (!customer) { return res.status(404).send("Not Found") }
+		if (!customer) { return res.status(404).send("Customer Not Found") }
 
 		// Allow deletion only if user owns this customer
 		if (customer.user.toString() !== req.user.id) {
-			return res.status(401).send("Not Allowed");
+			return res.status(400).send("Not Allowed");
 		}
 
 		let deletedcustomer = await Customers.findByIdAndDelete(id);
@@ -127,7 +125,7 @@ router.get('/getSingleCustomerDetail/:id', fetchuser, async (req, res) => {
 router.get('/getCustomerTransactions/:id', fetchuser, async (req, res) => {
 	try {
 		let customer = await Customers.findById(req.params.id);
-		if (!customer) { return res.status(404).send("Not much Found") }
+		if (!customer) { return res.status(404).send("No Customer Found with this name") }
 
 		if (customer.user.toString() !== req.user.id) {
 			return res.status(401).send("Not Allowed");
@@ -245,9 +243,14 @@ router.put('/updateCustomerTransaction/:id', fetchuser, async (req, res) => {
 			let res = currCustomerBalance.amounttogive;
 			res -= currCustomerTransaction.takeamount_singleCustomer;
 			res += takeamount_singleCustomer;
-			await customerNetBalance.findOneAndUpdate({ customer: custtoken }, { $set: { amounttogive: res } }, { new: true });
+			try {
+				await customerNetBalance.findOneAndUpdate({ customer: custtoken }, { $set: { amounttogive: res } }, { new: true });
+			}
+			catch (err) {
+				console.log(err);
+			}
 		}
-		
+
 		const updateCustomerTransaction = await CustomerTransactions.findByIdAndUpdate(req.params.id, { $set: newCustomerTransaction }, { new: true })
 		res.status(200).json(updateCustomerTransaction);
 	}
@@ -262,8 +265,6 @@ router.put('/updateCustomerTransaction/:id', fetchuser, async (req, res) => {
 router.get('/getCustomerBalance', fetchuser, async (req, res) => {
 	try {
 		let doc = await customerNetBalance.find({ user: req.user.id });
-		// console.log("shyam")
-		// console.log(doc)
 		return res.status(200).json(doc);
 	}
 	catch (error) {

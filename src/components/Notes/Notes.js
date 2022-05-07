@@ -28,23 +28,20 @@ const Notes = () => {
 	}
 
 	const handleClick = (e) => {
-		if(note.etitle.length<1)
-		{
+		if (note.etitle.length < 1) {
 			refClose.current.click();
 			showAlert("Title length less than 1", "danger");
 		}
-		else if(note.edescription.length<5)
-		{
+		else if (note.edescription.length < 5) {
 			refClose.current.click();
 			showAlert("Description length less than 5", "danger");
 		}
-		else
-		{
+		else {
 			editNote(note.id, note.etitle, note.edescription, note.etag)
 			refClose.current.click();
-			
+
 		}
-		
+
 	}
 
 	const onChange = (e) => {
@@ -53,6 +50,7 @@ const Notes = () => {
 
 	return (
 		<>
+			<br />
 			<NoteNavbar />
 			<AddNote />
 			<button ref={ref} type="button" className="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#exampleModal">

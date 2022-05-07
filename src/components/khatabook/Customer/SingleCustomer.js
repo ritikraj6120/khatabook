@@ -3,16 +3,15 @@ import CustomerContext from '../../../context/CustomerContext';
 import { useHistory, Link } from 'react-router-dom';
 import '../style.css';
 import CustomerDetail from './CustomerDetail';
-import Navbar from '../Navbar';
+// import Navbar from '../Navbar';
 import { Typography, Button, CircularProgress, Table, TableRow, TableHead, TableBody, TableCell, CardContent, Card } from '@mui/material';
 import PictureAsPdfOutlinedIcon from '@mui/icons-material/PictureAsPdfOutlined';
 import WhatsappOutlinedIcon from '@mui/icons-material/WhatsappOutlined';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 
-
 const SingleCustomer = () => {
 	let history = useHistory();
-	const { SingleCustomerTransaction, getSingleCustomerTransactions, getSingleCustomerDetail, singleCustomerDetail ,setSingleTransactionOfParticularCustomer} = useContext(CustomerContext);
+	const { SingleCustomerTransaction, getSingleCustomerTransactions, getSingleCustomerDetail, singleCustomerDetail, setSingleTransactionOfParticularCustomer } = useContext(CustomerContext);
 	const { singleCustomer, loading } = singleCustomerDetail;
 	const singlecustomerid = JSON.parse(localStorage.getItem('SingleCustomerId'));
 
@@ -32,17 +31,17 @@ const SingleCustomer = () => {
 
 	const handleEditSupplier = async (item) => {
 		console.log(item._id);
-		await setSingleTransactionOfParticularCustomer({...item})
-		if (item.lendamount_singleCustomer > 0) {	
+		await setSingleTransactionOfParticularCustomer({ ...item })
+		if (item.lendamount_singleCustomer > 0) {
 
 			history.push('/editcustomertransactionforgaveamount', {
-				transactionid: item._id, name: singleCustomer.name,...item
+				transactionid: item._id, name: singleCustomer.name, ...item
 			});
 
 		}
 		else {
 			history.push('/editcustomertransactionforgetamount', {
-				transactionid: item._id, name: singleCustomer.name,...item
+				transactionid: item._id, name: singleCustomer.name, ...item
 			});
 		}
 	}
@@ -56,15 +55,14 @@ const SingleCustomer = () => {
 		let y = localdate.substr(9, 2).toUpperCase();
 		return d.getDate() + ' ' + month[d.getMonth()] + ('' + d.getFullYear()).slice(2) + ' ' + x + ' ' + y;
 	}
-
 	return (
 		<>
-			<Navbar a="/editcustomer" b="/editsupplier" />
+			{/* <Navbar a="/editcustomer" b="/editsupplier" /> */}
 			{
 
 				loading === true ? <CircularProgress color="secondary" /> :
 					<>
-
+						
 						<div className=".container-fluid ">
 							<div className="row">
 								<div className="col-8">
@@ -191,7 +189,7 @@ const SingleCustomer = () => {
 								justifyContent: "center",
 							}} >
 								<Button style={{ backgroundColor: "red", marginRight: "1rem" }} variant="contained" onClick={youGaveAddPage}>You Gave <CurrencyRupeeIcon sx={{ fontSize: "1.25rem" }} /></Button>
-								
+
 								<Button style={{ backgroundColor: "green" }} variant="contained" onClick={youGetAddPage}>You Got <CurrencyRupeeIcon sx={{ fontSize: "1.25rem" }} /></Button>
 							</CardContent>
 						</Card>
@@ -203,6 +201,3 @@ const SingleCustomer = () => {
 };
 
 export default SingleCustomer;
-
-
-

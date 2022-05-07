@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react'
 import SupplierContext from "../../../context/SupplierContext"
 import SupplierItem from './SupplierItem';
 import { useHistory, Link } from 'react-router-dom'
-import Navbar from '../Navbar'
+// import Navbar from '../Navbar'
 import '../style.css'
 import { Button } from '@mui/material';
 import generatePDF from './supplierReport';
@@ -34,7 +34,7 @@ const Suppliers = () => {
 
 	return (
 		<>
-			<Navbar a="/customers" b="/suppliers" />
+			{/* <Navbar a="/customers" b="/suppliers" /> */}
 			{loading === true ? <CircularProgress color="secondary" /> :
 				<>
 					<div className="card mt-5" style={{ width: "18rem" }}>

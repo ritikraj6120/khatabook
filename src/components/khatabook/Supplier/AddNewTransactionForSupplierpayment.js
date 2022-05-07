@@ -6,7 +6,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import '../style.css';
 // import CustomerDetail from './CustomerDetail';
-import Navbar from '../Navbar';
+// import Navbar from '../Navbar';
 import { CircularProgress, Button, Typography, TextField } from '@mui/material';
 // import { CommentsDisabledOutlined, ConstructionOutlined } from '@mui/icons-material';
 const AddNewTransactionForSupplierPayment = () => {
@@ -60,7 +60,7 @@ const AddNewTransactionForSupplierPayment = () => {
 	}
 	return (
 		<>
-			<Navbar a="/singlecustomer" b="/singlesupplier" />
+			{/* <Navbar a="/singlecustomer" b="/singlesupplier" /> */}
 			{loading === true ? <CircularProgress /> :
 				<>
 					<div>

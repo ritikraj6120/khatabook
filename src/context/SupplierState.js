@@ -2,10 +2,33 @@ import SupplierContext from "./SupplierContext";
 import noteContext from "./noteContext";
 import { useState, useContext, useReducer } from "react";
 import { useHistory } from "react-router-dom";
-
+import { toast } from 'react-toastify';
 const SupplierState = (props) => {
 	const { showAlert } = useContext(noteContext)
-
+	const notifySuccess = (x) => {
+		toast.success(x, {
+			autoClose: 2000,
+			position: "top-center",
+		});
+	}
+	const notifyError = (x) => {
+		toast.error(x, {
+			autoClose: 2000,
+			position: "top-right",
+		});
+	}
+	const notifyWarning = (x) => {
+		toast.warn(x, {
+			autoClose: 2000,
+			position: "top-center",
+		})
+	}
+	const notifyUnAuthorized = (x) => {
+		toast.error(x, {
+			autoClose: 500,
+			position: "top-center",
+		});
+	}
 	let history = useHistory();
 	const host = "http://localhost:5000";
 	const [suppliers, setSuppliers] = useState([])
@@ -72,7 +95,6 @@ const SupplierState = (props) => {
 
 	// Get all Suppliers function no 1
 	const getSuppliers = async () => {
-		// API Call 
 		const response = await fetch(`${host}/api/supplier/getsuppliers`, {
 			method: 'GET',
 			headers: {
@@ -80,21 +102,23 @@ const SupplierState = (props) => {
 				"auth-token": localStorage.getItem('token')
 			}
 		});
-		if (response.status !== 200) {
-
-			history.push("/login");
+		if (response.status === 401) {
+			notifyUnAuthorized("Not Authorized, Login Again ");
+			localStorage.clear();
+			setTimeout(function () { history.push('/login') }, 1000);
 		}
-		else {
+		else if (response.status === 200) {
 			const json = await response.json()
 			setSuppliers(json);
 		}
-
+		else {
+			notifyError("Some Error happenend");
+		}
 	}
 
 
 	// Add a Supplier function no 2
 	const addSupplier = async (title, name, phone) => {
-
 		phone = parseInt(phone);
 		const response = await fetch(`${host}/api/supplier/addsupplier`, {
 			method: 'POST',
@@ -104,24 +128,28 @@ const SupplierState = (props) => {
 			},
 			body: JSON.stringify({ title, name, phone })
 		});
-		if (response.status === 409) {
-			showAlert("User already exists", "danger")
+		if (response.status === 401) {
+			notifyUnAuthorized("Not Authorized, Login Again ");
+			localStorage.clear();
+			setTimeout(function () { history.push('/login') }, 1000);
 		}
-		else if (response.status !== 200) {
-			history.push('/login');
+		else if (response.status === 404) {
+			notifyWarning("Supplier  already exists")
 		}
-		else {
-
+		else if (response.status === 200) {
 			const supplier = await response.json();
 			setSuppliers(suppliers.concat(supplier))
 			localStorage.setItem("SingleSupplierId", JSON.stringify(supplier._id))
-			showAlert("Supplier Added Succcessfully", "success")
+			notifySuccess("Customer Added Succcessfully")
+			setTimeout(function () { history.push('/singlecustomer') }, 1000);
+		}
+		else {
+			notifyError("Some Error happenend ");
 		}
 	}
 
 	// Edit a supplier function no 3
 	const editSupplier = async (id, title, name, phone) => {
-		// API Call 
 		console.log(title, name, phone);
 		const response = await fetch(`${host}/api/supplier/updatesupplier/${id}`, {
 			method: 'PUT',
@@ -132,11 +160,15 @@ const SupplierState = (props) => {
 			body: JSON.stringify({ title, name, phone })
 		});
 		// const json = await response.json();
-		if (response.status === 400 || response.status === 401) {
-			showAlert("Invalid User", "danger");
-			history.push('/login');
+		if (response.status === 401) {
+			notifyUnAuthorized("Not Authorized, Login Again ");
+			localStorage.clear();
+			setTimeout(function () { history.push('/login') }, 1000);
 		}
-		else {
+		else if (response.status === 404) {
+			notifyWarning("No Supplier found with this name")
+		}
+		else if (response.status === 200) {
 			let newSuppliers = JSON.parse(JSON.stringify(suppliers))
 			// Logic to edit in client
 			for (let index = 0; index < newSuppliers.length; index++) {
@@ -145,18 +177,19 @@ const SupplierState = (props) => {
 					newSuppliers[index].title = title;
 					newSuppliers[index].name = name;
 					newSuppliers[index].phone = phone;
-
 					break;
 				}
 			}
 			setSuppliers(newSuppliers);
+			notifySuccess("Supplier Details Updated  Succcessfully")
 		}
-
+		else {
+			notifyError("Some Error happenend ");
+		}
 	}
 
 	// Delete a Supplier function no 4
 	const deleteSupplier = async (id) => {
-		// API Call
 		const response = await fetch(`${host}/api/supplier/deletesupplier/${id}`, {
 			method: 'DELETE',
 			headers: {
@@ -166,18 +199,20 @@ const SupplierState = (props) => {
 		});
 		console.log(response.status);
 		if (response.status === 400 || response.status === 401) {
-			showAlert("Invalid User", "danger");
-			history.push('/login');
+			notifyUnAuthorized("Not Authorized, Login Again ");
+			localStorage.clear();
+			setTimeout(function () { history.push('/login') }, 1000);
+		}
+		else if (response.status === 404) {
+			notifyWarning("No Supplier found with this name")
 		}
 		else if (response.status === 200) {
-			// const json = await response.json();
 			const newSuppliers = suppliers.filter((supplier) => { return supplier._id !== id })
 			setSuppliers(newSuppliers);
 			history.push("/suppliers");
 		}
 		else {
-			showAlert("Internal server error", "danger");
-			history.push('/login');
+			notifyError("Some Error happenend ");
 		}
 
 	}
@@ -191,17 +226,27 @@ const SupplierState = (props) => {
 				"auth-token": localStorage.getItem('token')
 			}
 		});
-		if (response.status !== 200) {
+		if (response.status === 404) {
 			dispatchsingleSupplierDetail({ type: 'FETCH_ERROR' })
-			history.push("/login");
+			notifyWarning("No Supplier found with this name")
+			setTimeout(function () { history.push('/suppliers') }, 1000);
 		}
-		else {
+		else if (response.status === 401) {
+			dispatchsingleSupplierDetail({ type: 'FETCH_ERROR' });
+			notifyUnAuthorized("Not Authorized, Login Again ");
+			localStorage.clear();
+			setTimeout(function () { history.push('/login') }, 1000);
+		}
+		if (response.status === 200) {
 			const json = await response.json()
 			dispatchsingleSupplierDetail({ type: 'FETCH_SUCCESS', payload: json })
 		}
+		else {
+			notifyError("Some Error happenend at Server side");
+		}
 	}
 
-	//get Supplier transcation function no 6
+	//get single Supplier transcation function no 6
 	const getSingleSupplierTransactions = async (id) => {
 		const response = await fetch(`${host}/api/supplier/getSupplierTransactions/${id}`, {
 			method: 'GET',
@@ -211,13 +256,21 @@ const SupplierState = (props) => {
 
 			}
 		});
-		if (response.status !== 200) {
-
-			history.push("/login");
+		if (response.status === 400 || response.status === 401) {
+			notifyUnAuthorized("Not Authorized, Login Again ");
+			localStorage.clear();
+			setTimeout(function () { history.push('/login') }, 1000);
 		}
-		else {
+		else if (response.status === 404) {
+			notifyWarning("No Supplier found with this name")
+			setTimeout(function () { history.push('/suppliers') }, 1000);
+		}
+		else if (response.status === 200) {
 			const json = await response.json()
 			setSingleSupplierTransaction(json);
+		}
+		else {
+			notifyError("Some Error happenend at Server side");
 		}
 	}
 
@@ -233,13 +286,23 @@ const SupplierState = (props) => {
 			},
 			body: JSON.stringify({ purchase_singleSupplier, payment_singleSupplier, billDetails, billNo, date })
 		});
-		if (response.status !== 200) {
-			history.push('/login');
+
+		if (response.status === 400 || response.status === 401) {
+			notifyUnAuthorized("Not Authorized, Login Again ");
+			localStorage.clear();
+			setTimeout(function () { history.push('/login') }, 1000);
 		}
-		else {
+		else if (response.status === 404) {
+			notifyWarning("No Supplier found with this name")
+			setTimeout(function () { history.push('/suppliers') }, 1000);
+		}
+		else if (response.status === 200) {
 			const newSuppliertransaction = await response.json();
 			setSingleSupplierTransaction(SingleSupplierTransaction.concat(newSuppliertransaction));
-			showAlert("Supplier Transaction Added Succcessfully", "success");
+			notifySuccess("Supplier Transaction Added Succcessfully", "success")
+		}
+		else {
+			notifyError("Some Error happenend at Server side");
 		}
 	}
 
@@ -282,14 +345,16 @@ const SupplierState = (props) => {
 				history.push('/singlesupplier');
 			}
 			else if (response.status === 400 || response.status === 401) {
-				showAlert("Unauthorized User Access", "danger")
-				history.push("/login");
+				notifyUnAuthorized("Not Authorized, Login Again ");
+				localStorage.clear();
+				setTimeout(function () { history.push('/login') }, 1000);
 			}
 			else {
-				history.push("/login");
+				notifyError("Some Error happenend at Server side");
 			}
 		}
 		catch (error) {
+			notifyError("Some Error happenend at Server side");
 			history.push("/login");
 		}
 	}
@@ -305,7 +370,12 @@ const SupplierState = (props) => {
 
 				}
 			});
-			if (response.status === 200) {
+			if (response.status === 400 || response.status === 401) {
+				notifyError("Unauthorized User Access");
+				localStorage.clear();
+				history.push("/login");
+			}
+			else if (response.status === 200) {
 				const data = await response.json();
 				console.log(data);
 				if (data === null) {
@@ -314,14 +384,14 @@ const SupplierState = (props) => {
 				else
 					dispatch({ type: 'FETCH_SUCCESS', payload: data })
 			}
-			else if (response.status !== 200) {
+			else if (response.status ===500 ) {
 				dispatch({ type: 'FETCH_ERROR' })
-				history.push("/login");
+				notifyError("Some Error happenend at Server side");
 			}
 		}
 		catch (error) {
 			dispatch({ type: 'FETCH_ERROR' })
-			history.push("/login");
+			notifyError("Some Error happenend at Server side");
 		}
 	}
 

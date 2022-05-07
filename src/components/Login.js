@@ -7,7 +7,7 @@
 // 	const { showAlert } = context;
 // 	let history = useHistory();
 //     const [credentials, setCredentials] = useState({email: "", password: ""}) 
-    
+
 
 //     const handleSubmit = async (e) => {
 //         e.preventDefault();
@@ -25,7 +25,7 @@
 //             localStorage.setItem('token', json.authtoken); 
 // 			showAlert("Login Successfully","success")
 //             history.push("/");
-			
+
 //         }
 //         else{
 //             showAlert("Invalid Credentals","danger")
@@ -60,7 +60,7 @@
 
 
 import * as React from 'react';
-import {  useContext } from 'react';
+import { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -75,15 +75,12 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import noteContext from "../context/noteContext";
-
+import { toast } from 'react-toastify';
 function Copyright(props) {
 	return (
 		<Typography variant="body2" color="text.secondary" align="center" {...props}>
 			{'Copyright © '}
-			<Link color="inherit" href="https://mui.com/">
-				Your Website
-			</Link>{' '}
+			Ritik Raj{' '}
 			{new Date().getFullYear()}
 			{'.'}
 		</Typography>
@@ -93,10 +90,19 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function Login() {
-	const context = useContext(noteContext);
-	const { showAlert } = context;
+	const notifySuccess = (x) => {
+		toast.success(x, {
+			autoClose: 1500,
+			position: "top-center",
+		});
+	}
+	const notifyError = (x) => {
+		toast.error(x, {
+			autoClose: 2000,
+			position: "top-right",
+		});
+	}
 	let history = useHistory();
-
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -117,13 +123,13 @@ export default function Login() {
 		if (json.success) {
 			// Save the auth token and redirect
 			localStorage.setItem('token', json.authtoken);
-			localStorage.setItem('admin',json.isadmin);
-			showAlert(json.error, "success")
-			history.push("/");
+			localStorage.setItem('admin', json.isadmin);
+			notifySuccess("Successfully logged in")
+			setTimeout(function () { history.push('/') }, 500);
 
 		}
 		else {
-			showAlert(json.error, "danger")
+			notifyError(json.error);
 		}
 
 	};

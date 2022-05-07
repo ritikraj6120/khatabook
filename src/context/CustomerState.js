@@ -1,18 +1,40 @@
 import CustomerContext from "./CustomerContext";
-import noteContext from "./noteContext";
 // import axios from 'axios';
-import { useState, useContext, useReducer } from "react";
+import { useState, useReducer } from "react";
 import { useHistory } from "react-router-dom";
-
+import { toast } from 'react-toastify';
 const CustomerState = (props) => {
-	const { showAlert } = useContext(noteContext)
-
 	let history = useHistory();
 	const host = "http://localhost:5000";
 	const [customers, setCustomers] = useState([])
 	const [SingleCustomerTransaction, setSingleCustomerTransaction] = useState([]);
 	const [CustomerTransactions, setCustomerTransactions] = useState([]);
 	const [SingleTransactionOfParticularCustomer, setSingleTransactionOfParticularCustomer] = useState({});
+
+	const notifySuccess = (x) => {
+		toast.success(x, {
+			autoClose: 2000,
+			position: "top-center",
+		});
+	}
+	const notifyError = (x) => {
+		toast.error(x, {
+			autoClose: 2000,
+			position: "top-right",
+		});
+	}
+	const notifyWarning = (x) => {
+		toast.warn(x, {
+			autoClose: 2000,
+			position: "top-center",
+		})
+	}
+	const notifyUnAuthorized = (x) => {
+		toast.error(x, {
+			autoClose: 500,
+			position: "top-center",
+		});
+	}
 
 	const initialState = {
 		loading: true,
@@ -69,7 +91,6 @@ const CustomerState = (props) => {
 	///////////////////////////////////////////////////////////////////////
 	// Get all Customers function no 1
 	const getCustomers = async () => {
-		// API Call 
 		const response = await fetch(`${host}/api/customer/getcustomers`, {
 			method: 'GET',
 			headers: {
@@ -77,21 +98,22 @@ const CustomerState = (props) => {
 				"auth-token": localStorage.getItem('token')
 			}
 		});
-		if (response.status !== 200) {
-
-			history.push("/login");
+		if (response.status === 401) {
+			notifyUnAuthorized("Not Authorized, Login Again ");
+			localStorage.clear();
+			setTimeout(function () { history.push('/login') }, 1000);
 		}
-		else {
+		else if (response.status === 200) {
 			const json = await response.json()
 			setCustomers(json);
-
-
 		}
-
+		else {
+			notifyError("Some Error happenend");
+		}
 	}
+
 	// Add a Customer function no 2
 	const addCustomer = async (title, name, phone) => {
-
 		phone = parseInt(phone);
 		const response = await fetch(`${host}/api/customer/addcustomer`, {
 			method: 'POST',
@@ -101,27 +123,28 @@ const CustomerState = (props) => {
 			},
 			body: JSON.stringify({ title, name, phone })
 		});
-		if (response.status === 409) {
-			showAlert("User already exists", "danger")
-
+		if (response.status === 401) {
+			notifyUnAuthorized("Not Authorized, Login Again ");
+			localStorage.clear();
+			setTimeout(function () { history.push('/login') }, 1000);
 		}
-		else if (response.status !== 200) {
-			history.push('/login');
+		else if (response.status === 404) {
+			notifyWarning("Customer  already exists")
 		}
-		else {
-
-
+		else if (response.status === 200) {
 			const customer = await response.json();
 			setCustomers(customers.concat(customer))
 			localStorage.setItem("SingleCustomerId", JSON.stringify(customer._id))
-			showAlert("Customer Added Succcessfully", "success")
-
+			notifySuccess("Customer Added Succcessfully")
+			setTimeout(function () { history.push('/singlecustomer') }, 1000);
+		}
+		else {
+			notifyError("Some Error happenend ");
 		}
 	}
 
 	// Edit a Customer function no 3
 	const editCustomer = async (id, title, name, phone) => {
-		// API Call 
 		console.log(title, name, phone);
 		const response = await fetch(`${host}/api/customer/updatecustomer/${id}`, {
 			method: 'PUT',
@@ -132,9 +155,13 @@ const CustomerState = (props) => {
 			body: JSON.stringify({ title, name, phone })
 		});
 		// const json = await response.json();
-		if (response.status === 400 || response.status === 401) {
-			showAlert("Invalid User", "danger");
-			history.push('/login');
+		if (response.status === 401) {
+			notifyUnAuthorized("Not Authorized, Login Again ");
+			localStorage.clear();
+			setTimeout(function () { history.push('/login') }, 1000);
+		}
+		else if (response.status === 404) {
+			notifyWarning("No Customer found with this name")
 		}
 		else if (response.status === 200) {
 			let newCustomers = JSON.parse(JSON.stringify(customers))
@@ -149,15 +176,16 @@ const CustomerState = (props) => {
 				}
 			}
 			setCustomers(newCustomers);
-			showAlert("Customer Updated Succcessfully", "success")
-		} else {
-			history.push('/');
+			notifySuccess("Customer Details Updated  Succcessfully")
+		}
+		else {
+			notifyError("Some Error happenend ");
 		}
 
 	}
+
 	// Delete a Customer function no 4
 	const deleteCustomer = async (id) => {
-		// API Call
 		const response = await fetch(`${host}/api/customer/deletecustomer/${id}`, {
 			method: 'DELETE',
 			headers: {
@@ -167,18 +195,22 @@ const CustomerState = (props) => {
 		});
 		console.log(response.status)
 		if (response.status === 400 || response.status === 401) {
-			showAlert("Invalid User", "danger");
-			history.push('/login');
+			notifyUnAuthorized("Not Authorized, Login Again ");
+			localStorage.clear();
+			setTimeout(function () { history.push('/login') }, 1000);
+		}
+		else if (response.status === 404) {
+			notifyWarning("No Customer found with this name")
 		}
 		else if (response.status === 200) {
 			// const json = await response.json();
 			const newCustomers = customers.filter((customer) => { return customer._id !== id })
 			setCustomers(newCustomers);
-			history.push('/customers');
+			notifySuccess("Customer Deleted Succcessfully")
+			setTimeout(function () { history.push('/customers') }, 1000);
 		}
 		else {
-			showAlert("Internal server error", "danger");
-			history.push('/login');
+			notifyError("Some Error happenend ");
 		}
 
 	}
@@ -192,19 +224,27 @@ const CustomerState = (props) => {
 				"auth-token": localStorage.getItem('token')
 			}
 		});
-		if (response.status !== 200) {
-			dispatchsingleCustomerDetail({ type: 'FETCH_ERROR' })
-			history.push("/login");
+		if (response.status === 404) {
+			dispatchsingleCustomerDetail({ type: 'FETCH_ERROR' });
+			notifyWarning("No Customer found with this name")
+			setTimeout(function () { history.push('/customers') }, 1000);
+		}
+		else if (response.status === 401) {
+			dispatchsingleCustomerDetail({ type: 'FETCH_ERROR' });
+			notifyUnAuthorized("Not Authorized, Login Again ");
+			localStorage.clear();
+			setTimeout(function () { history.push('/login') }, 1000);
+		}
+		else if (response.status === 200) {
+			const json = await response.json();
+			dispatchsingleCustomerDetail({ type: 'FETCH_SUCCESS', payload: json })
 		}
 		else {
-			const json = await response.json();
-			// console.log(json);
-			dispatchsingleCustomerDetail({ type: 'FETCH_SUCCESS', payload: json })
+			notifyError("Some Error happenend at Server side");
 		}
 	}
 
 	//get single customer transcation function no 6
-
 	const getSingleCustomerTransactions = async (id) => {
 		const response = await fetch(`${host}/api/customer/getCustomerTransactions/${id}`, {
 			method: 'GET',
@@ -214,13 +254,21 @@ const CustomerState = (props) => {
 
 			}
 		});
-		if (response.status !== 200) {
-
-			history.push("/login");
+		if (response.status === 400 || response.status === 401) {
+			notifyUnAuthorized("Not Authorized, Login Again ");
+			localStorage.clear();
+			setTimeout(function () { history.push('/login') }, 1000);
 		}
-		else {
+		else if (response.status === 404) {
+			notifyWarning("No Customer found with this name")
+			setTimeout(function () { history.push('/customers') }, 1000);
+		}
+		else if (response.status === 200) {
 			const json = await response.json()
 			setSingleCustomerTransaction(json);
+		}
+		else {
+			notifyError("Some Error happenend at Server side");
 		}
 	}
 
@@ -259,16 +307,23 @@ const CustomerState = (props) => {
 			},
 			body: JSON.stringify({ lendamount_singleCustomer, takeamount_singleCustomer, billDetails, billNo, date })
 		});
-		if (response.status !== 200) {
-			history.push('/login');
+		if (response.status === 400 || response.status === 401) {
+			notifyUnAuthorized("Not Authorized, Login Again ");
+			localStorage.clear();
+			setTimeout(function () { history.push('/login') }, 1000);
 		}
-		else {
-
-
+		else if (response.status === 404) {
+			notifyWarning("No Customer found with this name")
+			setTimeout(function () { history.push('/customers') }, 1000);
+		}
+		else if (response.status === 200) {
 			const newCustomertransaction = await response.json();
 			setSingleCustomerTransaction(SingleCustomerTransaction.concat(newCustomertransaction))
-			showAlert("Customer Transaction Added Succcessfully", "success")
+			notifySuccess("Customer Transaction Added Succcessfully", "success")
 
+		}
+		else {
+			notifyError("Some Error happenend at Server side");
 		}
 	}
 
@@ -307,18 +362,20 @@ const CustomerState = (props) => {
 					}
 				}
 				setSingleCustomerTransaction(SingleCustomerTransaction)
-				showAlert("Customer Transaction  Updated Succcessfully", "success")
+				notifySuccess("Customer Transaction  Updated Succcessfully")
 				history.push('/singlecustomer');
 			}
 			else if (response.status === 400 || response.status === 401) {
-				showAlert("Unauthorized User Access", "danger")
-				history.push("/login");
+				notifyUnAuthorized("Not Authorized, Login Again ");
+				localStorage.clear();
+				setTimeout(function () { history.push('/login') }, 1000);
 			}
 			else {
-				history.push("/login");
+				notifyError("Some Error happenend at Server side");
 			}
 		}
 		catch (error) {
+			notifyError("Some Error happenend at Server side");
 			history.push("/login");
 		}
 	}
@@ -333,7 +390,12 @@ const CustomerState = (props) => {
 
 				}
 			});
-			if (response.status === 200) {
+			if (response.status === 400 || response.status === 401) {
+				notifyUnAuthorized("Unauthorized User Access");
+				localStorage.clear();
+				history.push("/login");
+			}
+			else if (response.status === 200) {
 				const data = await response.json();
 				if (data === null) {
 					dispatch({ type: 'FETCH_SUCCESS', payload: [] })
@@ -341,14 +403,14 @@ const CustomerState = (props) => {
 				else
 					dispatch({ type: 'FETCH_SUCCESS', payload: data })
 			}
-			else if (response.status !== 200) {
+			else if (response.status === 500) {
 				dispatch({ type: 'FETCH_ERROR' })
-				history.push("/login");
+				notifyError("Some Error happenend at Server side");
 			}
 		}
 		catch (error) {
 			dispatch({ type: 'FETCH_ERROR' })
-			history.push("/login");
+			notifyError("Some Error happenend at Server side");
 		}
 	}
 
@@ -369,7 +431,8 @@ const CustomerState = (props) => {
 				getCustomerBalance,// fetch balance of all customer
 				customerstate: state,  // contains balance of all customer  
 				SingleTransactionOfParticularCustomer, // contains info about a single transaction of a particular customer 
-				setSingleTransactionOfParticularCustomer// sets info about a single transaction of a particular customer 
+				setSingleTransactionOfParticularCustomer,// sets info about a single transaction of a particular customer 
+				notifySuccess, notifyError, notifyWarning, notifyUnAuthorized,
 			}
 		}>
 			{props.children}

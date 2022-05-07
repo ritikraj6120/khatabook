@@ -1,24 +1,38 @@
 import NoteContext from "./noteContext";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
+import { toast } from 'react-toastify';
 const NoteState = (props) => {
 	let history = useHistory();
 	const host = "http://localhost:5000"
 	const notesInitial = []
 	const [notes, setNotes] = useState(notesInitial)
-	const [alert, setAlert] = useState(null);
+	// const [alert, setAlert] = useState(null);
 
-	// shows alert 
-	const showAlert = (message, type) => {
-		setAlert({
-			msg: message,
-			type: type
-		})
-		setTimeout(() => {
-			setAlert(null);
-		}, 2000);
+	const notifySuccess = (x) => {
+		toast.success(x, {
+			autoClose: 2000,
+			position: "top-center",
+		});
 	}
-
+	const notifyError = (x) => {
+		toast.error(x, {
+			autoClose: 2000,
+			position: "top-right",
+		});
+	}
+	const notifyWarning = (x) => {
+		toast.warn(x, {
+			autoClose: 2000,
+			position: "top-center",
+		})
+	}
+	const notifyUnAuthorized = (x) => {
+		toast.error(x, {
+			autoClose: 500,
+			position: "top-center",
+		});
+	}
 	// Get all Notes
 	const getNotes = async () => {
 		// API Call 
@@ -29,14 +43,22 @@ const NoteState = (props) => {
 				"auth-token": localStorage.getItem('token')
 			}
 		});
-		const json = await response.json()
-		setNotes(json)
+		if (response.status === 401) {
+			notifyUnAuthorized("Unauthorized User Access");
+			localStorage.clear();
+			history.push("/login");
+		}
+		else if (response.status === 200) {
+			const json = await response.json()
+			setNotes(json)
+		}
+		else {
+			notifyError("Some Error happenend at Server side");
+		}
 	}
 
 	// Add a Note
 	const addNote = async (title, description, tag) => {
-		// TODO: API Call
-		// API Call 
 		const response = await fetch(`${host}/api/notes/addnote`, {
 			method: 'POST',
 			headers: {
@@ -45,21 +67,27 @@ const NoteState = (props) => {
 			},
 			body: JSON.stringify({ title, description, tag })
 		});
-		if (response.status !== 200) {
-
-			showAlert("Invalid Details for Notes", "danger")
+		if (response.status === 401) {
+			notifyUnAuthorized("Unauthorized User Access");
+			localStorage.clear();
+			history.push("/login");
 		}
-		else {
-			showAlert("Note Added Succcessfully", "success")
+		else if (response.status === 400) {
+			notifyWarning("Invalid Details for Notes")
+		}
+		else if (response.status === 200) {
+			notifySuccess("Note Added Succcessfully")
 			const note = await response.json();
 			setNotes(notes.concat(note));
+		}
+		else {
+			notifyError("Some Error happenend at Server side");
 		}
 	}
 
 	// Delete a Note
 	const deleteNote = async (id) => {
-		// API Call
-		try{
+		try {
 			const response = await fetch(`${host}/api/notes/deletenote/${id}`, {
 				method: 'DELETE',
 				headers: {
@@ -67,29 +95,32 @@ const NoteState = (props) => {
 					"auth-token": localStorage.getItem('token')
 				}
 			});
-			if(response.status===400 || response.status===401)
-			{
-				showAlert("Invalid User","danger");
-				history.push('/login');
+			if (response.status === 401) {
+				notifyUnAuthorized("Unauthorized User Access");
+				localStorage.clear();
+				history.push("/login");
 			}
-			else{
+			else if (response.status === 404) {
+				notifyWarning(" Note to be deleted Not Found");
+			}
+			else if (response.status === 200) {
 				const newNotes = notes.filter((note) => { return note._id !== id })
 				setNotes(newNotes)
-				showAlert("Deleted successfully", "success");
+				notifySuccess("Note Deleted successfully");
+			}
+			else {
+				notifyError("Some Error happenend at Server side");
 			}
 		}
-		catch(error){
-			history.push('/login');
+		catch (error) {
+			notifyError("Some Error happenend at Server side");
 		}
-		
-		
+
+
 	}
 
 	// Edit a Note
 	const editNote = async (id, title, description, tag, important, completed) => {
-		// API Call 
-		console.log("got my boy");
-		console.log(id, title, description, tag, important, completed);
 		const response = await fetch(`${host}/api/notes/updatenote/${id}`, {
 			method: 'PUT',
 			headers: {
@@ -100,14 +131,14 @@ const NoteState = (props) => {
 		});
 		// const json = await response.json();
 		if (response.status === 404) {
-			showAlert(" Note Not Found", "danger");
+			notifyWarning(" Note Not Found");
 		}
-		else if (response.status === (401)) {
-			showAlert(" Note Allowed", "danger");
-			history.push('/login');
-
+		else if (response.status === 401) {
+			notifyUnAuthorized("Unauthorized User Access");
+			localStorage.clear();
+			history.push("/login");
 		}
-		else {
+		else if (response.status === 200) {
 			let newNotes = notes;
 			// let newNotes = JSON.parse(JSON.stringify(notes))
 			// Logic to edit in client
@@ -128,12 +159,15 @@ const NoteState = (props) => {
 				}
 			}
 			setNotes(newNotes);
-			showAlert("Updated Succcessfully", "success")
+			notifySuccess("Note Updated Succcessfully")
+		}
+		else {
+			notifyError("Some Error happenend at Server side");
 		}
 	}
 
 	return (
-		<NoteContext.Provider value= {{ notes, addNote, deleteNote, editNote, getNotes, showAlert, alert }}>
+		<NoteContext.Provider value={{ notes, addNote, deleteNote, editNote, getNotes}}>
 			{props.children}
 		</NoteContext.Provider>
 	)

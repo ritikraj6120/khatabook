@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react'
 import CustomerContext from "../../../context/CustomerContext"
 import CustomerItem from './CustomerItem';
 import { useHistory, Link } from 'react-router-dom'
-import Navbar from '../Navbar'
+// import Navbar from '../Navbar'
 import '../style.css'
 import { Button } from '@mui/material';
 import generatePDF from './customerReport';
@@ -40,7 +40,7 @@ const Customers = () => {
 	}
 	return (
 		<>
-			<Navbar a="/customers" b="/suppliers" />
+			{/* <Navbar a="/customers" b="/suppliers" /> */}
 			{
 				loading === true ? <CircularProgress color="secondary" /> :
 					<>

@@ -1,5 +1,6 @@
 import './App.css';
 import { Switch, Route, Redirect } from "react-router-dom";
+import { ToastContainer } from 'react-toastify';
 import NoteState from './context/NoteState';
 import UserState from './context/UserState';
 import CustomerState from './context/CustomerState';
@@ -11,7 +12,7 @@ import Important from './components/Notes/Important.js';
 import Completed from './components/Notes/Completed.js';
 import About from './components/About';
 import User from './components/User';
-import Alert from './components/Alert';
+// import Alert from './components/Alert';
 import Signup from './components/Signup';
 import Login from './components/Login';
 import Error from './components/Error';
@@ -136,7 +137,8 @@ const App = () => {
 					<CustomerState>
 						<SupplierState>
 							<Navbar />
-							<Alert />
+							{/* <Alert /> */}
+							<ToastContainer/>
 							<div className="container">
 								<Routerapp />
 							</div>

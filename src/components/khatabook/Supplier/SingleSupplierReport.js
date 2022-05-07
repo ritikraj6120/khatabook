@@ -1,26 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, Link } from 'react-router-dom';
 import SupplierContext from '../../../context/SupplierContext';
-import { Typography, Button, ButtonGroup, CircularProgress, AppBar, Table, TableRow, TableHead, TableBody, TableCell, Toolbar, IconButton, TextField, Card, CardContent } from '@mui/material';
+import { Typography, Button, CircularProgress, AppBar, Table, TableRow, TableHead, TableBody, TableCell, Toolbar, IconButton, Card, CardContent } from '@mui/material';
 import { Box } from '@mui/system';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
-import TodayIcon from '@mui/icons-material/Today';
 import PictureAsPdfOutlinedIcon from '@mui/icons-material/PictureAsPdfOutlined';
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import generatePDF from './pdfGeneration_singleSupplier';
 const SingleCustomerReport = () => {
 	let history = useHistory();
 	const { SingleSupplierTransaction, getSingleSupplierTransactions, getSingleSupplierDetail, singleSupplierDetail } = useContext(SupplierContext);
 	const { singleSupplier, loading } = singleSupplierDetail;
 	const singlesupplierid = JSON.parse(localStorage.getItem('SingleSupplierId'));
-
-	const [newTransactiondate, setNewTransactiondate] = useState(new Date());
-	const [open, setOpen] = useState(false);
-
 	useEffect(() => {
 		getSingleSupplierTransactions(singlesupplierid);
 		getSingleSupplierDetail(singlesupplierid);

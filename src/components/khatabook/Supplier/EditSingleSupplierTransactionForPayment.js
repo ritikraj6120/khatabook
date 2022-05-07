@@ -6,7 +6,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import DeleteIcon from '@mui/icons-material/Delete';
 import '../style.css';
-import Navbar from '../Navbar';
+// import Navbar from '../Navbar';
 import { CircularProgress, Button, TextField, Typography } from '@mui/material';
 
 const EditSingleSupplierTransactionForPayment = () => {
@@ -66,8 +66,6 @@ const EditSingleSupplierTransactionForPayment = () => {
 		}
 		else {
 			x = parseInt(x);
-			// console.log(x)
-			// console.log(typeof x)
 			if (x <= 0) {
 				seterrorState(previousState => {
 					return { ...previousState, amountError: "Invalid Amount" }
@@ -88,7 +86,7 @@ const EditSingleSupplierTransactionForPayment = () => {
 
 	return (
 		<>
-			<Navbar a="/singlecustomer" b="/singlesupplier" />
+			{/* <Navbar a="/singlecustomer" b="/singlesupplier" /> */}
 			{loading === true ? <CircularProgress /> :
 				<>
 					<div>

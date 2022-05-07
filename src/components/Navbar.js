@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link, useLocation, useHistory } from "react-router-dom";
 import UserNavbar from './UserNavbar';
-
+import Button from '@mui/material/Button';
 
 const Navbar = () => {
 	let history = useHistory();
@@ -54,7 +54,8 @@ const Navbar = () => {
 						</form> :
 							<>
 								<UserNavbar />
-								<button onClick={handleLogout} className="btn btn-primary">Logout</button>
+								<Button variant="contained" onClick={handleLogout}>Logout</Button>
+								{/* <button onClick={handleLogout} className="btn btn-primary">Logout</button> */}
 							</>
 					}
 				</div>

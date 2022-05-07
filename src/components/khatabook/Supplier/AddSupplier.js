@@ -1,8 +1,7 @@
 import React, { useState, useContext } from 'react'
-import { useHistory } from "react-router-dom";
 import SupplierContext from "../../../context/SupplierContext"
 import noteContext from '../../../context/noteContext';
-import Navbar from '../Navbar';
+// import Navbar from '../Navbar';
 
 const Navbar2 = () => {
 	return (
@@ -23,7 +22,6 @@ const Navbar2 = () => {
 }
 
 const AddSupplier = () => {
-	let history = useHistory();
 	const { addSupplier } = useContext(SupplierContext);
 	const {showAlert}=useContext(noteContext)
 	const [supplier, setSupplier] = useState({ title: "Mr", name: "", phone: 0 });
@@ -47,13 +45,13 @@ const AddSupplier = () => {
 		else {
 			await addSupplier(supplier.title, supplier.name, supplier.phone);
 			setSupplier({ title: "Mr", name: "", phone: 0 });
-			history.push('/editsupplier');
+			// history.push('/singlesupplier');
 		}
 	}
 
 	return (
 		<>
-			<Navbar a="/addcustomer" b="/addsupplier" />
+			{/* <Navbar a="/addcustomer" b="/addsupplier" /> */}
 			<br />
 			<Navbar2 />
 			<br />
