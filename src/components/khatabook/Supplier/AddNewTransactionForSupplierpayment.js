@@ -7,7 +7,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import '../style.css';
 // import CustomerDetail from './CustomerDetail';
 // import Navbar from '../Navbar';
-import { CircularProgress, Button, Typography, TextField } from '@mui/material';
+import { CircularProgress, Button, TextField, Typography, Breadcrumbs, Link } from '@mui/material';
 // import { CommentsDisabledOutlined, ConstructionOutlined } from '@mui/icons-material';
 const AddNewTransactionForSupplierPayment = () => {
 	const errorStateinit = {
@@ -15,7 +15,7 @@ const AddNewTransactionForSupplierPayment = () => {
 	}
 	const [errorState, seterrorState] = useState(errorStateinit);
 	let history = useHistory();
-	const { getSingleSupplierDetail, singleSupplierDetail, getSingleSupplierTransactions, addSingleSupplierTransaction } = useContext(SupplierContext);
+	const { getSingleSupplierDetail, singleSupplierDetail, addSingleSupplierTransaction } = useContext(SupplierContext);
 	const { singleSupplier, loading } = singleSupplierDetail;
 	const singlesupplierid = JSON.parse(localStorage.getItem('SingleSupplierId'));
 
@@ -64,6 +64,25 @@ const AddNewTransactionForSupplierPayment = () => {
 			{loading === true ? <CircularProgress /> :
 				<>
 					<div>
+						<Breadcrumbs separator="›" sx={{ padding: 2 }} aria-label="breadcrumb">
+							<Link underline="hover" color="inherit" href="/suppliers">
+								Customers List
+							</Link>
+							<Link
+								underline="hover"
+								color="inherit"
+								href="/singlesupplier"
+							>
+								{singleSupplier.name}
+							</Link>
+							<Link
+								underline="hover"
+								color="text.primary"
+								href="#"
+							>
+								Your Payment
+							</Link>
+						</Breadcrumbs>
 						<h1>You gave Rs {newTransaction === '' ? 0 : newTransaction} to {singleSupplier.name}</h1>
 					</div>
 					<form >

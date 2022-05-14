@@ -156,7 +156,7 @@ const SingleCustomerReport = () => {
 												<Typography variant="caption" display="block" sx={{ fontSize: "0.80rem" }} >
 													PURCHASE
 												</Typography>
-												<Typography variant="h6" display="block" sx={{ fontSize: "1rem", color: "red" }}>
+												<Typography variant="h6" display="block" sx={{ fontSize: "1rem", color: "green" }}>
 													<CurrencyRupeeIcon sx={{ fontSize: "1.25rem" }} /> {purchase}
 												</Typography>
 											</TableCell>
@@ -164,7 +164,7 @@ const SingleCustomerReport = () => {
 												<Typography variant="caption" display="block" sx={{ fontSize: "0.8rem" }} >
 													PAYMENT
 												</Typography>
-												<Typography variant="h6" display="block" sx={{ fontSize: "1rem", color: "green" }}>
+												<Typography variant="h6" display="block" sx={{ fontSize: "1rem", color: "red" }}>
 													<CurrencyRupeeIcon sx={{ fontSize: "1.25rem" }} /> {payment}
 												</Typography>
 											</TableCell>

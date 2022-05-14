@@ -1,17 +1,18 @@
 import React, { useContext, useState, useEffect } from 'react';
 import CustomerContext from '../../../context/CustomerContext';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import DeleteIcon from '@mui/icons-material/Delete';
 import '../style.css';
+import { Breadcrumbs, Link } from '@mui/material';
 // import Navbar from '../Navbar';
 import { CircularProgress, Button, TextField, Typography } from '@mui/material';
 const EditSingleCustomerTransactionForGaveAmount = () => {
 	const location = useLocation();
 	const { transactionid, name, ...item } = location.state;
-	const { updateCustomerTransaction, SingleTransactionOfParticularCustomer } = useContext(CustomerContext);
+	const { updateCustomerTransaction } = useContext(CustomerContext);
 	const singlecustomerid = JSON.parse(localStorage.getItem('SingleCustomerId'));
 
 	const errorStateinit = {
@@ -80,17 +81,36 @@ const EditSingleCustomerTransactionForGaveAmount = () => {
 		}
 	}
 
-	const handleSubmit =async (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
 		await updateCustomerTransaction(transactionid, singlecustomerid, parseInt(newTransaction), 0, newTransactionBilldetails, addBillNo, newTransactiondate);
 	}
 
 	return (
 		<>
-			{/* <Navbar a="/singlecustomer" b="/singlesupplier" /> */}
+
 			{loading === true ? <CircularProgress /> :
 				<>
 					<div>
+						<Breadcrumbs separator="›" sx={{ padding: 2 }} aria-label="breadcrumb">
+							<Link underline="hover" color="inherit" href="/custmers">
+								Customers List
+							</Link>
+							<Link
+								underline="hover"
+								color="inherit"
+								href="/singlecustomer"
+							>
+								{name}
+							</Link>
+							<Link
+								underline="hover"
+								color="text.primary"
+								href="#"
+							>
+								Edit Entry
+							</Link>
+						</Breadcrumbs>
 						<h1>You gave Rs {newTransaction === '' ? 0 : newTransaction} to {name}</h1>
 					</div>
 					<form >
@@ -127,7 +147,7 @@ const EditSingleCustomerTransactionForGaveAmount = () => {
 							/>
 						</LocalizationProvider>
 						<br />
-						<br/>
+						<br />
 						<Typography align='center'>
 							{
 								newTransaction > 0 ? <Button sx={{

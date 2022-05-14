@@ -4,19 +4,19 @@ import noteContext from "../../context/noteContext"
 import Noteitem from './Noteitem';
 import AddNote from './AddNote';
 import NoteNavbar from './NoteNavbar';
-
+import { notifyWarning } from '../../alert';
 const Notes = () => {
 
 	const context = useContext(noteContext);
 	let history = useHistory();
-	const { notes, getNotes, editNote, showAlert } = context;
+	const { notes, getNotes, editNote } = context;
 	useEffect(() => {
 		if (localStorage.getItem('token'))
 			getNotes()
 		else {
 			history.push('/login');
 		}
-	}, [])
+	}, [notes])
 	const ref = useRef(null)
 	const refClose = useRef(null)
 	const [note, setNote] = useState({ id: "", etitle: "", edescription: "", etag: "" })
@@ -29,12 +29,10 @@ const Notes = () => {
 
 	const handleClick = (e) => {
 		if (note.etitle.length < 1) {
-			refClose.current.click();
-			showAlert("Title length less than 1", "danger");
+			notifyWarning("Title length less than 1");
 		}
 		else if (note.edescription.length < 5) {
-			refClose.current.click();
-			showAlert("Description length less than 5", "danger");
+			notifyWarning("Description length less than 5");
 		}
 		else {
 			editNote(note.id, note.etitle, note.edescription, note.etag)
@@ -49,10 +47,11 @@ const Notes = () => {
 	}
 
 	return (
-		<>
+		<div className="container">
 			<br />
 			<NoteNavbar />
 			<AddNote />
+			{/* modal starts */}
 			<button ref={ref} type="button" className="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#exampleModal">
 				Launch demo modal
 			</button>
@@ -101,6 +100,7 @@ const Notes = () => {
 				</div>
 			</div>
 
+			{/* modal ends */}
 			<div className="row my-3">
 				<h2>You Notes</h2>
 				<div className="container mx-2">
@@ -110,7 +110,7 @@ const Notes = () => {
 					return <Noteitem key={note._id} updateNote={updateNote} note={note} />
 				})}
 			</div>
-		</>
+		</div>
 	)
 }
 

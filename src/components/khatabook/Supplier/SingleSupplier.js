@@ -1,13 +1,26 @@
 import React, { useContext, useEffect } from 'react';
 import SupplierContext from '../../../context/SupplierContext';
-import { useHistory, Link, NavLink } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import '../style.css';
 import SupplierDetail from './SupplierDetail';
 // import Navbar from '../Navbar';
 import { Typography, Button, CircularProgress, Table, TableRow, TableHead, TableBody, TableCell, CardContent, Card } from '@mui/material';
-import PictureAsPdfOutlinedIcon from '@mui/icons-material/PictureAsPdfOutlined';
-import WhatsappOutlinedIcon from '@mui/icons-material/WhatsappOutlined';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+import Link from '@mui/material/Link';
+import { styled } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Grid';
+
+const Item = styled(Paper)(({ theme }) => ({
+	backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+	...theme.typography.body2,
+	padding: theme.spacing(1),
+	textAlign: 'center',
+	color: theme.palette.text.secondary,
+}));
+
 
 const SingleSupplier = () => {
 	let history = useHistory();
@@ -20,13 +33,7 @@ const SingleSupplier = () => {
 		getSingleSupplierDetail(singlesupplierid);
 		// eslint-disable-next-line
 	}, [])
-	const newPurchaseAddPage = (e) => {
-		history.push('/addNewTransactionForSupplierPurchase');
-	}
 
-	const newPaymentAddPage = (e) => {
-		history.push('/addNewTransactionForSupplierPayment');
-	}
 
 	const handleEditSupplier = async (item) => {
 		await setSingleTransactionOfParticularSupplier({ ...item })
@@ -56,37 +63,24 @@ const SingleSupplier = () => {
 
 	return (
 		<>
-			{/* <Navbar a="/editcustomer" b="/editsupplier" /> */}
 			{
 				loading === true ? <CircularProgress color="secondary" /> :
 					<>
-						<div className=".container-fluid ">
-							<div className="row">
-								<div className="col-8">
-									<SupplierDetail singleSupplier={singleSupplier} />
-								</div>
 
-								<div className="col-4">
-									<nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-										<div className="container-fluid">
-											<div className="collapse navbar-collapse" id="navbarSupportedContent">
-												<ul className="navbar-nav me-auto mb-2 mb-lg-0 ">
-													<li className="nav-item">
-														<Link className="nav-link " to="/singleSupplierReport">
-															<PictureAsPdfOutlinedIcon /> Report</Link>
-													</li>
-													<li className="nav-item">
-														<Link className="nav-link " to="/reminder"><WhatsappOutlinedIcon /> Reminder</Link>
-													</li>
-												</ul>
-											</div>
-										</div>
-									</nav>
-								</div>
-							</div>
-						</div>
-						<div className="d-flex justify-content-center" style={{ marginBottom: "5rem" }}>
-							<div className='d-grid gap-2 col-6 '>
+						<Grid container spacing={2} sx={{}}>
+							<Grid item xs={9} sx={{ overflowY: "auto", maxHeight: "90vh" }}>
+								<Breadcrumbs separator="›" sx={{ padding: 2 }} aria-label="breadcrumb">
+									<Link underline="hover" color="inherit" href="/suppliers">
+										Suppliers List
+									</Link>
+									<Link
+										underline="hover"
+										color="text.primary"
+										href="#"
+									>
+										{singleSupplier.name}
+									</Link>
+								</Breadcrumbs>
 								<Table>
 									<TableHead sx={{
 										background: '#ffeb3b'
@@ -176,21 +170,24 @@ const SingleSupplier = () => {
 										}
 									</TableBody>
 								</Table >
-							</div>
-						</div>
-						<Card sx={{
-							minWidth: 275, position: 'fixed', bottom: 0, width: "100%",
-							margin: "0 auto"
-						}} >
-							<CardContent sx={{
-								alignItems: "center",
-								display: "flex",
-								justifyContent: "center",
-							}} >
-								<Button style={{ backgroundColor: "green", marginRight: "1rem" }} variant="contained" onClick={newPurchaseAddPage}>PURCHASE</Button>
-								<Button style={{ backgroundColor: "red" }} variant="contained" onClick={newPaymentAddPage}>PAYMENT</Button>
-							</CardContent>
-						</Card>
+							</Grid>
+							<Grid item xs={3}>
+								<SupplierDetail singleSupplier={singleSupplier} />
+							</Grid>
+						</Grid>
+						{/* <Card sx={{
+									minWidth: 275, position: 'fixed', bottom: 0, width: "100%",
+									margin: "0 auto"
+								}} >
+									<CardContent sx={{
+										alignItems: "center",
+										display: "flex",
+										justifyContent: "center",
+									}} >
+										<Button style={{ backgroundColor: "green", marginRight: "1rem" }} variant="contained" onClick={newPurchaseAddPage}>PURCHASE</Button>
+										<Button style={{ backgroundColor: "red" }} variant="contained" onClick={newPaymentAddPage}>PAYMENT</Button>
+									</CardContent>
+								</Card> */}
 					</>
 			}
 		</>

@@ -61,13 +61,11 @@
 
 import * as React from 'react';
 import { useContext } from 'react';
-import { useHistory } from 'react-router-dom';
+import UserContext from "../context/UserContext.js";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -75,7 +73,6 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { toast } from 'react-toastify';
 function Copyright(props) {
 	return (
 		<Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -90,19 +87,7 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function Login() {
-	const notifySuccess = (x) => {
-		toast.success(x, {
-			autoClose: 1500,
-			position: "top-center",
-		});
-	}
-	const notifyError = (x) => {
-		toast.error(x, {
-			autoClose: 2000,
-			position: "top-right",
-		});
-	}
-	let history = useHistory();
+	const { login } = useContext(UserContext);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -112,25 +97,7 @@ export default function Login() {
 			email: data.get('email'),
 			password: data.get('password'),
 		};
-		const response = await fetch("http://localhost:5000/api/auth/login", {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(user)
-		});
-		const json = await response.json()
-		if (json.success) {
-			// Save the auth token and redirect
-			localStorage.setItem('token', json.authtoken);
-			localStorage.setItem('admin', json.isadmin);
-			notifySuccess("Successfully logged in")
-			setTimeout(function () { history.push('/') }, 500);
-
-		}
-		else {
-			notifyError(json.error);
-		}
+		login(user);
 
 	};
 
@@ -173,10 +140,10 @@ export default function Login() {
 							id="password"
 							autoComplete="current-password" inputProps={{ minLength: 8 }}
 						/>
-						<FormControlLabel
+						{/* <FormControlLabel
 							control={<Checkbox value="remember" color="primary" />}
 							label="Remember me"
-						/>
+						/> */}
 						<Button
 							type="submit"
 							fullWidth

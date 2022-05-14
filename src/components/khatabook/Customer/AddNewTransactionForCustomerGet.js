@@ -4,9 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import '../style.css';
-// import Navbar from '../Navbar';
-import { CircularProgress, Button, Typography, TextField } from '@mui/material';
+import { CircularProgress, Button, TextField, Typography, Breadcrumbs, Link } from '@mui/material';
 
 const AddNewTransactionForCustomerGet = () => {
 	const errorStateinit = {
@@ -63,6 +61,25 @@ const AddNewTransactionForCustomerGet = () => {
 			{loading === true ? <CircularProgress /> :
 				<>
 					<div>
+						<Breadcrumbs separator="›" sx={{ padding: 2 }} aria-label="breadcrumb">
+							<Link underline="hover" color="inherit" href="/customers">
+								Customers List
+							</Link>
+							<Link
+								underline="hover"
+								color="inherit"
+								href="/singlecustomer"
+							>
+								{singleCustomer.name}
+							</Link>
+							<Link
+								underline="hover"
+								color="text.primary"
+								href="#"
+							>
+								You Got
+							</Link>
+						</Breadcrumbs>
 						<h1>You got Rs {newTransaction === '' ? 0 : newTransaction} from {singleCustomer.name}</h1>
 					</div>
 					<form >

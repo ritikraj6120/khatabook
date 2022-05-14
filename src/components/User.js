@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import UserContext from '../context/userContext';
+import UserContext from '../context/UserContext';
 import { useHistory } from 'react-router-dom';
 import SendIcon from '@mui/icons-material/Send';
 import Box from "@mui/material/Box";
@@ -16,6 +16,7 @@ const User = () => {
 		if (localStorage.getItem('token'))
 			getUser()
 		else {
+			localStorage.clear();
 			history.push('/login');
 		}
 		// eslint-disable-next-line
@@ -88,7 +89,6 @@ const User = () => {
 	};
 	return (
 		<>
-			{/* <ToastContainer /> */}
 			<Box sx={{ minWidth: 275 }}>
 				<Card variant="outlined">
 					<CardContent>
@@ -113,58 +113,60 @@ const User = () => {
 					</CardContent>
 				</Card>
 			</Box>
-			<Paper elevation={3} sx={{
-				width: "35vw", borderRadius: "10px"
-			}}>
-				<Box component="form" onSubmit={handleSubmit}
-					sx={{
-						marginTop: 8,
-						display: 'flex',
-						flexDirection: 'column',
-						alignItems: 'center',
-						width: "35vw"
-					}} autoComplete="off" >
-					<Typography variant="h5" component="div" sx={{ marginTop: 1 }}>
-					Change Password
-					</Typography>
-					<TextField
-						required
-						label="Current Password"
-						id="Current Password"
-						variant="outlined"
-						name="currentPassword"
-						type="text"
-						inputProps={{ minLength: 8 }}
-						sx={{ width: "25vw", marginTop: 3 }}
-						value={passwords.currentPassword}
-						onChange={(e) => setPasswords({ ...passwords, currentPassword: e.target.value })}
-					/>
-					<Divider />
-					<TextField
-						required
-						label="New Password"
-						id="New Password"
-						variant="outlined"
-						name="newPassword"
-						type="text"
-						margin="dense"
-						inputProps={{ minLength: 8 }}
-						sx={{ width: "25vw" }}
-						value={passwords.newPassword}
-						onChange={(e) => setPasswords({ ...passwords, newPassword: e.target.value })}
-					/>
+			<div className="container">
+				<Paper elevation={3} sx={{
+					width: "35vw", borderRadius: "10px"
+				}}>
+					<Box component="form" onSubmit={handleSubmit}
+						sx={{
+							marginTop: 8,
+							display: 'flex',
+							flexDirection: 'column',
+							alignItems: 'center',
+							width: "35vw"
+						}} autoComplete="off" >
+						<Typography variant="h5" component="div" sx={{ marginTop: 1 }}>
+							Change Password
+						</Typography>
+						<TextField
+							required
+							label="Current Password"
+							id="Current Password"
+							variant="outlined"
+							name="currentPassword"
+							type="text"
+							inputProps={{ minLength: 8 }}
+							sx={{ width: "25vw", marginTop: 3 }}
+							value={passwords.currentPassword}
+							onChange={(e) => setPasswords({ ...passwords, currentPassword: e.target.value })}
+						/>
+						<Divider />
+						<TextField
+							required
+							label="New Password"
+							id="New Password"
+							variant="outlined"
+							name="newPassword"
+							type="text"
+							margin="dense"
+							inputProps={{ minLength: 8 }}
+							sx={{ width: "25vw" }}
+							value={passwords.newPassword}
+							onChange={(e) => setPasswords({ ...passwords, newPassword: e.target.value })}
+						/>
 
-					<Button
-						type="submit"
-						variant="contained"
-						sx={{ mt: 3, mb: 1 }}
-						endIcon={<SendIcon />}
-					>
-						Update
-					</Button>
+						<Button
+							type="submit"
+							variant="contained"
+							sx={{ mt: 3, mb: 1 }}
+							endIcon={<SendIcon />}
+						>
+							Update
+						</Button>
 
-				</Box>
-			</Paper>
+					</Box>
+				</Paper>
+			</div>
 		</>
 	)
 }

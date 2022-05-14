@@ -1,8 +1,11 @@
 import React, { useState, useContext } from 'react'
 import SupplierContext from "../../../context/SupplierContext"
-import noteContext from '../../../context/noteContext';
+import { notifyWarning } from '../../../alert';
+import 'react-phone-number-input/style.css'
+import PhoneInput, { isPossiblePhoneNumber, isValidPhoneNumber } from 'react-phone-number-input'
 // import Navbar from '../Navbar';
-
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+import Link from '@mui/material/Link';
 const Navbar2 = () => {
 	return (
 		<nav className="navbar navbar-expand-lg  navbar-dark bg-primary" style={{ color: "#ffffff" }
@@ -23,8 +26,8 @@ const Navbar2 = () => {
 
 const AddSupplier = () => {
 	const { addSupplier } = useContext(SupplierContext);
-	const {showAlert}=useContext(noteContext)
-	const [supplier, setSupplier] = useState({ title: "Mr", name: "", phone: 0 });
+	const [phone, setPhone] = useState()
+	const [supplier, setSupplier] = useState({ title: "Mr", name: "" });
 
 	const onChange = (e) => {
 		setSupplier({ ...supplier, [e.target.name]: e.target.value })
@@ -34,18 +37,18 @@ const AddSupplier = () => {
 		e.preventDefault();
 		if (supplier.name.length < 1) {
 			console.log(supplier.name.length);
-			showAlert("Supplier length less than 1", "danger");
+			notifyWarning("Supplier length less than 1");
 		}
-		else if(supplier.phone.length>11){
-			showAlert("Supplier phone number length greater than 11 digits", "danger");
+		else if (isPossiblePhoneNumber(phone) === false) {
+			notifyWarning("Enter correct phone Number");
 		}
-		else if(supplier.phone.length<3){
-			showAlert("Supplier phone number length lesser than 3 digits", "danger");
+		else if (isValidPhoneNumber(phone) === false) {
+			notifyWarning("Enter valid phone Number");
 		}
 		else {
-			await addSupplier(supplier.title, supplier.name, supplier.phone);
-			setSupplier({ title: "Mr", name: "", phone: 0 });
-			// history.push('/singlesupplier');
+			// console.log("very good");
+			await addSupplier(supplier.title, supplier.name, phone);
+			// history.push('/editcustomer');
 		}
 	}
 
@@ -53,6 +56,18 @@ const AddSupplier = () => {
 		<>
 			{/* <Navbar a="/addcustomer" b="/addsupplier" /> */}
 			<br />
+			<Breadcrumbs separator="›" sx={{ padding: 2 }} aria-label="breadcrumb">
+				<Link underline="hover" color="inherit" href="/suppliers">
+					Suppliers List
+				</Link>
+				<Link
+					underline="hover"
+					color="text.primary"
+					href="#"
+				>
+					Add new supplier
+				</Link>
+			</Breadcrumbs>
 			<Navbar2 />
 			<br />
 			<form onSubmit={handleClick}>
@@ -70,8 +85,14 @@ const AddSupplier = () => {
 							value={supplier.name} onChange={onChange} placeholder="Enter Supplier Name to add Entries" />
 					</div>
 					<div className="col-sm col-lg-4">
-						<label htmlFor="phone">Phone</label>
-						<input required type="number" className="form-control" id="phone" name="phone" onChange={onChange} placeholder="Enter Phone Number " />
+						<label htmlFor="phone">Enter Phone No.</label>
+						<PhoneInput
+							international
+							defaultCountry="IN"
+							placeholder="Enter Phone Number"
+							className="form-control"
+							id="phone" value={phone} onChange={setPhone} />
+						{/* <input required type="number" className="form-control" id="phone" name="phone" onChange={onChange} placeholder="Enter Phone Number" /> */}
 					</div>
 				</div>
 				<div className="row mt-3">

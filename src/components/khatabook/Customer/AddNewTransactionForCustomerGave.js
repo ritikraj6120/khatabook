@@ -4,17 +4,16 @@ import { useHistory } from 'react-router-dom';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import '../style.css';
 // import CustomerDetail from './CustomerDetail';
 // import Navbar from '../Navbar';
-import { CircularProgress, Button, TextField, Typography } from '@mui/material';
+import { CircularProgress, Button, TextField, Typography, Breadcrumbs, Link } from '@mui/material';
 const AddNewTransactionForCustomerGave = () => {
 	let history = useHistory();
 	const errorStateinit = {
 		amountError: null
 	}
 	const [errorState, seterrorState] = useState(errorStateinit);
-	const { getSingleCustomerDetail, singleCustomerDetail, getSingleCustomerTransactions, addSingleCustomerTransaction } = useContext(CustomerContext);
+	const { getSingleCustomerDetail, singleCustomerDetail, addSingleCustomerTransaction } = useContext(CustomerContext);
 	const { singleCustomer, loading } = singleCustomerDetail;
 	const singlecustomerid = JSON.parse(localStorage.getItem('SingleCustomerId'));
 
@@ -27,7 +26,7 @@ const AddNewTransactionForCustomerGave = () => {
 	const [newTransactionBilldetails, setNewTransactiondateBilldetails] = useState("");
 	const [toggleAddBillNo, settoggleAddBillNo] = useState(false);
 	const [addBillNo, setAddBillNo] = useState("");
-	const onChange =  (e) => {
+	const onChange = (e) => {
 		let x = e.target.value
 		if (x === '') {
 			seterrorState(previousState => {
@@ -45,16 +44,15 @@ const AddNewTransactionForCustomerGave = () => {
 				});
 				setNewTransaction('0');
 			}
-			else
-				{
-					seterrorState({ ...errorState, amountError: null })
-					setNewTransaction(x.toString());
-				}
+			else {
+				seterrorState({ ...errorState, amountError: null })
+				setNewTransaction(x.toString());
+			}
 		}
 	}
-	const handlesubmit = (e) => {
+	const handlesubmit = async (e) => {
 		e.preventDefault();
-		addSingleCustomerTransaction(singleCustomer._id, parseInt(newTransaction), 0, newTransactionBilldetails, addBillNo, newTransactiondate);
+		await addSingleCustomerTransaction(singleCustomer._id, parseInt(newTransaction), 0, newTransactionBilldetails, addBillNo, newTransactiondate);
 		history.push('/singlecustomer')
 	}
 
@@ -64,7 +62,26 @@ const AddNewTransactionForCustomerGave = () => {
 			{loading === true ? <CircularProgress /> :
 				<>
 					<div>
-						<h1>You gave Rs {newTransaction===''? 0:newTransaction} to {singleCustomer.name}</h1>
+						<Breadcrumbs separator="›" sx={{ padding: 2 }} aria-label="breadcrumb">
+							<Link underline="hover" color="inherit" href="/customers">
+								Customers List
+							</Link>
+							<Link
+								underline="hover"
+								color="inherit"
+								href="/singlecustomer"
+							>
+								{singleCustomer.name}
+							</Link>
+							<Link
+								underline="hover"
+								color="text.primary"
+								href="#"
+							>
+								You Gave
+							</Link>
+						</Breadcrumbs>
+						<h1>You gave Rs {newTransaction === '' ? 0 : newTransaction} to {singleCustomer.name}</h1>
 					</div>
 					<form >
 						<input type="number" className="form-control " placeholder="Enter Amount" value={newTransaction} onChange={onChange} />

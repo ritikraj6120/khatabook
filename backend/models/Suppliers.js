@@ -16,9 +16,8 @@ const SupplierSchema = new Schema({
 		unique:true
 	},
 	phone:{
-		type:Number,
-		required:true,
-		min: 100, max: 99999999999
+		type:String,
+		required:true
 	},
 	date: {
 		type: Date,

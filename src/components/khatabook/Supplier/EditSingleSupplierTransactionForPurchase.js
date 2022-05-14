@@ -7,12 +7,11 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import DeleteIcon from '@mui/icons-material/Delete';
 import '../style.css';
 // import Navbar from '../Navbar';
-import { CircularProgress, Button, TextField, Typography } from '@mui/material';
-
+import { CircularProgress, Button, TextField, Typography, Breadcrumbs, Link } from '@mui/material';
 const EditSingleSupplierTransactionForPurchase = () => {
 	const location = useLocation();
 	const { transactionid, name, ...item } = location.state;
-	const { updateSupplierTransaction, SingleTransactionOfParticularSupplier } = useContext(SupplierContext);
+	const { updateSupplierTransaction } = useContext(SupplierContext);
 	const singlesupplierid = JSON.parse(localStorage.getItem('SingleSupplierId'));
 
 	const errorStateinit = {
@@ -93,6 +92,25 @@ const EditSingleSupplierTransactionForPurchase = () => {
 			{loading === true ? <CircularProgress /> :
 				<>
 					<div>
+						<Breadcrumbs separator="›" sx={{ padding: 2 }} aria-label="breadcrumb">
+							<Link underline="hover" color="inherit" href="/suppliers">
+								Suppliers List
+							</Link>
+							<Link
+								underline="hover"
+								color="inherit"
+								href="/singlesupplier"
+							>
+								{name}
+							</Link>
+							<Link
+								underline="hover"
+								color="text.primary"
+								href="#"
+							>
+								Edit Entry
+							</Link>
+						</Breadcrumbs>
 						<h1>Purchase of Rs {newTransaction === '' ? 0 : newTransaction} from {name}</h1>
 					</div>
 					<form >

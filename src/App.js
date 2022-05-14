@@ -1,22 +1,20 @@
 import './App.css';
 import { Switch, Route, Redirect } from "react-router-dom";
+import { useState,useEffect } from 'react';
 import { ToastContainer } from 'react-toastify';
-import NoteState from './context/NoteState';
 import UserState from './context/UserState';
+import NoteState from './context/NoteState';
 import CustomerState from './context/CustomerState';
 import SupplierState from './context/SupplierState';
-import AdminState from './context/AdminState';
 import Navbar from './components/Navbar';
 import Notes from './components/Notes/Notes';
 import Important from './components/Notes/Important.js';
 import Completed from './components/Notes/Completed.js';
 import About from './components/About';
 import User from './components/User';
-// import Alert from './components/Alert';
 import Signup from './components/Signup';
 import Login from './components/Login';
 import Error from './components/Error';
-import Adminpage from './components/Admin/AdminPage';
 import Suppliers from './components/khatabook/Supplier/Suppliers'
 import Customers from './components/khatabook/Customer/Customers'
 import AddCustomer from './components/khatabook/Customer/AddCustomer';
@@ -34,119 +32,203 @@ import EditSingleCustomerTransactionForGaveAmount from './components/khatabook/C
 import EditSingleCustomerTransactionForGetAmount from './components/khatabook/Customer/EditSingleCustomerTransactionForGetAmount';
 import EditSingleSupplierTransactionForPayment from './components/khatabook/Supplier/EditSingleSupplierTransactionForPayment';
 import EditSingleSupplierTransactionForPurchase from './components/khatabook/Supplier/EditSingleSupplierTransactionForPurchase';
-function Routerapp() {
+
+function KhataBookRouterapp(props) {
+	const [userloggedin,setUserloggedin]=useState(!(localStorage.getItem('token') === null));
+	useEffect(() => {
+		setUserloggedin(!(localStorage.getItem('token') === null));
+	}, [localStorage.getItem('token')])
 	return (
-		<>
-			<Switch>
-				<Route exact path="/">
-					<Redirect to="/customers" />
-				</Route>
-				<Route exact path="/notes">
-					<Notes />
-				</Route>
-				<Route exact path="/importantNotes">
-					<Important />
-				</Route>
-				<Route exact path="/completedNotes">
-					<Completed />
-				</Route>
-				<Route exact path="/about">
-					<About />
-				</Route>
-				<Route exact path="/login">
-					<Login />
-				</Route>
-				<Route exact path="/adminpage">
-					<Adminpage />
-				</Route>
-				<Route exact path="/signup">
-					<Signup />
-				</Route>
-				<Route exact path="/userdetail">
-					<User />
-				</Route>
-				<Route exact path="/addNewTransactionForCustomerGave">
-					<AddNewTransactionForCustomerGave />
-				</Route>
-				<Route exact path="/addNewTransactionForCustomerGet">
-					<AddNewTransactionForCustomerGet />
-				</Route>
-				<Route exact path="/addNewTransactionForSupplierPayment">
-					<AddNewTransactionForSupplierPayment />
-				</Route>
-				<Route exact path="/addNewTransactionForSupplierPurchase">
-					<AddNewTransactionForSupplierPurchase />
-				</Route>
-				<Route exact path="/customers">
-					<Customers />
-				</Route>
-				<Route exact path="/suppliers">
-					<Suppliers />
-				</Route>
-				<Route exact path="/addsupplier">
-					<AddSupplier />
-				</Route>
-				<Route exact path="/addcustomer">
-					<AddCustomer />
-				</Route>
-				<Route exact path="/singlecustomer">
-					<SingleCustomer />
-				</Route>
-				<Route exact path="/singlesupplier">
-					<SingleSupplier />
-				</Route>
-				<Route exact path="/singleCustomerReport">
-					<SingleCustomerReport />
-				</Route>
-				<Route exact path="/reminder">
-					<Reminder />
-				</Route>
-				<Route exact path="/singlesupplierReport">
-					<SingleSupplierReport />
-				</Route>
+		<Switch>
+			<Route exact path="/">
+				<Redirect to="/customers" />
+			</Route>
+			<Route exact path="/notes">
+				{
+					userloggedin ?
+						<Notes /> :
+						<Redirect to="/login" />
+				}
+			</Route>
+			<Route exact path="/importantNotes">
+				{
+					userloggedin ?
+						<Important /> :
+						<Redirect to="/login" />
+				}
+			</Route>
+			<Route exact path="/completedNotes">
+				{
+					userloggedin ?
+						<Completed /> :
+						<Redirect to="/login" />
+				}
+			</Route>
+			<Route exact path="/about">
+				<About />
+			</Route>
+			<Route exact path="/login">
+				<Login />
+			</Route>
+			<Route exact path="/signup">
+				<Signup />
+			</Route>
+			<Route exact path="/userdetail">
+				{
+					userloggedin ?
+						<User /> :
+						<Redirect to="/login" />
+				}
+				<User />
+			</Route>
+			<Route exact path="/addNewTransactionForCustomerGave">
+				{
+					userloggedin ?
+						<AddNewTransactionForCustomerGave /> :
+						<Redirect to="/login" />
+				}
 
-				<Route exact path="/editcustomertransactionforgetamount"  >
-					<EditSingleCustomerTransactionForGetAmount />
-				</Route>
+			</Route>
+			<Route exact path="/addNewTransactionForCustomerGet">
+				{
+					userloggedin ?
+					<AddNewTransactionForCustomerGet /> :
+						<Redirect to="/login" />
+				}
+			
+			</Route>
+			<Route exact path="/addNewTransactionForSupplierPayment">
+				{
+					userloggedin ?
+						<AddNewTransactionForSupplierPayment /> :
+						<Redirect to="/login" />
+				}
+			</Route>
+			<Route exact path="/addNewTransactionForSupplierPurchase">
+				{
+					userloggedin ?
+						<AddNewTransactionForSupplierPurchase /> :
+						<Redirect to="/login" />
+				}
+			</Route>
+			<Route exact path="/customers">
+				{
+					userloggedin ?
+						<Customers /> :
+						<Redirect to="/login" />
+				}
+			</Route>
+			<Route exact path="/suppliers">
+				{
+					userloggedin ?
+						<Suppliers /> :
+						<Redirect to="/login" />
+				}
+			</Route>
+			<Route exact path="/addsupplier">
+				{
+					userloggedin ?
+						<AddSupplier /> :
+						<Redirect to="/login" />
+				}
+			</Route>
+			<Route exact path="/addcustomer">
+				{
+					userloggedin ?
+						<AddCustomer /> :
+						<Redirect to="/login" />
+				}
+			</Route>
+			<Route exact path="/singlecustomer">
+				{
+					userloggedin ?
+						<SingleCustomer /> :
+						<Redirect to="/login" />
+				}
+			</Route>
+			<Route exact path="/singlesupplier">
+				{
+					userloggedin ?
+						<SingleSupplier /> :
+						<Redirect to="/login" />
+				}
+			</Route>
+			<Route exact path="/singleCustomerReport">
+				{
+					userloggedin ?
+						<SingleCustomerReport /> :
+						<Redirect to="/login" />
+				}
+			</Route>
+			<Route exact path="/reminder">
+				{
+					userloggedin ?
+						<Reminder /> :
+						<Redirect to="/login" />
+				}
+			</Route>
+			<Route exact path="/singlesupplierReport">
+				{
+					userloggedin ?
+						<SingleSupplierReport /> :
+						<Redirect to="/login" />
+				}
+			</Route>
+			<Route exact path="/editcustomertransactionforgetamount"  >
+				{
+					userloggedin ?
+						<EditSingleCustomerTransactionForGetAmount /> :
+						<Redirect to="/login" />
+				}
+			</Route>
+			<Route exact path="/editcustomertransactionforgaveamount"  >
+				{
+					userloggedin ?
+						<EditSingleCustomerTransactionForGaveAmount /> :
+						<Redirect to="/login" />
+				}
+			</Route>
+			<Route exact path="/editsinglesuppliertransactionforpayment" >
+				{
+					userloggedin ?
+						<EditSingleSupplierTransactionForPayment /> :
+						<Redirect to="/login" />
+				}
+			</Route>
+			<Route exact path="/editsinglesuppliertransactionforpurchase" >
+				{
+					userloggedin ?
+						<EditSingleSupplierTransactionForPurchase /> :
+						<Redirect to="/login" />
+				}
+			</Route>
 
-				<Route exact path="/editcustomertransactionforgaveamount"  >
-					<EditSingleCustomerTransactionForGaveAmount />
-				</Route>
-
-				<Route exact path="/editsinglesuppliertransactionforpayment" >
-					<EditSingleSupplierTransactionForPayment />
-				</Route>
-
-				<Route exact path="/editsinglesuppliertransactionforpurchase" >
-					<EditSingleSupplierTransactionForPurchase />
-				</Route>
-
-				<Route>
-					<Error />
-				</Route>
-			</Switch>
-		</>
+			<Route>
+				<Error />
+			</Route>
+		</Switch>
 	);
 }
 
+
+
 const App = () => {
 	return (
-		<AdminState>
-			<UserState>
-				<NoteState>
-					<CustomerState>
-						<SupplierState>
-							<Navbar />
-							{/* <Alert /> */}
-							<ToastContainer/>
-							<div className="container">
-								<Routerapp />
-							</div>
-						</SupplierState>
-					</CustomerState>
-				</NoteState>
-			</UserState >
-		</AdminState >
+		<UserState>
+			<NoteState>
+				<CustomerState>
+					<SupplierState>
+
+						<Navbar />
+						{/* <Alert /> */}
+						<ToastContainer />
+						{/* <div className="container"> */}
+						<KhataBookRouterapp />
+						{/* </div> */}
+					</SupplierState>
+				</CustomerState>
+			</NoteState>
+		</UserState>
 	);
 };
 

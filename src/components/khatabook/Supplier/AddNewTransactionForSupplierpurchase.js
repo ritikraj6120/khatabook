@@ -6,7 +6,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import '../style.css';
 // import Navbar from '../Navbar';
-import { CircularProgress, Button, Typography, TextField } from '@mui/material';
+import { CircularProgress, Button, TextField, Typography, Breadcrumbs, Link } from '@mui/material';
 const AddNewTransactionForSupplierPurchase = () => {
 	const errorStateinit = {
 		amountError: null
@@ -64,6 +64,25 @@ const AddNewTransactionForSupplierPurchase = () => {
 			{loading === true ? <CircularProgress /> :
 				<>
 					<div>
+						<Breadcrumbs separator="›" sx={{ padding: 2 }} aria-label="breadcrumb">
+							<Link underline="hover" color="inherit" href="/suppliers">
+								Customers List
+							</Link>
+							<Link
+								underline="hover"
+								color="inherit"
+								href="/singlesupplier"
+							>
+								{singleSupplier.name}
+							</Link>
+							<Link
+								underline="hover"
+								color="text.primary"
+								href="#"
+							>
+								Your Purchase
+							</Link>
+						</Breadcrumbs>
 						<h1>Purchase of Rs {newTransaction === '' ? 0 : newTransaction} from {singleSupplier.name}</h1>
 					</div>
 					<form >

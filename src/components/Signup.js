@@ -83,9 +83,8 @@
 
 // export default Signup;
 
-import React, {  useContext } from "react";
-import { useHistory } from "react-router-dom";
-import { toast } from 'react-toastify';
+import React, { useContext, useState } from "react";
+import UserContext from "../context/UserContext.js";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -97,7 +96,9 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
+import 'react-phone-number-input/style.css'
+import PhoneInput, { isPossiblePhoneNumber, isValidPhoneNumber } from 'react-phone-number-input'
+import { notifyWarning, notifyError, notifySuccess } from '../alert';
 function Copyright(props) {
 	return (
 		<Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -113,23 +114,18 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignUp() {
-	const notifySuccess = (x) => {
-		toast.success(x, {
-			autoClose: 2000,
-			position: "top-center",
-		});
-	}
-	const notifyError = (x) => {
-		toast.error(x, {
-			autoClose: 2000,
-			position: "top-right",
-		});
-	}
-	let history = useHistory();
-
-
+	const [phone, setPhone] = useState()
+	const { signup } = useContext(UserContext);
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+		if (isPossiblePhoneNumber(phone) === false) {
+			notifyWarning("Enter correct phone Number");
+			return;
+		}
+		else if (isValidPhoneNumber(phone) === false) {
+			notifyWarning("Enter valid phone Number");
+			return;
+		}
 		const data = new FormData(e.currentTarget);
 		const user = {
 			fname: data.get("firstName"),
@@ -137,29 +133,8 @@ export default function SignUp() {
 			email: data.get("email"),
 			password: data.get("password")
 		};
-		const response = await fetch("http://localhost:5000/api/auth/signup", {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(user)
-		});
-		const json = await response.json()
-		// console.log(json);
-		if (json.isAuthenticated) {
-			// Save the auth token and redirect
-			notifySuccess("Account Created Successfully")
-			history.push("/login");
-		}
-		else {
-			let x=json.error;
-			x=x[0];
-			notifyError(x.msg);
-		}
+		await signup(user);
 	}
-
-
-
 
 	return (
 		<ThemeProvider theme={theme}>
@@ -183,13 +158,13 @@ export default function SignUp() {
 						<Grid container spacing={2}>
 							<Grid item xs={12} sm={6}>
 								<TextField
-									autoComplete="given-name"
 									name="firstName"
 									required
 									fullWidth
 									id="firstName"
 									label="First Name"
 									autoFocus
+									autoComplete="off"
 								/>
 							</Grid>
 							<Grid item xs={12} sm={6}>
@@ -198,7 +173,7 @@ export default function SignUp() {
 									id="lastName"
 									label="Last Name"
 									name="lastName"
-									autoComplete="family-name" 
+									autoComplete="off"
 								/>
 							</Grid>
 
@@ -209,9 +184,23 @@ export default function SignUp() {
 									id="email"
 									label="Email Address"
 									name="email"
-									autoComplete="email" 
+									autoComplete="off"
 								/>
 							</Grid>
+
+							{/* <Grid item xs={12}>
+								<PhoneInput
+									// fullWidth
+									required
+									international
+									defaultCountry="IN"
+									placeholder="Phone Number"
+									className="form-control"
+									name="phone"
+									autoComplete="off"
+									id="phone" value={phone} onChange={setPhone} />
+
+							</Grid> */}
 
 							<Grid item xs={12}>
 								<TextField
@@ -221,7 +210,7 @@ export default function SignUp() {
 									label="Password"
 									type="password"
 									id="password"
-									autoComplete="new-password" inputProps={{ minLength: 8 }}
+									autoComplete="off" inputProps={{ minLength: 8 }}
 								/>
 							</Grid>
 						</Grid>

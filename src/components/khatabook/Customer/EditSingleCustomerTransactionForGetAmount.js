@@ -7,7 +7,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import DeleteIcon from '@mui/icons-material/Delete';
 import '../style.css';
 // import Navbar from '../Navbar';
-import { CircularProgress, Button, TextField, Typography } from '@mui/material';
+import { CircularProgress, Button, TextField, Typography ,Breadcrumbs,Link} from '@mui/material';
 const EditSingleCustomerTransactionForGaveAmount = () => {
 	const location = useLocation();
 	const { transactionid, name, ...item } = location.state;
@@ -85,10 +85,28 @@ const EditSingleCustomerTransactionForGaveAmount = () => {
 
 	return (
 		<>
-			{/* <Navbar a="/singlecustomer" b="/singlesupplier" /> */}
 			{loading === true ? <CircularProgress /> :
 				<>
 					<div>
+						<Breadcrumbs separator="›" sx={{ padding: 2 }} aria-label="breadcrumb">
+							<Link underline="hover" color="inherit" href="/custmers">
+								Customers List
+							</Link>
+							<Link
+								underline="hover"
+								color="inherit"
+								href="/singlecustomer"
+							>
+								{name}
+							</Link>
+							<Link
+								underline="hover"
+								color="text.primary"
+								href="#"
+							>
+								Edit Entry
+							</Link>
+						</Breadcrumbs>
 						<h1>You got Rs {newTransaction === '' ? 0 : newTransaction} from {name}</h1>
 					</div>
 					<form >

@@ -93,7 +93,7 @@ router.post('/login', [
 			}
 			const authtoken = jwt.sign(data, JWT_SECRET);
 			success = true;
-			return res.status(200).json({ success, authtoken, isadmin: user.isadmin });
+			return res.status(200).json({ success, authtoken });
 
 		} catch (error) {
 			console.error(error.message);

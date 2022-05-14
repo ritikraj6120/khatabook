@@ -4,12 +4,12 @@ import noteContext from "../../context/noteContext"
 import Noteitem from './Noteitem';
 import AddNote from './AddNote';
 import NoteNavbar from './NoteNavbar';
-
+import { notifyWarning, notifySuccess } from '../../alert';
 const Notes = () => {
 
 	const context = useContext(noteContext);
 	let history = useHistory();
-	const { notes, getNotes, editNote, showAlert } = context;
+	const { notes, getNotes, editNote } = context;
 	useEffect(() => {
 		if (localStorage.getItem('token'))
 			getNotes()
@@ -20,7 +20,7 @@ const Notes = () => {
 	const ref = useRef(null)
 	const refClose = useRef(null)
 	const [note, setNote] = useState({ id: "", etitle: "", edescription: "", etag: "" })
-	const importantNotes =notes.filter((note)=>note.important===true);
+	const importantNotes = notes.filter((note) => note.important === true);
 
 	const updateNote = (currentNote) => {
 		ref.current.click();
@@ -29,21 +29,18 @@ const Notes = () => {
 	}
 
 	const handleClick = (e) => {
-		if(note.etitle.length<1)
-		{
+		if (note.etitle.length < 1) {
 			refClose.current.click();
-			showAlert("Title length less than 1", "danger");
+			notifyWarning("Title length less than 1");
 		}
-		else if(note.edescription.length<5)
-		{
+		else if (note.edescription.length < 5) {
 			refClose.current.click();
-			showAlert("Description length less than 5", "danger");
+			notifyWarning("Description length less than 5");
 		}
-		else
-		{
-		editNote(note.id, note.etitle, note.edescription, note.etag)
-		refClose.current.click();
-		showAlert("Updated Succcessfully", "success")
+		else {
+			editNote(note.id, note.etitle, note.edescription, note.etag)
+			refClose.current.click();
+			notifySuccess("Updated Succcessfully")
 		}
 	}
 
@@ -52,7 +49,8 @@ const Notes = () => {
 	}
 
 	return (
-		<>
+		<div className="container">
+		<br/>
 			<NoteNavbar />
 			<AddNote />
 			<button ref={ref} type="button" className="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -93,7 +91,7 @@ const Notes = () => {
 						</div>
 						<div className="modal-footer">
 							<button ref={refClose} type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-							<button  type="button" className="btn btn-primary" onClick={handleClick}>Update Note</button>
+							<button type="button" className="btn btn-primary" onClick={handleClick}>Update Note</button>
 						</div>
 					</div>
 				</div>
@@ -109,7 +107,7 @@ const Notes = () => {
 						return <Noteitem key={note._id} updateNote={updateNote} note={note} />
 					})}
 			</div>
-		</>
+		</div>
 	)
 }
 

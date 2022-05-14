@@ -5,6 +5,14 @@ import { useHistory } from "react-router-dom";
 import { toast } from 'react-toastify';
 const SupplierState = (props) => {
 	const { showAlert } = useContext(noteContext)
+
+
+	const handleLogout = () => {
+		localStorage.clear();
+		localStorage.clear();
+		setTimeout(function () { history.push('/login') }, 1000);
+	}
+
 	const notifySuccess = (x) => {
 		toast.success(x, {
 			autoClose: 2000,
@@ -104,8 +112,7 @@ const SupplierState = (props) => {
 		});
 		if (response.status === 401) {
 			notifyUnAuthorized("Not Authorized, Login Again ");
-			localStorage.clear();
-			setTimeout(function () { history.push('/login') }, 1000);
+			handleLogout()
 		}
 		else if (response.status === 200) {
 			const json = await response.json()
@@ -119,7 +126,6 @@ const SupplierState = (props) => {
 
 	// Add a Supplier function no 2
 	const addSupplier = async (title, name, phone) => {
-		phone = parseInt(phone);
 		const response = await fetch(`${host}/api/supplier/addsupplier`, {
 			method: 'POST',
 			headers: {
@@ -130,8 +136,7 @@ const SupplierState = (props) => {
 		});
 		if (response.status === 401) {
 			notifyUnAuthorized("Not Authorized, Login Again ");
-			localStorage.clear();
-			setTimeout(function () { history.push('/login') }, 1000);
+			handleLogout()
 		}
 		else if (response.status === 404) {
 			notifyWarning("Supplier  already exists")
@@ -162,8 +167,7 @@ const SupplierState = (props) => {
 		// const json = await response.json();
 		if (response.status === 401) {
 			notifyUnAuthorized("Not Authorized, Login Again ");
-			localStorage.clear();
-			setTimeout(function () { history.push('/login') }, 1000);
+			handleLogout()
 		}
 		else if (response.status === 404) {
 			notifyWarning("No Supplier found with this name")
@@ -200,8 +204,7 @@ const SupplierState = (props) => {
 		console.log(response.status);
 		if (response.status === 400 || response.status === 401) {
 			notifyUnAuthorized("Not Authorized, Login Again ");
-			localStorage.clear();
-			setTimeout(function () { history.push('/login') }, 1000);
+			handleLogout()
 		}
 		else if (response.status === 404) {
 			notifyWarning("No Supplier found with this name")
@@ -234,8 +237,7 @@ const SupplierState = (props) => {
 		else if (response.status === 401) {
 			dispatchsingleSupplierDetail({ type: 'FETCH_ERROR' });
 			notifyUnAuthorized("Not Authorized, Login Again ");
-			localStorage.clear();
-			setTimeout(function () { history.push('/login') }, 1000);
+			handleLogout()
 		}
 		if (response.status === 200) {
 			const json = await response.json()
@@ -258,8 +260,7 @@ const SupplierState = (props) => {
 		});
 		if (response.status === 400 || response.status === 401) {
 			notifyUnAuthorized("Not Authorized, Login Again ");
-			localStorage.clear();
-			setTimeout(function () { history.push('/login') }, 1000);
+			handleLogout()
 		}
 		else if (response.status === 404) {
 			notifyWarning("No Supplier found with this name")
@@ -289,8 +290,7 @@ const SupplierState = (props) => {
 
 		if (response.status === 400 || response.status === 401) {
 			notifyUnAuthorized("Not Authorized, Login Again ");
-			localStorage.clear();
-			setTimeout(function () { history.push('/login') }, 1000);
+			handleLogout()
 		}
 		else if (response.status === 404) {
 			notifyWarning("No Supplier found with this name")
@@ -346,8 +346,7 @@ const SupplierState = (props) => {
 			}
 			else if (response.status === 400 || response.status === 401) {
 				notifyUnAuthorized("Not Authorized, Login Again ");
-				localStorage.clear();
-				setTimeout(function () { history.push('/login') }, 1000);
+				handleLogout()
 			}
 			else {
 				notifyError("Some Error happenend at Server side");
@@ -355,7 +354,7 @@ const SupplierState = (props) => {
 		}
 		catch (error) {
 			notifyError("Some Error happenend at Server side");
-			history.push("/login");
+			handleLogout()
 		}
 	}
 
@@ -372,8 +371,7 @@ const SupplierState = (props) => {
 			});
 			if (response.status === 400 || response.status === 401) {
 				notifyError("Unauthorized User Access");
-				localStorage.clear();
-				history.push("/login");
+				handleLogout()
 			}
 			else if (response.status === 200) {
 				const data = await response.json();
@@ -384,7 +382,7 @@ const SupplierState = (props) => {
 				else
 					dispatch({ type: 'FETCH_SUCCESS', payload: data })
 			}
-			else if (response.status ===500 ) {
+			else if (response.status === 500) {
 				dispatch({ type: 'FETCH_ERROR' })
 				notifyError("Some Error happenend at Server side");
 			}

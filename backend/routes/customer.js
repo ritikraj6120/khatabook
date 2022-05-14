@@ -22,7 +22,7 @@ router.get('/getcustomers', fetchuser, async (req, res) => {
 router.post('/addcustomer', fetchuser, async (req, res) => {
 	try {
 		let { title, name, phone } = req.body;
-
+		console.log(phone);
 		// If there are errors, return Bad request and the errors
 		// const errors = validationResult(req);
 		// if (!errors.isEmpty()) {
@@ -35,7 +35,7 @@ router.post('/addcustomer', fetchuser, async (req, res) => {
 		console.log(rep)
 		if (!rep) {
 			let savedCustomer = await customer.save();
-			console.log(savedCustomer);
+			// console.log(savedCustomer);
 			res.status(200).json(savedCustomer);
 		}
 		else {

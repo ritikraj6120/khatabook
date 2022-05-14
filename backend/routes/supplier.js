@@ -74,13 +74,13 @@ router.post('/addsupplier', fetchuser, async (req, res) => {
 router.put('/updatesupplier/:id', fetchuser, async (req, res) => {
 	const { title, name, phone } = req.body;
 	try {
-		// Create a newNote object
+		// Create a newsupplier object
 		const newsupplier = {};
 		if (title) { newsupplier.title = title };
 		if (name) { newsupplier.name = name };
 		if (phone) { newsupplier.phone = phone };
 
-		// Find the note to be updated and update it
+		// Find the supplier to be updated and update it
 		let supplier = await Suppliers.findById(req.params.id);
 		if (!supplier) { return res.status(404).send("Not Found") }
 
@@ -88,7 +88,7 @@ router.put('/updatesupplier/:id', fetchuser, async (req, res) => {
 			return res.status(401).send("Not Allowed");
 		}
 		const updatesupplier = await Suppliers.findByIdAndUpdate(req.params.id, { $set: newsupplier }, { new: true })
-		res.status(200).json(updatesupplier).select('-user -date');
+		res.status(200).json(updatesupplier);
 	}
 	catch (error) {
 		console.error(error.message);
